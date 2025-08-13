@@ -15,13 +15,13 @@ export function FooterMenuItem({ item }: { item: Menu }) {
   }, [pathname, item.path]);
 
   return (
-    <li>
+    <li className="mb-3">
       <Link
         href={item.path}
         className={clsx(
-          'block p-2 text-lg underline-offset-4 hover:text-black hover:underline md:inline-block md:text-sm dark:hover:text-neutral-300',
+          'block text-gray-600 hover:text-black transition-colors',
           {
-            'text-black dark:text-neutral-300': active
+            'text-black': active
           }
         )}
       >
@@ -36,7 +36,7 @@ export default function FooterMenu({ menu }: { menu: Menu[] }) {
 
   return (
     <nav>
-      <ul>
+      <ul className="flex flex-col">
         {menu.map((item: Menu) => {
           return <FooterMenuItem key={item.title} item={item} />;
         })}
