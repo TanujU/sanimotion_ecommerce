@@ -104,14 +104,11 @@ export async function updateItemQuantity(
 export async function redirectToCheckout() {
   let cart = await getCart();
   
-  // For mock environment, clear the cart and show success page
+  // For mock environment, redirect to our custom checkout flow
   if (cart?.checkoutUrl === '#') {
-    // Clear the cart for mock environment
-    clearMockCart();
-    revalidateTag(TAGS.cart);
     // In a real implementation, this would redirect to Shopify checkout
-    // For now, we'll redirect to a success page
-    redirect('/checkout-success');
+    // For now, we'll redirect to our custom checkout process
+    redirect('/checkout');
   }
   
   redirect(cart!.checkoutUrl);

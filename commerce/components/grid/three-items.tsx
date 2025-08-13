@@ -17,13 +17,12 @@ function ThreeItemGridItem({
       className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}
     >
       <Link
-        className="relative block aspect-square h-full w-full min-h-[500px]"
+        className="relative block aspect-square h-full w-full"
         href={`/product/${item.handle}`}
         prefetch={true}
       >
         <GridTileImage
           src={item.featuredImage.url}
-          fill
           sizes={
             size === 'full' ? '(min-width: 768px) 66vw, 100vw' : '(min-width: 768px) 33vw, 100vw'
           }
