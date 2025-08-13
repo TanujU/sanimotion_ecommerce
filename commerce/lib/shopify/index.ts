@@ -363,6 +363,36 @@ export async function getMenu(handle: string): Promise<Menu[]> {
   ];
 }
 
+export async function getFooterMenu(): Promise<Menu[]> {
+  // Return footer menu items
+  return [
+    {
+      title: 'Home',
+      path: '/'
+    },
+    {
+      title: 'About',
+      path: '/about'
+    },
+    {
+      title: 'Terms & Conditions',
+      path: '/terms'
+    },
+    {
+      title: 'Shipping & Return Policy',
+      path: '/shipping'
+    },
+    {
+      title: 'Privacy Policy',
+      path: '/privacy'
+    },
+    {
+      title: 'FAQ',
+      path: '/faq'
+    }
+  ];
+}
+
 export async function getPage(handle: string): Promise<Page> {
   // Return mock page instead of calling Shopify API
   return {
