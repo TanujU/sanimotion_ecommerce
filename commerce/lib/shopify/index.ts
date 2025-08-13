@@ -351,7 +351,16 @@ export async function getCollections(): Promise<Collection[]> {
 
 export async function getMenu(handle: string): Promise<Menu[]> {
   // Return mock menu instead of calling Shopify API
-  return [];
+  return [
+    {
+      title: 'All',
+      path: '/search'
+    },
+    {
+      title: 'Mediziner',
+      path: '/search/mediziner'
+    }
+  ];
 }
 
 export async function getPage(handle: string): Promise<Page> {
