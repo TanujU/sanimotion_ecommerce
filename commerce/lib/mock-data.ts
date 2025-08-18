@@ -83,15 +83,15 @@ export const mockProducts: MockProduct[] = [
     id: '1',
     title: 'Aqualyx',
     handle: 'aqualyx',
-    description: 'Injizierbare Lösung für Fettreduktion und Körperkonturierungsbehandlungen.',
+    description: 'Aqualyx stellt die ideale Lösung für die gezielte Bekämpfung von hartnäckigen Fettansammlungen an verschiedenen Körperregionen dar, darunter Wangen, Bauch, Hüften und Oberschenkel.\n\n\nEntwickelt für die gezielte Behandlung kleiner lokaler Fettdepots am gesamten Körper, setzt Aqualyx auf eine einzigartige Formel aus Phosphatidylcholin und Wasser. Dieses effektive Produkt von Marllor Biomedical wirkt Fettansammlungen an Kinn, Rücken, Brust, Hüften, Oberschenkeln und sogar am Nacken entgegen. Zusätzlich zerstört die Lösung Fettzellen und verhindert die Bildung neuer Zellen, wodurch das Produkt nicht nur schnell, sondern auch langfristig wirksam ist. Die nachhaltige Wirkung setzt voraus, dass ein gesunder Lebensstil beibehalten wird. Mit seinen vielen positiven Eigenschaften bietet diese gut verträgliche Lösung eine echte Alternative zu invasiven chirurgischen Eingriffen, insbesondere der zeitaufwendigen Fettabsaugung.\n\n\n**Warum Aqualyx die perfekte Lösung zur Fettreduktion ist:**\n\n\nDank seiner einzigartigen Formel auf Wasser- und Phosphatidylcholin-Basis wirkt Aqualyx gezielt gegen lokale Fettansammlungen im gesamten Körper. Die spezielle Formel wird an den gewünschten Stellen angewendet, wo sie Fettzellen gezielt angreift und zerstört. Innerhalb von durchschnittlich 3 Wochen scheidet der Körper das freigesetzte Fett eigenständig über den Stoffwechsel aus, wodurch die behandelten Bereiche eine verbesserte Kontur aufweisen. Diese Lösung eignet sich besonders für kleine, hartnäckige Fettpölsterchen, die trotz Sport und gesunder Ernährung bestehen bleiben.\n\n\n**Die Wirkungsweise dieser außergewöhnlichen Fettreduktionslösung:**\n\n\nDie Lösung von Mallor Biomedical unterstützt schlanke und sportliche Personen dabei, kleine, hartnäckige Fettpölsterchen nachhaltig zu reduzieren. Durch die einzigartige Formel werden Fettzellen in ihre Einzelteile zerlegt, die der Körper innerhalb von 3 Wochen ausscheidet. Die Behandlung zeichnet sich durch eine schnelle und schmerzfreie Wirkungsweise aus. Durch den Kauf von Aqualyx heute können Sie das Fett Ihrer Patienten effizient und unkompliziert schmelzen lassen!',
     price: {
-      amount: '150.00',
+      amount: '178.50',
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '1',
-        url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
+        url: '/images/aqualyx.jpg',
         altText: 'Aqualyx Injectable Solution'
       }
     ],
@@ -100,7 +100,7 @@ export const mockProducts: MockProduct[] = [
         id: '1',
         title: 'Default Title',
         price: {
-          amount: '150.00',
+          amount: '178.50',
           currencyCode: 'EUR'
         }
       }
@@ -109,17 +109,17 @@ export const mockProducts: MockProduct[] = [
   },
   {
     id: '2',
-    title: 'Belotero-Serie',
-    handle: 'belotero-serie',
+    title: 'Belotero',
+    handle: 'Belotero-serie',
     description: 'Premium Hyaluronsäure-Filler für Gesichtskonturierung und Faltenbehandlung.',
     price: {
-      amount: '200.00',
+      amount: '166.99',
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '2',
-        url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
+        url: '/images/belotero.jpg',
         altText: 'Belotero-Serie Fillers'
       }
     ],
@@ -128,7 +128,7 @@ export const mockProducts: MockProduct[] = [
         id: '2',
         title: 'Default Title',
         price: {
-          amount: '200.00',
+          amount: '166.99',
           currencyCode: 'EUR'
         }
       }
@@ -137,17 +137,17 @@ export const mockProducts: MockProduct[] = [
   },
   {
     id: '3',
-    title: 'Juvederm-Serie',
+    title: 'Juvederm',
     handle: 'juvederm-serie',
     description: 'Fortschrittliche Hyaluronsäure-Dermalfiller für Gesichtsvolumisierung und Faltenkorrektur.',
     price: {
-      amount: '250.00',
+      amount: '213.99',
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '3',
-        url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
+        url: '/images/juvederm.jpg',
         altText: 'Juvederm-Serie Fillers'
       }
     ],
@@ -156,7 +156,7 @@ export const mockProducts: MockProduct[] = [
         id: '3',
         title: 'Default Title',
         price: {
-          amount: '250.00',
+          amount: '213.99',
           currencyCode: 'EUR'
         }
       }
@@ -165,17 +165,17 @@ export const mockProducts: MockProduct[] = [
   },
   {
     id: '4',
-    title: 'Teosyal-Serie',
+    title: 'Teosyal',
     handle: 'teosyal-serie',
     description: 'Schweizer Hyaluronsäure-Filler für natürliche Gesichtsverbesserung.',
     price: {
-      amount: '220.00',
+      amount: '142.99',
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '4',
-        url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
+        url: '/images/teoxane.jpg',
         altText: 'Teosyal-Serie Fillers'
       }
     ],
@@ -184,7 +184,7 @@ export const mockProducts: MockProduct[] = [
         id: '4',
         title: 'Default Title',
         price: {
-          amount: '220.00',
+          amount: '142.99',
           currencyCode: 'EUR'
         }
       }
@@ -193,17 +193,17 @@ export const mockProducts: MockProduct[] = [
   },
   {
     id: '5',
-    title: 'Stylage-Serie',
+    title: 'Stylage',
     handle: 'stylage-serie',
     description: 'Französische Hyaluronsäure-Filler mit fortschrittlicher Vernetzungstechnologie.',
     price: {
-      amount: '230.00',
+      amount: '114.99',
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '5',
-        url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
+        url: '/images/stylage.jpg',
         altText: 'Stylage-Serie Fillers'
       }
     ],
@@ -212,7 +212,7 @@ export const mockProducts: MockProduct[] = [
         id: '5',
         title: 'Default Title',
         price: {
-          amount: '230.00',
+          amount: '114.99',
           currencyCode: 'EUR'
         }
       }
@@ -225,13 +225,13 @@ export const mockProducts: MockProduct[] = [
     handle: 'radiesse',
     description: 'Calcium-Hydroxylapatit-Filler für Gesichtsvolumisierung und Faltenbehandlung.',
     price: {
-      amount: '280.00',
+      amount: '119.00', 
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '6',
-        url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
+        url: '/images/radiesse.jpg',
         altText: 'Radiesse Filler'
       }
     ],
@@ -240,54 +240,54 @@ export const mockProducts: MockProduct[] = [
         id: '6',
         title: 'Default Title',
         price: {
-          amount: '280.00',
+          amount: '119.00', 
           currencyCode: 'EUR'
         }
       }
     ],
     tags: ['calcium-hydroxylapatite', 'filler', 'facial']
   },
-  {
-    id: '7',
-    title: 'Prostolane',
-    handle: 'prostolane',
-    description: 'Polyacrylamid-Hydrogel für Gesichtskonturierung und Volumisierung.',
-    price: {
-      amount: '300.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '7',
-        url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
-        altText: 'Prostolane Hydrogel'
-      }
-    ],
-    variants: [
-      {
-        id: '7',
-        title: 'Default Title',
-        price: {
-          amount: '300.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['polyacrylamide', 'hydrogel', 'facial']
-  },
+  // {
+  //   id: '7',
+  //   title: 'Prostolane',
+  //   handle: 'prostolane',
+  //   description: 'Polyacrylamid-Hydrogel für Gesichtskonturierung und Volumisierung.',
+  //   price: {
+  //     amount: '300.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '7',
+  //       url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
+  //       altText: 'Prostolane Hydrogel'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '7',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '300.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['polyacrylamide', 'hydrogel', 'facial']
+  // },
   {
     id: '8',
     title: 'PROFHILO',
     handle: 'profhilo',
     description: 'Bio-Remodeling-Behandlung für Hautfeuchtigkeit und Verjüngung.',
     price: {
-      amount: '180.00',
+      amount: '105.99',
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '8',
-        url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
+        url: '/images/profhilo.jpg',
         altText: 'PROFHILO Bio-remodeling'
       }
     ],
@@ -296,7 +296,7 @@ export const mockProducts: MockProduct[] = [
         id: '8',
         title: 'Default Title',
         price: {
-          amount: '180.00',
+          amount: '105.99',
           currencyCode: 'EUR'
         }
       }
@@ -305,17 +305,17 @@ export const mockProducts: MockProduct[] = [
   },
   {
     id: '9',
-    title: 'Restylane-Serie',
+    title: 'Restylane',
     handle: 'restylane-serie',
     description: 'Schwedische Hyaluronsäure-Filler für natürliche Gesichtsverbesserung.',
     price: {
-      amount: '240.00',
+      amount: '59.99',
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '9',
-        url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
+        url: '/images/restylane.jpg',
         altText: 'Restylane-Serie Fillers'
       }
     ],
@@ -324,7 +324,7 @@ export const mockProducts: MockProduct[] = [
         id: '9',
         title: 'Default Title',
         price: {
-          amount: '240.00',
+          amount: '59.99',
           currencyCode: 'EUR'
         }
       }
@@ -333,17 +333,17 @@ export const mockProducts: MockProduct[] = [
   },
   {
     id: '10',
-    title: 'Saypha / Princess',
+    title: 'Saypha',
     handle: 'saypha-princess',
     description: 'Premium Hyaluronsäure-Filler für Gesichtskonturierung und Volumisierung.',
     price: {
-      amount: '260.00',
+      amount: '37.99',
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '10',
-        url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
+        url: '/images/saypha.jpg',
         altText: 'Saypha Princess Fillers'
       }
     ],
@@ -352,54 +352,54 @@ export const mockProducts: MockProduct[] = [
         id: '10',
         title: 'Default Title',
         price: {
-          amount: '260.00',
+          amount: '37.99',
           currencyCode: 'EUR'
         }
       }
     ],
     tags: ['hyaluronic-acid', 'filler', 'facial']
   },
-  {
-    id: '11',
-    title: 'Filorga',
-    handle: 'filorga',
-    description: 'Französische Anti-Aging-Behandlungen und Hyaluronsäure-Filler.',
-    price: {
-      amount: '190.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '11',
-        url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
-        altText: 'Filorga Anti-aging'
-      }
-    ],
-    variants: [
-      {
-        id: '11',
-        title: 'Default Title',
-        price: {
-          amount: '190.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['anti-aging', 'hyaluronic-acid', 'facial']
-  },
+  // {
+  //   id: '11',
+  //   title: 'Filorga',
+  //   handle: 'filorga',
+  //   description: 'Französische Anti-Aging-Behandlungen und Hyaluronsäure-Filler.',
+  //   price: {
+  //     amount: '190.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '11',
+  //       url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
+  //       altText: 'Filorga Anti-aging'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '11',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '190.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['anti-aging', 'hyaluronic-acid', 'facial']
+  // },
   {
     id: '12',
     title: 'Hyalone',
     handle: 'hyalone',
     description: 'Hyaluronsäure-basierte Behandlung für Gelenkschmierung und Schmerzlinderung.',
     price: {
-      amount: '120.00',
+      amount: '135.99',
       currencyCode: 'EUR'
     },
     images: [
       {
         id: '12',
-        url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
+        url: '/images/hyalone.jpg',
         altText: 'Hyalone Joint Treatment'
       }
     ],
@@ -408,378 +408,378 @@ export const mockProducts: MockProduct[] = [
         id: '12',
         title: 'Default Title',
         price: {
-          amount: '120.00',
+          amount: '135.99',
           currencyCode: 'EUR'
         }
       }
     ],
     tags: ['hyaluronic-acid', 'joint-treatment', 'pain-relief']
   },
-  {
-    id: '13',
-    title: 'Hymovis / Hyadd',
-    handle: 'hymovis-hyadd',
-    description: 'Hochmolekulare Hyaluronsäure für Gelenkviskosupplementation.',
-    price: {
-      amount: '140.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '13',
-        url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
-        altText: 'Hymovis Hyadd Joint Treatment'
-      }
-    ],
-    variants: [
-      {
-        id: '13',
-        title: 'Default Title',
-        price: {
-          amount: '140.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'joint-treatment', 'viscosupplementation']
-  },
-  {
-    id: '14',
-    title: 'HYALUBRIX',
-    handle: 'hyalubrix',
-    description: 'Hyaluronsäure-Injektion für Gelenkschmierung und Arthrosebehandlung.',
-    price: {
-      amount: '130.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '14',
-        url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
-        altText: 'HYALUBRIX Joint Injection'
-      }
-    ],
-    variants: [
-      {
-        id: '14',
-        title: 'Default Title',
-        price: {
-          amount: '130.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'joint-treatment', 'osteoarthritis']
-  },
-  {
-    id: '15',
-    title: 'Durolane',
-    handle: 'durolane',
-    description: 'Einmal-Injektion Hyaluronsäure-Behandlung für Kniearthrose.',
-    price: {
-      amount: '160.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '15',
-        url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
-        altText: 'Durolane Knee Treatment'
-      }
-    ],
-    variants: [
-      {
-        id: '15',
-        title: 'Default Title',
-        price: {
-          amount: '160.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'knee-treatment', 'osteoarthritis']
-  },
-  {
-    id: '16',
-    title: 'Monovisc',
-    handle: 'monovisc',
-    description: 'Hochmolekulare Hyaluronsäure für Kniearthrose-Behandlung.',
-    price: {
-      amount: '170.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '16',
-        url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
-        altText: 'Monovisc Knee Treatment'
-      }
-    ],
-    variants: [
-      {
-        id: '16',
-        title: 'Default Title',
-        price: {
-          amount: '170.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'knee-treatment', 'osteoarthritis']
-  },
-  {
-    id: '17',
-    title: 'Orthovisc',
-    handle: 'orthovisc',
-    description: 'Hyaluronsäure-Viskosupplementation zur Schmerzlinderung bei Kniearthrose.',
-    price: {
-      amount: '150.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '17',
-        url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
-        altText: 'Orthovisc Knee Treatment'
-      }
-    ],
-    variants: [
-      {
-        id: '17',
-        title: 'Default Title',
-        price: {
-          amount: '150.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'knee-treatment', 'pain-relief']
-  },
-  {
-    id: '18',
-    title: 'Ostenil',
-    handle: 'ostenil',
-    description: 'Hyaluronsäure-Behandlung für Gelenkschmerzen und Arthrose-Management.',
-    price: {
-      amount: '140.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '18',
-        url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
-        altText: 'Ostenil Joint Treatment'
-      }
-    ],
-    variants: [
-      {
-        id: '18',
-        title: 'Default Title',
-        price: {
-          amount: '140.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'joint-treatment', 'osteoarthritis']
-  },
-  {
-    id: '19',
-    title: 'Cingal',
-    handle: 'cingal',
-    description: 'Kombinationsbehandlung aus Hyaluronsäure und Kortikosteroid für Kniearthrose.',
-    price: {
-      amount: '200.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '19',
-        url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
-        altText: 'Cingal Combination Treatment'
-      }
-    ],
-    variants: [
-      {
-        id: '19',
-        title: 'Default Title',
-        price: {
-          amount: '200.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'corticosteroid', 'knee-treatment']
-  },
-  {
-    id: '20',
-    title: 'GO-ON',
-    handle: 'go-on',
-    description: 'Hyaluronsäure-Behandlung für Gelenkschmierung und Mobilitätsverbesserung.',
-    price: {
-      amount: '110.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '20',
-        url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
-        altText: 'GO-ON Joint Treatment'
-      }
-    ],
-    variants: [
-      {
-        id: '20',
-        title: 'Default Title',
-        price: {
-          amount: '110.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'joint-treatment', 'mobility']
-  },
-  {
-    id: '21',
-    title: 'Supartz',
-    handle: 'supartz',
-    description: 'Hyaluronsäure-Viskosupplementation für Kniearthrose-Behandlung.',
-    price: {
-      amount: '160.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '21',
-        url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
-        altText: 'Supartz Knee Treatment'
-      }
-    ],
-    variants: [
-      {
-        id: '21',
-        title: 'Default Title',
-        price: {
-          amount: '160.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'knee-treatment', 'osteoarthritis']
-  },
-  {
-    id: '22',
-    title: 'Euflexxa',
-    handle: 'euflexxa',
-    description: 'Bioengineerte Hyaluronsäure zur Schmerzlinderung bei Kniearthrose.',
-    price: {
-      amount: '180.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '22',
-        url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
-        altText: 'Euflexxa Knee Treatment'
-      }
-    ],
-    variants: [
-      {
-        id: '22',
-        title: 'Default Title',
-        price: {
-          amount: '180.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'knee-treatment', 'bioengineered']
-  },
-  // ===== OTHER INJECTABLE PRODUCTS =====
-  {
-    id: '23',
-    title: 'SCULPTRA',
-    handle: 'sculptra',
-    description: 'Poly-L-Milchsäure-Injektion für Gesichtsvolumisierung und Kollagenstimulation.',
-    price: {
-      amount: '350.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '23',
-        url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
-        altText: 'SCULPTRA Injectable'
-      }
-    ],
-    variants: [
-      {
-        id: '23',
-        title: 'Default Title',
-        price: {
-          amount: '350.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['poly-l-lactic-acid', 'collagen-stimulation', 'facial']
-  },
-  {
-    id: '24',
-    title: 'Ellansé',
-    handle: 'ellanse',
-    description: 'Polycaprolacton-basierter Filler für langanhaltende Gesichtsvolumisierung.',
-    price: {
-      amount: '320.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '24',
-        url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
-        altText: 'Ellansé Filler'
-      }
-    ],
-    variants: [
-      {
-        id: '24',
-        title: 'Default Title',
-        price: {
-          amount: '320.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['polycaprolactone', 'filler', 'long-lasting']
-  },
-  {
-    id: '25',
-    title: 'Perfectha-Serie',
-    handle: 'perfectha-serie',
-    description: 'Hyaluronsäure-Filler für Gesichtskonturierung und Faltenbehandlung.',
-    price: {
-      amount: '210.00',
-      currencyCode: 'EUR'
-    },
-    images: [
-      {
-        id: '25',
-        url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
-        altText: 'Perfectha-Serie Fillers'
-      }
-    ],
-    variants: [
-      {
-        id: '25',
-        title: 'Default Title',
-        price: {
-          amount: '210.00',
-          currencyCode: 'EUR'
-        }
-      }
-    ],
-    tags: ['hyaluronic-acid', 'filler', 'facial']
-  }
+  // {
+  //   id: '13',
+  //   title: 'Hymovis / Hyadd',
+  //   handle: 'hymovis-hyadd',
+  //   description: 'Hochmolekulare Hyaluronsäure für Gelenkviskosupplementation.',
+  //   price: {
+  //     amount: '140.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '13',
+  //       url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
+  //       altText: 'Hymovis Hyadd Joint Treatment'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '13',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '140.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'joint-treatment', 'viscosupplementation']
+  // },
+  // {
+  //   id: '14',
+  //   title: 'HYALUBRIX',
+  //   handle: 'hyalubrix',
+  //   description: 'Hyaluronsäure-Injektion für Gelenkschmierung und Arthrosebehandlung.',
+  //   price: {
+  //     amount: '130.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '14',
+  //       url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
+  //       altText: 'HYALUBRIX Joint Injection'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '14',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '130.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'joint-treatment', 'osteoarthritis']
+  // },
+  // {
+  //   id: '15',
+  //   title: 'Durolane',
+  //   handle: 'durolane',
+  //   description: 'Einmal-Injektion Hyaluronsäure-Behandlung für Kniearthrose.',
+  //   price: {
+  //     amount: '160.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '15',
+  //       url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
+  //       altText: 'Durolane Knee Treatment'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '15',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '160.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'knee-treatment', 'osteoarthritis']
+  // },
+  // {
+  //   id: '16',
+  //   title: 'Monovisc',
+  //   handle: 'monovisc',
+  //   description: 'Hochmolekulare Hyaluronsäure für Kniearthrose-Behandlung.',
+  //   price: {
+  //     amount: '170.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '16',
+  //       url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
+  //       altText: 'Monovisc Knee Treatment'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '16',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '170.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'knee-treatment', 'osteoarthritis']
+  // },
+  // {
+  //   id: '17',
+  //   title: 'Orthovisc',
+  //   handle: 'orthovisc',
+  //   description: 'Hyaluronsäure-Viskosupplementation zur Schmerzlinderung bei Kniearthrose.',
+  //   price: {
+  //     amount: '150.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '17',
+  //       url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
+  //       altText: 'Orthovisc Knee Treatment'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '17',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '150.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'knee-treatment', 'pain-relief']
+  // },
+  // {
+  //   id: '18',
+  //   title: 'Ostenil',
+  //   handle: 'ostenil',
+  //   description: 'Hyaluronsäure-Behandlung für Gelenkschmerzen und Arthrose-Management.',
+  //   price: {
+  //     amount: '140.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '18',
+  //       url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
+  //       altText: 'Ostenil Joint Treatment'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '18',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '140.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'joint-treatment', 'osteoarthritis']
+  // },
+  // {
+  //   id: '19',
+  //   title: 'Cingal',
+  //   handle: 'cingal',
+  //   description: 'Kombinationsbehandlung aus Hyaluronsäure und Kortikosteroid für Kniearthrose.',
+  //   price: {
+  //     amount: '200.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '19',
+  //       url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
+  //       altText: 'Cingal Combination Treatment'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '19',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '200.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'corticosteroid', 'knee-treatment']
+  // },
+  // {
+  //   id: '20',
+  //   title: 'GO-ON',
+  //   handle: 'go-on',
+  //   description: 'Hyaluronsäure-Behandlung für Gelenkschmierung und Mobilitätsverbesserung.',
+  //   price: {
+  //     amount: '110.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '20',
+  //       url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
+  //       altText: 'GO-ON Joint Treatment'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '20',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '110.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'joint-treatment', 'mobility']
+  // },
+  // {
+  //   id: '21',
+  //   title: 'Supartz',
+  //   handle: 'supartz',
+  //   description: 'Hyaluronsäure-Viskosupplementation für Kniearthrose-Behandlung.',
+  //   price: {
+  //     amount: '160.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '21',
+  //       url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
+  //       altText: 'Supartz Knee Treatment'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '21',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '160.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'knee-treatment', 'osteoarthritis']
+  // },
+  // {
+  //   id: '22',
+  //   title: 'Euflexxa',
+  //   handle: 'euflexxa',
+  //   description: 'Bioengineerte Hyaluronsäure zur Schmerzlinderung bei Kniearthrose.',
+  //   price: {
+  //     amount: '180.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '22',
+  //       url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&h=800&fit=crop',
+  //       altText: 'Euflexxa Knee Treatment'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '22',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '180.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'knee-treatment', 'bioengineered']
+  // },
+  // // ===== OTHER INJECTABLE PRODUCTS =====
+  // {
+  //   id: '23',
+  //   title: 'SCULPTRA',
+  //   handle: 'sculptra',
+  //   description: 'Poly-L-Milchsäure-Injektion für Gesichtsvolumisierung und Kollagenstimulation.',
+  //   price: {
+  //     amount: '350.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '23',
+  //       url: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&h=800&fit=crop',
+  //       altText: 'SCULPTRA Injectable'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '23',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '350.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['poly-l-lactic-acid', 'collagen-stimulation', 'facial']
+  // },
+  // {
+  //   id: '24',
+  //   title: 'Ellansé',
+  //   handle: 'ellanse',
+  //   description: 'Polycaprolacton-basierter Filler für langanhaltende Gesichtsvolumisierung.',
+  //   price: {
+  //     amount: '320.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '24',
+  //       url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
+  //       altText: 'Ellansé Filler'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '24',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '320.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['polycaprolactone', 'filler', 'long-lasting']
+  // },
+  // {
+  //   id: '25',
+  //   title: 'Perfectha-Serie',
+  //   handle: 'perfectha-serie',
+  //   description: 'Hyaluronsäure-Filler für Gesichtskonturierung und Faltenbehandlung.',
+  //   price: {
+  //     amount: '210.00',
+  //     currencyCode: 'EUR'
+  //   },
+  //   images: [
+  //     {
+  //       id: '25',
+  //       url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=800&fit=crop',
+  //       altText: 'Perfectha-Serie Fillers'
+  //     }
+  //   ],
+  //   variants: [
+  //     {
+  //       id: '25',
+  //       title: 'Default Title',
+  //       price: {
+  //         amount: '210.00',
+  //         currencyCode: 'EUR'
+  //       }
+  //     }
+  //   ],
+  //   tags: ['hyaluronic-acid', 'filler', 'facial']
+  // }
 ];
 
 export const mockCollections: MockCollection[] = [

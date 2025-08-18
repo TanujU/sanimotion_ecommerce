@@ -70,7 +70,7 @@ export function VariantSelector({
                 key={value}
                 aria-disabled={!isAvailableForSale}
                 disabled={!isAvailableForSale}
-                title={`${option.name} ${value}${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
+                title={`${option.name} ${value}${!isAvailableForSale ? ' (Nicht auf Lager)' : ''}`}
                 className={clsx(
                   'flex min-w-[48px] items-center justify-center rounded-full border border-neutral-200 bg-neutral-100 px-2 py-1 text-sm',
                   {

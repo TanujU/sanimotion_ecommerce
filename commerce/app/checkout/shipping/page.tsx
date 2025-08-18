@@ -8,7 +8,7 @@ export default function ShippingPage() {
   const [shippingMethods] = useState([
     {
       id: 'economy',
-      name: 'Economy',
+      name: 'Wirtschaft',
       price: '€4,90',
       time: '5 bis 8 Werktage',
       description: 'Günstigster Versand'
