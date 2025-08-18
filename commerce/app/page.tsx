@@ -20,12 +20,12 @@ export default async function HomePage() {
     <div className="min-h-screen bg-white">
       {/* Product Grid */}
       <div className="mx-auto max-w-7xl px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* Main large product display */}
-          <div className="lg:col-span-2 lg:row-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
+          {/* First product */}
+          <div className="lg:col-span-1 lg:row-span-1">
             {products[0] && (
               <Link href={`/product/${products[0].handle}`} className="block">
-                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '995/600' }}>
+                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '1/1' }}>
                   <GridTileImage
                     src={products[0].featuredImage?.url}
                     alt={products[0].title}
@@ -40,33 +40,52 @@ export default async function HomePage() {
             )}
           </div>
           
-          {/* Right column products */}
-          <div className="space-y-4">
-            {products.slice(1, 3).map((product) => (
-              <Link key={product.handle} href={`/product/${product.handle}`} className="block">
-                <div className="relative w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '995/590' }}>
+          {/* Second product */}
+          <div className="lg:col-span-1 lg:row-span-1">
+            {products[1] && (
+              <Link href={`/product/${products[1].handle}`} className="block">
+                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '1/1' }}>
                   <GridTileImage
-                    src={product.featuredImage?.url}
-                    alt={product.title}
+                    src={products[1].featuredImage?.url}
+                    alt={products[1].title}
                     label={{
-                      title: product.title,
-                      amount: product.priceRange.maxVariantPrice.amount,
-                      currencyCode: product.priceRange.maxVariantPrice.currencyCode
+                      title: products[1].title,
+                      amount: products[1].priceRange.maxVariantPrice.amount,
+                      currencyCode: products[1].priceRange.maxVariantPrice.currencyCode
                     }}
                   />
                 </div>
               </Link>
-            ))}
+            )}
+          </div>
+          
+          {/* Third product */}
+          <div className="lg:col-span-1 lg:row-span-1">
+            {products[2] && (
+              <Link href={`/product/${products[2].handle}`} className="block">
+                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '1/1' }}>
+                  <GridTileImage
+                    src={products[2].featuredImage?.url}
+                    alt={products[2].title}
+                    label={{
+                      title: products[2].title,
+                      amount: products[2].priceRange.maxVariantPrice.amount,
+                      currencyCode: products[2].priceRange.maxVariantPrice.currencyCode
+                    }}
+                  />
+                </div>
+              </Link>
+            )}
           </div>
         </div>
         
         {/* Auto-scrolling horizontal carousel */}
         <div className="mt-4 overflow-hidden">
-          <div className="flex gap-4 animate-scroll">
+          <div className="flex gap-3 animate-scroll">
             {/* First set of products */}
             {products.slice(3).map((product) => (
               <Link key={product.handle} href={`/product/${product.handle}`} className="block">
-                <div className="relative aspect-square w-64 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
+                <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
                   <GridTileImage
                     src={product.featuredImage?.url}
                     alt={product.title}
@@ -82,7 +101,7 @@ export default async function HomePage() {
             {/* Duplicate set for seamless loop */}
             {products.slice(3).map((product, index) => (
               <Link key={`duplicate-${product.handle}-${index}`} href={`/product/${product.handle}`} className="block">
-                <div className="relative aspect-square w-64 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
+                <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
                   <GridTileImage
                     src={product.featuredImage?.url}
                     alt={product.title}

@@ -525,8 +525,37 @@ export async function getProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  // Return mock products instead of calling Shopify API
-  return mockProducts.map(product => ({
+  // Filter mock products based on search query
+  let filteredProducts = mockProducts;
+  
+  if (query && query.trim()) {
+    const searchTerm = query.toLowerCase().trim();
+    filteredProducts = mockProducts.filter(product => 
+      product.title.toLowerCase().includes(searchTerm) ||
+      product.description.toLowerCase().includes(searchTerm) ||
+      product.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+    );
+  }
+
+  // Apply sorting if specified
+  if (sortKey) {
+    filteredProducts.sort((a, b) => {
+      switch (sortKey) {
+        case 'TITLE':
+          return reverse ? b.title.localeCompare(a.title) : a.title.localeCompare(b.title);
+        case 'PRICE':
+          const priceA = parseFloat(a.price.amount);
+          const priceB = parseFloat(b.price.amount);
+          return reverse ? priceB - priceA : priceA - priceB;
+        case 'CREATED_AT':
+          return reverse ? 1 : -1; // Mock products don't have creation dates
+        default:
+          return 0;
+      }
+    });
+  }
+
+  return filteredProducts.map(product => ({
     id: product.id,
     handle: product.handle,
     availableForSale: true,
