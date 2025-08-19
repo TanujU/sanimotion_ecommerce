@@ -6,6 +6,7 @@ import Footer from 'components/layout/footer';
 import { Gallery } from 'components/product/gallery';
 import { ProductProvider } from 'components/product/product-context';
 import { ProductDescription } from 'components/product/product-description';
+import Prose from 'components/prose';
 import { HIDDEN_PRODUCT_TAG } from 'lib/constants';
 import { getProduct, getProductRecommendations } from 'lib/shopify';
 import { Image } from 'lib/shopify/types';
@@ -80,24 +81,41 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
           __html: JSON.stringify(productJsonLd)
         }}
       />
-      <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
-        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8">
-          <div className="h-full w-full basis-full lg:basis-4/8">
-            <Suspense
-              fallback={
-                <div className="relative aspect-square h-full max-h-[50px] w-full overflow-hidden" />
-              }
-            >
-              <Gallery
-                images={product.images.slice(0, 5).map((image: Image) => ({
-                  src: image.url,
-                  altText: image.altText
-                }))}
-              />
-            </Suspense>
+            <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
+        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-12">
+          {/* Left Column: Image + Description */}
+          <div className="h-full w-full basis-full lg:basis-2/3">
+            {/* Product Image Section */}
+            <div className="mb-8">
+              <Suspense
+                fallback={
+                  <div className="relative aspect-square h-full max-h-[500px] w-full overflow-hidden" />
+                }
+              >
+                <Gallery
+                  images={product.images.slice(0, 5).map((image: Image) => ({
+                    src: image.url,
+                    altText: image.altText
+                  }))}
+                />
+              </Suspense>
+            </div>
+
+            {/* Product Information Section */}
+            <div className="border-t border-gray-200 pt-8">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">Produktinformationen</h2>
+              <h1 className="text-3xl font-medium text-black mb-4">{product.title}</h1>
+              {product.descriptionHtml ? (
+                <Prose
+                  className="text-sm leading-relaxed text-gray-700"
+                  html={product.descriptionHtml}
+                />
+              ) : null}
+            </div>
           </div>
 
-          <div className="basis-full lg:basis-2/3">
+          {/* Right Column: Product Details */}
+          <div className="basis-full lg:basis-1/3">
             <Suspense fallback={null}>
               <ProductDescription product={product} />
             </Suspense>

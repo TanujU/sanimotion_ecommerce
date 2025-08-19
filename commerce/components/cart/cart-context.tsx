@@ -210,33 +210,57 @@ export function CartProvider({
   const [cart, setCartState] = useState<Cart | undefined>(undefined);
 
   useEffect(() => {
+    // Try to load cart from localStorage first
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        setCartState(parsedCart);
+        return;
+      } catch (error) {
+        console.error('Error parsing saved cart:', error);
+      }
+    }
+
+    // If no saved cart, load from promise
     cartPromise.then((initialCart) => {
-      setCartState(initialCart || createEmptyCart());
+      const cartToSet = initialCart || createEmptyCart();
+      setCartState(cartToSet);
+      // Save to localStorage
+      localStorage.setItem('cart', JSON.stringify(cartToSet));
     });
   }, [cartPromise]);
 
   const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
     setCartState(prevCart => {
       if (!prevCart) return prevCart;
-      return cartReducer(prevCart, {
+      const newCart = cartReducer(prevCart, {
         type: 'UPDATE_ITEM',
         payload: { merchandiseId, updateType }
       });
+      // Save to localStorage
+      localStorage.setItem('cart', JSON.stringify(newCart));
+      return newCart;
     });
   };
 
   const addCartItem = (variant: ProductVariant, product: Product) => {
     setCartState(prevCart => {
       if (!prevCart) return prevCart;
-      return cartReducer(prevCart, {
+      const newCart = cartReducer(prevCart, {
         type: 'ADD_ITEM',
         payload: { variant, product }
       });
+      // Save to localStorage
+      localStorage.setItem('cart', JSON.stringify(newCart));
+      return newCart;
     });
   };
 
   const setCart = (newCart: Cart) => {
     setCartState(newCart);
+    // Save to localStorage
+    localStorage.setItem('cart', JSON.stringify(newCart));
   };
 
   const value = useMemo(
