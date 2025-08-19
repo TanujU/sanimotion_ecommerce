@@ -107,7 +107,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
               <h1 className="text-3xl font-medium text-black mb-4">{product.title}</h1>
               {product.descriptionHtml ? (
                 <Prose
-                  className="text-sm leading-relaxed text-gray-700"
+                  className="text-sm leading-relaxed text-gray-700 max-w-none text-justify"
                   html={product.descriptionHtml}
                 />
               ) : null}
