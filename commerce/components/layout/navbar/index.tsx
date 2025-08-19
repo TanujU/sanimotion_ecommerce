@@ -28,7 +28,7 @@ export async function Navbar() {
           >
             <LogoSquare />
             <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block text-black">
-              {SITE_NAME}
+              FREYARU
             </div>
           </Link>
           {menu.length ? (

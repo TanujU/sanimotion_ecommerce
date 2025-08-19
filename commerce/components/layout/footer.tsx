@@ -106,9 +106,9 @@ export default function Footer() {
           <div className="flex items-center justify-start mb-8">
             <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
               <LogoSquare size="sm" />
-              {/* De.Freyaru Text */}
+              {/* FREYARU Text */}
               <div className="flex flex-col ml-2">
-                <span className="text-sm font-medium uppercase text-black">De.Freyaru</span>
+                <span className="text-sm font-medium uppercase text-black">FREYARU</span>
               </div>
             </Link>
           </div>
