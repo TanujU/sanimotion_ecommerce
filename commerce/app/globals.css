@@ -4,6 +4,26 @@
 @plugin "@tailwindcss/typography";
 
 @layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --card: #ffffff;
+    --card-foreground: #000000;
+    --border: #e5e5e5;
+    --muted: #f5f5f5;
+    --muted-foreground: #737373;
+  }
+
+  .dark {
+    --background: #171717;
+    --foreground: #ffffff;
+    --card: #262626;
+    --card-foreground: #ffffff;
+    --border: #404040;
+    --muted: #262626;
+    --muted-foreground: #a3a3a3;
+  }
+
   *,
   ::after,
   ::before,
@@ -11,9 +31,16 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
   }
-}
 
-/* Forced light mode - removed dark mode preference */
+  /* Only apply CSS variables to elements that don't have explicit Tailwind classes */
+  body:not([class*="bg-"]) {
+    background-color: var(--background);
+  }
+  
+  body:not([class*="text-"]) {
+    color: var(--foreground);
+  }
+}
 
 @supports (font: -apple-system-body) and (-webkit-appearance: none) {
   img[loading='lazy'] {

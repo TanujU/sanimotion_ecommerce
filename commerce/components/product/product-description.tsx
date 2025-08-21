@@ -38,7 +38,7 @@ export function ProductDescription({ product }: { product: Product }) {
 
       {/* Product Title */}
       <div className="mb-4">
-        <h1 className="text-3xl font-medium text-black">{product.title}</h1>
+        <h1 className="text-3xl font-medium text-black dark:text-white">{product.title}</h1>
       </div>
 
       {/* Pricing Section */}
@@ -52,7 +52,7 @@ export function ProductDescription({ product }: { product: Product }) {
           </span>
           <span className="text-blue-600">*</span>
         </div>
-        <div className="mt-2 text-sm text-gray-500">
+        <div className="mt-2 text-sm text-gray-500 dark:text-neutral-400">
           Preise inkl. MwSt. zzgl. Versandkosten
         </div>
       </div>
@@ -63,18 +63,18 @@ export function ProductDescription({ product }: { product: Product }) {
 
       {/* Quantity Selector and Add to Cart */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Menge:</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-neutral-300">Menge:</label>
         <div className="flex items-center space-x-1">
           <button 
             onClick={handleDecrement}
-            className="w-10 h-10 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+            className="w-10 h-10 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors dark:border-neutral-600 dark:hover:bg-neutral-700 dark:text-white"
           >
             <span className="text-lg font-semibold">-</span>
           </button>
-          <span className="w-12 text-center text-lg font-medium">{quantity}</span>
+          <span className="w-12 text-center text-lg font-medium dark:text-white">{quantity}</span>
           <button 
             onClick={handleIncrement}
-            className="w-10 h-10 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+            className="w-10 h-10 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors dark:border-neutral-600 dark:hover:bg-neutral-700 dark:text-white"
           >
             <span className="text-lg font-semibold">+</span>
           </button>
@@ -88,8 +88,8 @@ export function ProductDescription({ product }: { product: Product }) {
       </div>
 
       {/* Product Information */}
-      <div className="border-t border-gray-200 pt-6">
-        <div className="space-y-2 text-sm text-gray-600">
+      <div className="border-t border-gray-200 pt-6 dark:border-neutral-600">
+        <div className="space-y-2 text-sm text-gray-600 dark:text-neutral-400">
           <div>Produktnummer: ART-{product.id}</div>
           <div>Hersteller: {product.title.includes('Croma') ? 'CROMA Pharma GmbH' : 'FREYARU'}</div>
         </div>

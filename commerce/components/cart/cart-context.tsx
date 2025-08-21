@@ -210,25 +210,48 @@ export function CartProvider({
   const [cart, setCartState] = useState<Cart | undefined>(undefined);
 
   useEffect(() => {
-    // Try to load cart from localStorage first
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
-        const parsedCart = JSON.parse(savedCart);
-        setCartState(parsedCart);
-        return;
-      } catch (error) {
-        console.error('Error parsing saved cart:', error);
+    try {
+      // Try to load cart from localStorage first
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        try {
+          const parsedCart = JSON.parse(savedCart);
+          setCartState(parsedCart);
+          return;
+        } catch (error) {
+          console.error('Error parsing saved cart:', error);
+          // Clear invalid cart data
+          try {
+            localStorage.removeItem('cart');
+          } catch (e) {
+            console.warn('Error clearing invalid cart:', e);
+          }
+        }
       }
-    }
 
-    // If no saved cart, load from promise
-    cartPromise.then((initialCart) => {
-      const cartToSet = initialCart || createEmptyCart();
-      setCartState(cartToSet);
-      // Save to localStorage
-      localStorage.setItem('cart', JSON.stringify(cartToSet));
-    });
+      // If no saved cart, load from promise
+      cartPromise.then((initialCart) => {
+        try {
+          const cartToSet = initialCart || createEmptyCart();
+          setCartState(cartToSet);
+          // Save to localStorage
+          try {
+            localStorage.setItem('cart', JSON.stringify(cartToSet));
+          } catch (error) {
+            console.warn('Error saving cart to localStorage:', error);
+          }
+        } catch (error) {
+          console.error('Error setting initial cart:', error);
+          setCartState(createEmptyCart());
+        }
+      }).catch((error) => {
+        console.error('Error loading cart from promise:', error);
+        setCartState(createEmptyCart());
+      });
+    } catch (error) {
+      console.error('Error in cart initialization:', error);
+      setCartState(createEmptyCart());
+    }
   }, [cartPromise]);
 
   const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
@@ -239,7 +262,11 @@ export function CartProvider({
         payload: { merchandiseId, updateType }
       });
       // Save to localStorage
-      localStorage.setItem('cart', JSON.stringify(newCart));
+      try {
+        localStorage.setItem('cart', JSON.stringify(newCart));
+      } catch (error) {
+        console.warn('Error saving cart to localStorage:', error);
+      }
       return newCart;
     });
   };
@@ -252,7 +279,11 @@ export function CartProvider({
         payload: { variant, product }
       });
       // Save to localStorage
-      localStorage.setItem('cart', JSON.stringify(newCart));
+      try {
+        localStorage.setItem('cart', JSON.stringify(newCart));
+      } catch (error) {
+        console.warn('Error saving cart to localStorage:', error);
+      }
       return newCart;
     });
   };
@@ -260,7 +291,11 @@ export function CartProvider({
   const setCart = (newCart: Cart) => {
     setCartState(newCart);
     // Save to localStorage
-    localStorage.setItem('cart', JSON.stringify(newCart));
+    try {
+      localStorage.setItem('cart', JSON.stringify(newCart));
+    } catch (error) {
+      console.warn('Error saving cart to localStorage:', error);
+    }
   };
 
   const value = useMemo(

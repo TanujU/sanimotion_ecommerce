@@ -1,7 +1,12 @@
 import clsx from 'clsx';
 import LogoIcon from './icons/logo';
 
-export default function LogoSquare({ size }: { size?: 'sm' | undefined }) {
+interface LogoSquareProps {
+  size?: 'sm' | undefined;
+  siteName?: string;
+}
+
+export default function LogoSquare({ size, siteName }: LogoSquareProps) {
   return (
     <div
       className={clsx(
@@ -13,6 +18,7 @@ export default function LogoSquare({ size }: { size?: 'sm' | undefined }) {
       )}
     >
       <LogoIcon
+        siteName={siteName}
         className={clsx({
           'h-[16px] w-[16px]': !size,
           'h-[14px] w-[14px]': size === 'sm'

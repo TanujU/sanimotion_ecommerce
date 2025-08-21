@@ -8,7 +8,7 @@ export default function Footer() {
   const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '');
 
   return (
-    <footer className="text-sm bg-gray-100 text-gray-600">
+    <footer className="text-sm bg-gray-100 text-gray-600 dark:bg-neutral-800 dark:text-neutral-300">
       <div className="py-12">
         <div className="mx-auto w-full max-w-7xl px-4 md:px-4 min-[1320px]:px-0">
           {/* Three Column Layout */}
@@ -16,32 +16,32 @@ export default function Footer() {
             
             {/* Column 1: Legal */}
             <div>
-              <h3 className="font-semibold text-black mb-4 border-b border-black pb-2 max-w-fit">
+              <h3 className="font-semibold text-black mb-4 border-b border-black pb-2 max-w-fit dark:text-white dark:border-white">
                 Rechtliches
               </h3>
               <ul className="space-y-2">
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Impressum
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Datenschutz
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Allgemeine Geschäftsbedingungen
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Widerrufsrecht
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Medizinproduktegesetz
                   </span>
                 </li>
@@ -50,32 +50,32 @@ export default function Footer() {
 
             {/* Column 2: Customer service */}
             <div>
-              <h3 className="font-semibold text-black mb-4 border-b border-black pb-2 max-w-fit">
+              <h3 className="font-semibold text-black mb-4 border-b border-black pb-2 max-w-fit dark:text-white dark:border-white">
                 Kundenservice
               </h3>
                                                          <ul className="space-y-2">
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Kontakt
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Lieferzeiten & Versandkosten
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Zahlungsmethoden
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Kundenkonto
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Passwort vergessen?
                 </span>
                 </li>
@@ -84,17 +84,17 @@ export default function Footer() {
             
             {/* Column 3: Pursue */}
             <div>
-              <h3 className="font-semibold text-black mb-4 border-b border-black pb-2 max-w-fit">
+              <h3 className="font-semibold text-black mb-4 border-b border-black pb-2 max-w-fit dark:text-white dark:border-white">
                 Verfolgen
               </h3>
               <ul className="space-y-2">
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     Über uns
                   </span>
                 </li>
                 <li>
-                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer">
+                  <span className="text-gray-600 hover:text-black transition-colors cursor-pointer dark:text-neutral-300 dark:hover:text-white">
                     FAQ
                   </span>
                 </li>
@@ -105,10 +105,10 @@ export default function Footer() {
           {/* Logo Section */}
           <div className="flex items-center justify-start mb-8">
             <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
-              <LogoSquare size="sm" />
+              <LogoSquare size="sm" siteName={SITE_NAME} />
               {/* FREYARU Text */}
               <div className="flex flex-col ml-2">
-                <span className="text-sm font-medium uppercase text-black">FREYARU</span>
+                <span className="text-sm font-medium uppercase text-black dark:text-white">FREYARU</span>
               </div>
             </Link>
           </div>
@@ -156,9 +156,9 @@ export default function Footer() {
       </div>
       
       {/* Copyright at the very bottom */}
-      <div className="border-t border-gray-200 py-4">
+      <div className="border-t border-gray-200 py-4 dark:border-neutral-700">
         <div className="mx-auto w-full max-w-7xl px-4 md:px-4 min-[1320px]:px-0">
-          <p className="text-center text-gray-800">
+          <p className="text-center text-gray-800 dark:text-neutral-300">
             &copy; {copyrightDate} Alle Rechte vorbehalten.
           </p>
         </div>
