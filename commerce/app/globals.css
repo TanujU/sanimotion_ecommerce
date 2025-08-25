@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin "@tailwindcss/container-queries";
 @plugin "@tailwindcss/typography";
@@ -36,14 +36,14 @@
   body:not([class*="bg-"]) {
     background-color: var(--background);
   }
-  
+
   body:not([class*="text-"]) {
     color: var(--foreground);
   }
 }
 
 @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-  img[loading='lazy'] {
+  img[loading="lazy"] {
     clip-path: inset(0.6px);
   }
 }

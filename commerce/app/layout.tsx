@@ -1,13 +1,13 @@
-import { CartProvider } from 'components/cart/cart-context';
-import { Navbar } from 'components/layout/navbar';
-import { WelcomeToast } from 'components/welcome-toast';
-import { ThemeProvider } from 'components/theme/theme-context';
-import { GeistSans } from 'geist/font/sans';
-import { getCart } from 'lib/shopify';
-import { ReactNode } from 'react';
-import { Toaster } from 'sonner';
-import './globals.css';
-import { baseUrl } from 'lib/utils';
+import { CartProvider } from "components/cart/cart-context";
+import { Navbar } from "components/layout/navbar";
+import { WelcomeToast } from "components/welcome-toast";
+import { ThemeProvider } from "components/theme/theme-context";
+import { GeistSans } from "geist/font/sans";
+import { getCart } from "lib/shopify";
+import React, { ReactNode } from "react";
+import { Toaster } from "sonner";
+import "./globals.css";
+import { baseUrl } from "lib/utils";
 
 const { SITE_NAME } = process.env;
 
@@ -15,57 +15,24 @@ export const metadata = {
   metadataBase: new URL(baseUrl),
   title: {
     default: SITE_NAME!,
-    template: `%s | ${SITE_NAME}`
+    template: `%s | ${SITE_NAME}`,
   },
   robots: {
     follow: true,
-    index: true
-  }
+    index: true,
+  },
 };
 
 export default async function RootLayout({
-  children
+  children,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   // Don't await the fetch, pass the Promise to the context provider
   const cart = getCart();
 
   return (
     <html lang="de" className={GeistSans.variable}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  // Check if we're in a browser environment
-                  if (typeof window === 'undefined' || typeof document === 'undefined') {
-                    return;
-                  }
-                  
-                  var theme = localStorage.getItem('theme');
-                  if (!theme) {
-                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                      theme = 'dark';
-                    } else {
-                      theme = 'light';
-                    }
-                  }
-                  
-                  // Apply to html element
-                  if (document.documentElement) {
-                    document.documentElement.classList.add(theme);
-                  }
-                  
-                } catch (e) {
-                  console.error('Error applying theme:', e);
-                }
-              })();
-            `
-          }}
-        />
-      </head>
       <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white">
         <ThemeProvider>
           <CartProvider cartPromise={cart}>
