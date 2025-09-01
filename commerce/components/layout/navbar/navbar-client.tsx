@@ -2,7 +2,6 @@
 
 import CartModal from 'components/cart/modal';
 import LogoSquare from 'components/logo-square';
-import ThemeToggle from 'components/theme/theme-toggle';
 import { Menu } from 'lib/shopify/types';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -16,7 +15,7 @@ interface NavbarClientProps {
 
 export function NavbarClient({ menu, siteName }: NavbarClientProps) {
   return (
-    <nav className="relative flex items-center justify-between p-4 lg:px-6 bg-white border-b border-gray-200 dark:bg-neutral-900 dark:border-neutral-700">
+    <nav className="relative flex items-center justify-between p-4 lg:px-6 bg-white border-b border-gray-200">
       <div className="block flex-none md:hidden">
         <Suspense fallback={null}>
           <MobileMenu menu={menu} />
@@ -30,7 +29,7 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
             className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
           >
             <LogoSquare siteName={siteName} />
-            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block text-black dark:text-white">
+            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block text-black">
               FREYARU
             </div>
           </Link>
@@ -41,7 +40,7 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
                   <Link
                     href={item.path}
                     prefetch={true}
-                    className="text-neutral-600 underline-offset-4 hover:text-black hover:underline dark:text-neutral-300 dark:hover:text-white"
+                    className="text-neutral-600 underline-offset-4 hover:text-black hover:underline"
                   >
                     {item.title}
                   </Link>
@@ -57,7 +56,6 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
         </div>
         <div className="flex justify-end md:w-1/3">
           <div className="flex items-center space-x-2">
-            <ThemeToggle />
             <CartModal />
           </div>
         </div>

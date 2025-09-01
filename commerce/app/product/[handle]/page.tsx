@@ -82,7 +82,7 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
         }}
       />
             <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
-        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-12 dark:bg-neutral-800 dark:border-neutral-700">
+        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-12">
           {/* Left Column: Image + Description */}
           <div className="h-full w-full basis-full lg:basis-2/3">
             {/* Product Image Section */}
@@ -102,12 +102,12 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
             </div>
 
             {/* Product Information Section */}
-            <div className="border-t border-gray-200 pt-8 dark:border-neutral-600">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2 dark:text-white">Produktinformationen</h2>
-              <h1 className="text-3xl font-medium text-black mb-4 dark:text-white">{product.title}</h1>
+            <div className="border-t border-gray-200 pt-8">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">Produktinformationen</h2>
+              <h1 className="text-3xl font-medium text-black mb-4">{product.title}</h1>
               {product.descriptionHtml ? (
                 <Prose
-                  className="text-sm leading-relaxed text-gray-700 max-w-none text-justify dark:text-neutral-300"
+                  className="text-sm leading-relaxed text-gray-700 max-w-none text-justify"
                   html={product.descriptionHtml}
                 />
               ) : null}
@@ -135,7 +135,7 @@ async function RelatedProducts({ id }: { id: string }) {
 
   return (
     <div className="py-8">
-      <h2 className="mb-4 text-2xl font-bold dark:text-white">Ähnliche Produkte</h2>
+      <h2 className="mb-4 text-2xl font-bold">Ähnliche Produkte</h2>
       <ul className="flex w-full gap-4 overflow-x-auto pt-1">
         {relatedProducts.map((product) => (
           <li

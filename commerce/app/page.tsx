@@ -17,7 +17,7 @@ export default async function HomePage() {
   const products = await getProducts({});
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-900">
+    <div className="min-h-screen bg-white">
       {/* Product Grid */}
       <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
@@ -25,7 +25,7 @@ export default async function HomePage() {
           <div className="lg:col-span-1 lg:row-span-1">
             {products[0] && (
               <Link href={`/product/${products[0].handle}`} className="block">
-                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer dark:bg-neutral-800 dark:border-neutral-700" style={{ aspectRatio: '1/1' }}>
+                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '1/1' }}>
                   <GridTileImage
                     src={products[0].featuredImage?.url}
                     alt={products[0].title}
@@ -44,7 +44,7 @@ export default async function HomePage() {
           <div className="lg:col-span-1 lg:row-span-1">
             {products[1] && (
               <Link href={`/product/${products[1].handle}`} className="block">
-                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer dark:bg-neutral-800 dark:border-neutral-700" style={{ aspectRatio: '1/1' }}>
+                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '1/1' }}>
                   <GridTileImage
                     src={products[1].featuredImage?.url}
                     alt={products[1].title}
@@ -63,7 +63,7 @@ export default async function HomePage() {
           <div className="lg:col-span-1 lg:row-span-1">
             {products[2] && (
               <Link href={`/product/${products[2].handle}`} className="block">
-                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer dark:bg-neutral-800 dark:border-neutral-700" style={{ aspectRatio: '1/1' }}>
+                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '1/1' }}>
                   <GridTileImage
                     src={products[2].featuredImage?.url}
                     alt={products[2].title}
@@ -80,12 +80,12 @@ export default async function HomePage() {
         </div>
         
         {/* Auto-scrolling horizontal carousel */}
-        <div className="mt-4 overflow-hidden">
-          <div className="flex gap-3 animate-scroll">
+        <div className="mt-4">
+          <div className="flex gap-3 overflow-x-auto pb-4" style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db #f3f4f6' }}>
             {/* First set of products */}
             {products.slice(3).map((product) => (
               <Link key={product.handle} href={`/product/${product.handle}`} className="block">
-                <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer dark:bg-neutral-800 dark:border-neutral-700">
+                <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
                   <GridTileImage
                     src={product.featuredImage?.url}
                     alt={product.title}
@@ -101,7 +101,7 @@ export default async function HomePage() {
             {/* Duplicate set for seamless loop */}
             {products.slice(3).map((product, index) => (
               <Link key={`duplicate-${product.handle}-${index}`} href={`/product/${product.handle}`} className="block">
-                <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer dark:bg-neutral-800 dark:border-neutral-700">
+                <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
                   <GridTileImage
                     src={product.featuredImage?.url}
                     alt={product.title}

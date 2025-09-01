@@ -71,3 +71,44 @@ button {
 .animate-scroll:hover {
   animation-play-state: paused;
 }
+
+/* Custom scrollbar styling */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Scroll indicator animation */
+@keyframes scrollIndicator {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scaleX(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+.scroll-indicator {
+  animation: scrollIndicator 2s ease-in-out infinite;
+}
+
+.scroll-indicator:nth-child(1) { animation-delay: 0s; }
+.scroll-indicator:nth-child(2) { animation-delay: 0.2s; }
+.scroll-indicator:nth-child(3) { animation-delay: 0.4s; }
+.scroll-indicator:nth-child(4) { animation-delay: 0.6s; }
+.scroll-indicator:nth-child(5) { animation-delay: 0.8s; }
