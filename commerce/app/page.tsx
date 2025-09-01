@@ -1,16 +1,16 @@
-import Grid from 'components/grid';
-import ProductGridItems from 'components/layout/product-grid-items';
-import Footer from 'components/layout/footer';
-import { getProducts } from 'lib/shopify';
-import { GridTileImage } from 'components/grid/tile';
-import Link from 'next/link';
+import Grid from "components/grid";
+import ProductGridItems from "components/layout/product-grid-items";
+import Footer from "components/layout/footer";
+import { getProducts } from "lib/shopify";
+import { GridTileImage } from "components/grid/tile";
+import Link from "next/link";
 
 export const metadata = {
   description:
-    'Hochleistungs-E-Commerce-Shop gebaut mit Next.js, Vercel und Shopify.',
+    "Hochleistungs-E-Commerce-Shop gebaut mit Next.js, Vercel und Shopify.",
   openGraph: {
-    type: 'website'
-  }
+    type: "website",
+  },
 };
 
 export default async function HomePage() {
@@ -32,14 +32,15 @@ export default async function HomePage() {
                     label={{
                       title: products[0].title,
                       amount: products[0].priceRange.maxVariantPrice.amount,
-                      currencyCode: products[0].priceRange.maxVariantPrice.currencyCode
+                      currencyCode:
+                        products[0].priceRange.maxVariantPrice.currencyCode,
                     }}
                   />
                 </div>
               </Link>
             )}
           </div>
-          
+
           {/* Second product */}
           <div className="lg:col-span-1 lg:row-span-1">
             {products[1] && (
@@ -51,14 +52,15 @@ export default async function HomePage() {
                     label={{
                       title: products[1].title,
                       amount: products[1].priceRange.maxVariantPrice.amount,
-                      currencyCode: products[1].priceRange.maxVariantPrice.currencyCode
+                      currencyCode:
+                        products[1].priceRange.maxVariantPrice.currencyCode,
                     }}
                   />
                 </div>
               </Link>
             )}
           </div>
-          
+
           {/* Third product */}
           <div className="lg:col-span-1 lg:row-span-1">
             {products[2] && (
@@ -70,7 +72,8 @@ export default async function HomePage() {
                     label={{
                       title: products[2].title,
                       amount: products[2].priceRange.maxVariantPrice.amount,
-                      currencyCode: products[2].priceRange.maxVariantPrice.currencyCode
+                      currencyCode:
+                        products[2].priceRange.maxVariantPrice.currencyCode,
                     }}
                   />
                 </div>
@@ -78,7 +81,7 @@ export default async function HomePage() {
             )}
           </div>
         </div>
-        
+
         {/* Auto-scrolling horizontal carousel */}
         <div className="mt-4">
           <div className="flex gap-3 overflow-x-auto pb-4" style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db #f3f4f6' }}>
@@ -92,7 +95,8 @@ export default async function HomePage() {
                     label={{
                       title: product.title,
                       amount: product.priceRange.maxVariantPrice.amount,
-                      currencyCode: product.priceRange.maxVariantPrice.currencyCode
+                      currencyCode:
+                        product.priceRange.maxVariantPrice.currencyCode,
                     }}
                   />
                 </div>
@@ -108,7 +112,8 @@ export default async function HomePage() {
                     label={{
                       title: product.title,
                       amount: product.priceRange.maxVariantPrice.amount,
-                      currencyCode: product.priceRange.maxVariantPrice.currencyCode
+                      currencyCode:
+                        product.priceRange.maxVariantPrice.currencyCode,
                     }}
                   />
                 </div>
