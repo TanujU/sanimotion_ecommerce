@@ -4,6 +4,7 @@ import Footer from "components/layout/footer";
 import { getProducts } from "lib/shopify";
 import { GridTileImage } from "components/grid/tile";
 import Link from "next/link";
+import AutoScrollCarousel from "components/auto-scroll-carousel";
 
 export const metadata = {
   description:
@@ -25,7 +26,10 @@ export default async function HomePage() {
           <div className="lg:col-span-1 lg:row-span-1">
             {products[0] && (
               <Link href={`/product/${products[0].handle}`} className="block">
-                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '1/1' }}>
+                <div
+                  className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer"
+                  style={{ aspectRatio: "1/1" }}
+                >
                   <GridTileImage
                     src={products[0].featuredImage?.url}
                     alt={products[0].title}
@@ -45,7 +49,10 @@ export default async function HomePage() {
           <div className="lg:col-span-1 lg:row-span-1">
             {products[1] && (
               <Link href={`/product/${products[1].handle}`} className="block">
-                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '1/1' }}>
+                <div
+                  className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer"
+                  style={{ aspectRatio: "1/1" }}
+                >
                   <GridTileImage
                     src={products[1].featuredImage?.url}
                     alt={products[1].title}
@@ -65,7 +72,10 @@ export default async function HomePage() {
           <div className="lg:col-span-1 lg:row-span-1">
             {products[2] && (
               <Link href={`/product/${products[2].handle}`} className="block">
-                <div className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer" style={{ aspectRatio: '1/1' }}>
+                <div
+                  className="relative h-full w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer"
+                  style={{ aspectRatio: "1/1" }}
+                >
                   <GridTileImage
                     src={products[2].featuredImage?.url}
                     alt={products[2].title}
@@ -83,44 +93,7 @@ export default async function HomePage() {
         </div>
 
         {/* Auto-scrolling horizontal carousel */}
-        <div className="mt-4">
-          <div className="flex gap-3 overflow-x-auto pb-4" style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db #f3f4f6' }}>
-            {/* First set of products */}
-            {products.slice(3).map((product) => (
-              <Link key={product.handle} href={`/product/${product.handle}`} className="block">
-                <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
-                  <GridTileImage
-                    src={product.featuredImage?.url}
-                    alt={product.title}
-                    label={{
-                      title: product.title,
-                      amount: product.priceRange.maxVariantPrice.amount,
-                      currencyCode:
-                        product.priceRange.maxVariantPrice.currencyCode,
-                    }}
-                  />
-                </div>
-              </Link>
-            ))}
-            {/* Duplicate set for seamless loop */}
-            {products.slice(3).map((product, index) => (
-              <Link key={`duplicate-${product.handle}-${index}`} href={`/product/${product.handle}`} className="block">
-                <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
-                  <GridTileImage
-                    src={product.featuredImage?.url}
-                    alt={product.title}
-                    label={{
-                      title: product.title,
-                      amount: product.priceRange.maxVariantPrice.amount,
-                      currencyCode:
-                        product.priceRange.maxVariantPrice.currencyCode,
-                    }}
-                  />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <AutoScrollCarousel products={products.slice(3)} />
       </div>
       <Footer />
     </div>
