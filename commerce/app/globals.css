@@ -827,7 +827,7 @@ button {
 
 .marquee__inner {
   display: inline-flex;
-  animation: marquee 90s linear infinite;
+  animation: marquee 120s linear infinite;
   animation-play-state: running;
 }
 

@@ -32,12 +32,12 @@ const SafeLink = ({
 };
 
 export const metadata = {
-  title: "SaniMotion - Professional Medical Equipment & Healthcare Supplies",
+  title: "Sanimotion - Professional Medical Equipment & Healthcare Supplies",
   description:
     "Premium Medical Equipment and Healthcare Supplies - Professional Grade Medical Devices and Medicines. Trusted by healthcare professionals worldwide.",
   openGraph: {
     type: "website",
-    title: "SaniMotion - Professional Medical Equipment & Healthcare Supplies",
+    title: "Sanimotion - Professional Medical Equipment & Healthcare Supplies",
     description:
       "Premium Medical Equipment and Healthcare Supplies - Professional Grade Medical Devices and Medicines.",
     url: "/",
@@ -53,7 +53,7 @@ export default async function HomePage() {
 
       {/* Hero Banner Section */}
       <HeroBanner
-        title="SaniMotion"
+        title="Sanimotion"
         subtitle="Medical Excellence"
         description="Premium medical equipment and healthcare supplies trusted by professionals worldwide. Discover our comprehensive range of medical devices, equipment, and supplies for hospitals, clinics, and medical practices."
         imageUrl="https://img.freepik.com/premium-photo/medical-supplies-equipment-blue-background_690064-9800.jpg?semt=ais_hybrid&w=740&q=80"

@@ -108,7 +108,34 @@ export function HeroBanner({
   const [isMobile, setIsMobile] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInitialAnimation, setIsInitialAnimation] = useState(true);
+  const [showNavItems, setShowNavItems] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  // Hero slides data
+  const heroSlides = [
+    {
+      title: "Sanimotion",
+      subtitle: "Medical Excellence",
+      description: "Premium medical equipment and healthcare supplies trusted by professionals worldwide. Discover our comprehensive range of medical devices, equipment, and supplies for hospitals, clinics, and medical practices.",
+      imageUrl: "https://img.freepik.com/premium-photo/medical-supplies-equipment-blue-background_690064-9800.jpg?semt=ais_hybrid&w=740&q=80",
+      imageAlt: "3D online pharmacy store with medical supplies and healthcare products"
+    },
+    {
+      title: "Advanced Technology",
+      subtitle: "Innovation in Healthcare",
+      description: "Cutting-edge medical technology and state-of-the-art equipment designed to enhance patient care and improve clinical outcomes. Trusted by leading healthcare institutions worldwide.",
+      imageUrl: "https://img.freepik.com/premium-photo/medical-equipment-hospital-room-modern-technology_690064-9801.jpg?semt=ais_hybrid&w=740&q=80",
+      imageAlt: "Modern medical equipment and technology in hospital setting"
+    },
+    {
+      title: "Professional Grade",
+      subtitle: "Quality Assurance",
+      description: "Rigorous quality standards and professional-grade medical supplies that meet international healthcare regulations. Your trusted partner in medical excellence and patient safety.",
+      imageUrl: "https://img.freepik.com/premium-photo/medical-professionals-working-modern-hospital_690064-9802.jpg?semt=ais_hybrid&w=740&q=80",
+      imageAlt: "Medical professionals working with advanced equipment"
+    }
+  ];
 
   // Initial loading animation sequence
   useEffect(() => {
@@ -122,11 +149,26 @@ export function HeroBanner({
       setIsInitialAnimation(false);
     }, 800); // Delay to let navigation load first
 
+    // Third: After sidebar slides in, show the navigation items
+    const navItemsTimer = setTimeout(() => {
+      setShowNavItems(true);
+    }, 1500); // Delay to let sidebar slide in first
+
     return () => {
       clearTimeout(loadTimer);
       clearTimeout(slideTimer);
+      clearTimeout(navItemsTimer);
     };
   }, []);
+
+  // Auto-advance slideshow
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [heroSlides.length]);
 
   // Mobile detection
   useEffect(() => {
@@ -197,16 +239,25 @@ export function HeroBanner({
       ref={heroRef}
       className={`relative min-h-[100vh] flex items-center overflow-hidden mt-0 pt-0 ${className}`}
     >
-      {/* Background Image */}
+      {/* Background Images - Slideshow */}
       <div className="absolute inset-0 z-0">
-        <SafeImage
-          src={imageUrl}
-          alt={imageAlt}
-          fill
-          className="object-cover object-center"
-          priority
-          sizes="100vw"
-        />
+        {heroSlides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <SafeImage
+              src={slide.imageUrl}
+              alt={slide.imageAlt}
+              fill
+              className="object-cover object-center"
+              priority={index === 0}
+              sizes="100vw"
+            />
+          </div>
+        ))}
         {/* Overlay */}
         <div className="absolute inset-0 hero-banner-overlay"></div>
       </div>
@@ -274,11 +325,11 @@ export function HeroBanner({
           className={`px-8 py-8 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
             isMobile
               ? "opacity-100 border-b border-gray-100/50 transform translate-y-0"
-              : !isLoaded || isInitialAnimation
-                ? "opacity-0 transform -translate-y-4"
+              : !isLoaded || isInitialAnimation || !showNavItems
+                ? "opacity-0 transform -translate-x-8"
                 : isMinimized
                   ? "opacity-0 transform -translate-y-4"
-                  : "opacity-100 transform translate-y-0"
+                  : "opacity-100 transform translate-x-0"
           }`}
         >
           <h1
@@ -290,14 +341,50 @@ export function HeroBanner({
           </h1>
         </div>
 
-        {/* Desktop: no hamburger icon */}
+        {/* Hamburger Icon - Desktop */}
+        {!isMobile && (
+          <div
+            className={`px-6 py-4 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
+              !isLoaded || isInitialAnimation || !showNavItems
+                ? "opacity-0 transform -translate-x-8"
+                : isMinimized
+                  ? "opacity-100 transform translate-x-0"
+                  : "opacity-100 transform translate-x-0"
+            }`}
+            style={{ transitionDelay: showNavItems ? '0.05s' : '0s' }}
+          >
+            <button
+              onClick={() => setIsMinimized(!isMinimized)}
+              className="flex items-center justify-center w-8 h-8 text-black hover:text-blue-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110"
+              aria-label="Toggle navigation"
+            >
+              <div className="flex flex-col space-y-1">
+                <div
+                  className={`w-5 h-0.5 bg-current transform-gpu transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    isMinimized ? "rotate-45 translate-y-1.5" : "rotate-0 translate-y-0"
+                  }`}
+                ></div>
+                <div
+                  className={`w-5 h-0.5 bg-current transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    isMinimized ? "opacity-0 scale-0" : "opacity-100 scale-100"
+                  }`}
+                ></div>
+                <div
+                  className={`w-5 h-0.5 bg-current transform-gpu transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    isMinimized ? "-rotate-45 -translate-y-1.5" : "rotate-0 translate-y-0"
+                  }`}
+                ></div>
+              </div>
+            </button>
+          </div>
+        )}
 
         {/* Navigation Links */}
         <nav
           className={`px-6 flex-1 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
             isMobile 
               ? "opacity-100 transform translate-y-0" 
-              : !isLoaded || isInitialAnimation
+              : !isLoaded || isInitialAnimation || !showNavItems
                 ? "opacity-0 transform -translate-y-4"
                 : isMinimized 
                   ? "opacity-0 transform -translate-y-4" 
@@ -305,7 +392,7 @@ export function HeroBanner({
           }`}
         >
           <ul className={`${isMobile ? "space-y-1" : "space-y-6"}`}>
-            <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.1s' }}>
+            <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.1s' : '0s' }}>
               <SafeLink
                 href="/search"
                 className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
@@ -334,7 +421,7 @@ export function HeroBanner({
               </SafeLink>
             </li>
             {!isMobile && (
-              <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.2s' }}>
+              <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.2s' : '0s' }}>
                 <SafeLink
                   href="/search"
                   className="text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105"
@@ -344,7 +431,7 @@ export function HeroBanner({
               </li>
             )}
             {isMobile && (
-              <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.2s' }}>
+              <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.2s' : '0s' }}>
                 <SafeLink
                   href="/search"
                   className="flex items-center px-6 py-4 text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105"
@@ -367,7 +454,7 @@ export function HeroBanner({
                 </SafeLink>
               </li>
             )}
-            <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.3s' }}>
+            <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.3s' : '0s' }}>
               <SafeLink
                 href="/login"
                 className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
@@ -395,7 +482,7 @@ export function HeroBanner({
                 LOGIN/SIGNUP
               </SafeLink>
             </li>
-            <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.4s' }}>
+            <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.4s' : '0s' }}>
               {isMobile ? (
                 <div className="flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105">
                   <CartLink />
@@ -424,19 +511,19 @@ export function HeroBanner({
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Text Content */}
+            {/* Text Content - Slideshow */}
             <div className="text-white space-y-6">
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight hero-text-shadow">
-                  {title}
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight hero-text-shadow transition-all duration-1000 ease-in-out">
+                  {heroSlides[currentSlide]?.title || title}
                 </h1>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-gray-200 hero-text-shadow">
-                  {subtitle}
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-gray-200 hero-text-shadow transition-all duration-1000 ease-in-out">
+                  {heroSlides[currentSlide]?.subtitle || subtitle}
                 </h2>
               </div>
 
-              <p className="text-lg sm:text-xl text-gray-100 max-w-lg leading-relaxed hero-text-shadow">
-                {description}
+              <p className="text-lg sm:text-xl text-gray-100 max-w-lg leading-relaxed hero-text-shadow transition-all duration-1000 ease-in-out">
+                {heroSlides[currentSlide]?.description || description}
               </p>
 
               <div className="pt-4">
@@ -459,6 +546,22 @@ export function HeroBanner({
                     />
                   </svg>
                 </SafeLink>
+              </div>
+
+              {/* Slide Indicators */}
+              <div className="flex space-x-3 pt-6">
+                {heroSlides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                      index === currentSlide
+                        ? 'bg-white scale-125'
+                        : 'bg-white/50 hover:bg-white/75'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
               </div>
             </div>
 

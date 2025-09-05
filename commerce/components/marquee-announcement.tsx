@@ -20,6 +20,14 @@ export function MarqueeAnnouncement({
         <span aria-hidden="true">{text}</span>
         <span aria-hidden="true">{text}</span>
         <span aria-hidden="true">{text}</span>
+        <span aria-hidden="true">{text}</span>
+        <span aria-hidden="true">{text}</span>
+        <span aria-hidden="true">{text}</span>
+        <span aria-hidden="true">{text}</span>
+        <span aria-hidden="true">{text}</span>
+        <span aria-hidden="true">{text}</span>
+        <span aria-hidden="true">{text}</span>
+        <span aria-hidden="true">{text}</span>
       </p>
     </div>
   );
