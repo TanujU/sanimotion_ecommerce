@@ -11,6 +11,7 @@ import { HeroBanner } from "components/hero-banner";
 //import { BestsellersCarousel } from "../components/bestsellers-carousel";
 import type { Metadata } from "next";
 import { BestsellersCarousel } from "../components/bestsellers-carousel";
+import { WelcomePopup } from "../components/welcome-popup";
 
 // Type-safe Link wrapper for React 19 compatibility
 const SafeLink = ({
@@ -194,129 +195,109 @@ export default async function HomePage() {
           </div>
           
           <BestsellersCarousel products={bestsellersData} />
-        </div>
+              </div>
 
-        {/* Enhanced Product Grid with Advanced Hover Animations */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto stagger-reveal">
-          {/* First product - Large featured */}
-          <div className="lg:col-span-1 lg:row-span-1 group hover-lift scroll-reveal-left">
-            {products[0] && (
-              <SafeLink
-                href={`/product/${products[0].handle}`}
-                className="block"
-              >
-                <div className="relative h-full w-full bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 group-hover:rotate-1">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 transition-opacity duration-300 group-hover:opacity-80"></div>
-                  <GridTileImage
-                    src={products[0].featuredImage?.url}
-                    alt={products[0].title}
-                    label={{
-                      title: products[0].title,
-                      amount: products[0].priceRange.maxVariantPrice.amount,
-                      currencyCode:
-                        products[0].priceRange.maxVariantPrice.currencyCode,
-                    }}
-                  />
+        {/* Shop by Category Section */}
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="text-center mb-12 scroll-reveal">
+            <h2 className="text-3xl font-light tracking-wide text-gray-900 sm:text-4xl">
+              Shop by Category
+            </h2>
+              </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-7xl mx-auto stagger-reveal">
+            {/* Weight Loss */}
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-100">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/healthy-lifestyle-weight-loss-concept_690064-9807.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Weight loss products"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-4 text-center">
+                <p className="text-gray-800 font-medium">Weight Loss</p>
+              </div>
+            </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 p-6 z-20 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg group-hover:shadow-xl transition-all duration-300">
-                      <h3 className="font-semibold text-gray-900 text-lg group-hover:text-blue-600 transition-colors duration-300">
-                        {products[0].title}
-                      </h3>
-                      <p className="text-blue-600 font-bold text-xl group-hover:scale-110 transition-transform duration-300">
-                        {products[0].priceRange.maxVariantPrice.amount}{" "}
-                        {products[0].priceRange.maxVariantPrice.currencyCode}
-                      </p>
-                    </div>
-                  </div>
-                  {/* Enhanced hover overlay effect */}
-                  <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-all duration-300"></div>
-                  {/* Shimmer effect on hover */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer"></div>
-                </div>
-              </SafeLink>
-            )}
-          </div>
+            {/* Allergy */}
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-200">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/allergy-medication-antihistamine-concept_690064-9808.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Allergy medications"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-4 text-center">
+                <p className="text-gray-800 font-medium">Allergy</p>
+              </div>
+            </div>
 
-          {/* Second product */}
-          <div className="lg:col-span-1 lg:row-span-1 group hover-lift scroll-reveal-scale">
-            {products[1] && (
-              <SafeLink
-                href={`/product/${products[1].handle}`}
-                className="block"
-              >
-                <div className="relative h-full w-full bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 group-hover:-rotate-1">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 transition-opacity duration-300 group-hover:opacity-80"></div>
-                  <GridTileImage
-                    src={products[1].featuredImage?.url}
-                    alt={products[1].title}
-                    label={{
-                      title: products[1].title,
-                      amount: products[1].priceRange.maxVariantPrice.amount,
-                      currencyCode:
-                        products[1].priceRange.maxVariantPrice.currencyCode,
-                    }}
-                  />
+            {/* Medical Devices */}
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-300">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/medical-devices-equipment-healthcare_690064-9809.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Medical devices"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-4 text-center">
+                <p className="text-gray-800 font-medium">Medical Devices</p>
+              </div>
+            </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 p-6 z-20 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg group-hover:shadow-xl transition-all duration-300">
-                      <h3 className="font-semibold text-gray-900 text-lg group-hover:text-blue-600 transition-colors duration-300">
-                        {products[1].title}
-                      </h3>
-                      <p className="text-blue-600 font-bold text-xl group-hover:scale-110 transition-transform duration-300">
-                        {products[1].priceRange.maxVariantPrice.amount}{" "}
-                        {products[1].priceRange.maxVariantPrice.currencyCode}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-all duration-300"></div>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer"></div>
-                </div>
-              </SafeLink>
-            )}
-          </div>
+            {/* Vitamins */}
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-400">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/vitamins-supplements-health-wellness_690064-9810.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Vitamins and supplements"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-4 text-center">
+                <p className="text-gray-800 font-medium">Vitamins</p>
+              </div>
+            </div>
 
-          {/* Third product */}
-          <div className="lg:col-span-1 lg:row-span-1 group hover-lift scroll-reveal-right">
-            {products[2] && (
-              <SafeLink
-                href={`/product/${products[2].handle}`}
-                className="block"
-              >
-                <div className="relative h-full w-full bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 group-hover:rotate-1">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 transition-opacity duration-300 group-hover:opacity-80"></div>
-                  <GridTileImage
-                    src={products[2].featuredImage?.url}
-                    alt={products[2].title}
-                    label={{
-                      title: products[2].title,
-                      amount: products[2].priceRange.maxVariantPrice.amount,
-                      currencyCode:
-                        products[2].priceRange.maxVariantPrice.currencyCode,
-                    }}
-                  />
+            {/* Women's Health */}
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-500">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/womens-health-wellness-medical-care_690064-9811.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Women's health products"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-4 text-center">
+                <p className="text-gray-800 font-medium">Women's Health</p>
+              </div>
+            </div>
 
-                  <div className="absolute bottom-0 left-0 right-0 p-6 z-20 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-4 shadow-lg group-hover:shadow-xl transition-all duration-300">
-                      <h3 className="font-semibold text-gray-900 text-lg group-hover:text-blue-600 transition-colors duration-300">
-                        {products[2].title}
-                      </h3>
-                      <p className="text-blue-600 font-bold text-xl group-hover:scale-110 transition-transform duration-300">
-                        {products[2].priceRange.maxVariantPrice.amount}{" "}
-                        {products[2].priceRange.maxVariantPrice.currencyCode}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-all duration-300"></div>
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer"></div>
-                </div>
-              </SafeLink>
-            )}
+            {/* Men's Health */}
+            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-600">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/mens-health-wellness-medical-care_690064-9812.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Men's health products"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-4 text-center">
+                <p className="text-gray-800 font-medium">Men's Health</p>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
 
       <Footer />
+      
+      {/* Welcome Popup */}
+      <WelcomePopup />
     </div>
   );
 }
