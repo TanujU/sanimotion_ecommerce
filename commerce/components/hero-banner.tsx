@@ -110,6 +110,7 @@ export function HeroBanner({
   const [isInitialAnimation, setIsInitialAnimation] = useState(true);
   const [showNavItems, setShowNavItems] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isScrollingToTop, setIsScrollingToTop] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
   // Hero slides data
@@ -165,10 +166,41 @@ export function HeroBanner({
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000); // Change slide every 5 seconds
+    }, isScrollingToTop ? 8000 : 5000); // Slower when scrolling to top
 
     return () => clearInterval(interval);
-  }, [heroSlides.length]);
+  }, [heroSlides.length, isScrollingToTop]);
+
+  // Smooth slideshow reset when scrolling back to top
+  useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+    
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Clear any existing timeout
+      clearTimeout(scrollTimeout);
+      
+      // If we're scrolling back to top (within 200px), start the slow animation
+      if (currentScrollY < 200) {
+        setIsScrollingToTop(true);
+        
+        // Gradually reset to first slide over time
+        scrollTimeout = setTimeout(() => {
+          setCurrentSlide(0);
+          setIsScrollingToTop(false);
+        }, 1000); // Take 1 second to reset
+      } else {
+        setIsScrollingToTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
 
   // Mobile detection
   useEffect(() => {
@@ -342,7 +374,7 @@ export function HeroBanner({
         </div>
 
         {/* Hamburger Icon - Desktop */}
-        {!isMobile && (
+        {/* {!isMobile && (
           <div
             className={`px-6 py-4 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
               !isLoaded || isInitialAnimation || !showNavItems
@@ -377,7 +409,7 @@ export function HeroBanner({
               </div>
             </button>
           </div>
-        )}
+        )} */}
 
         {/* Navigation Links */}
         <nav
