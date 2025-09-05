@@ -395,3 +395,354 @@ button {
     transform: scale(1.05);
   }
 }
+
+/* Scroll-triggered animations */
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes flipIn {
+  from {
+    opacity: 0;
+    transform: rotateY(-90deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes elasticIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Scroll animation classes */
+.animate-slide-in-left-scroll {
+  animation: slideInFromLeft 0.8s ease-out forwards;
+}
+
+.animate-slide-in-right-scroll {
+  animation: slideInFromRight 0.8s ease-out forwards;
+}
+
+.animate-zoom-in-scroll {
+  animation: zoomIn 0.6s ease-out forwards;
+}
+
+.animate-flip-in-scroll {
+  animation: flipIn 0.8s ease-out forwards;
+}
+
+.animate-bounce-in-scroll {
+  animation: bounceIn 0.8s ease-out forwards;
+}
+
+.animate-slide-in-top-scroll {
+  animation: slideInFromTop 0.8s ease-out forwards;
+}
+
+.animate-slide-in-bottom-scroll {
+  animation: slideInFromBottom 0.8s ease-out forwards;
+}
+
+.animate-rotate-in-scroll {
+  animation: rotateIn 0.8s ease-out forwards;
+}
+
+.animate-elastic-in-scroll {
+  animation: elasticIn 0.8s ease-out forwards;
+}
+
+/* Parallax scrolling effects */
+.parallax-slow {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.parallax-fast {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Scroll reveal animations */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s ease-out;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: all 0.8s ease-out;
+}
+
+.scroll-reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.8s ease-out;
+}
+
+.scroll-reveal-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-reveal-scale {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.8s ease-out;
+}
+
+.scroll-reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Enhanced floating animations */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes floatDown {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float-up {
+  animation: floatUp 3s ease-in-out infinite;
+}
+
+.animate-float-down {
+  animation: floatDown 3s ease-in-out infinite;
+}
+
+/* Staggered reveal animations */
+.stagger-reveal > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.stagger-reveal.revealed > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.stagger-reveal.revealed > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.stagger-reveal.revealed > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.stagger-reveal.revealed > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.stagger-reveal.revealed > *:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.stagger-reveal.revealed > *:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+.stagger-reveal.revealed > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Marquee Text Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.marquee-text {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  background: linear-gradient(135deg, #f3f3f3 0%, #ffffff 100%);
+  color: black;
+  overflow: hidden;
+  white-space: nowrap;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.marquee__inner {
+  display: inline-flex;
+  animation: marquee 90s linear infinite;
+  animation-play-state: running;
+}
+
+.marquee__inner:hover {
+  cursor: pointer;
+  animation-play-state: paused;
+}
+
+.marquee-caps {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 0 2rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.marquee-caps span {
+  margin-right: 4rem;
+  white-space: nowrap;
+}
+
+/* Adjust navbar position to account for marquee */
+.navbar-with-marquee {
+  top: 40px;
+}
+
+/* Hero Banner Styles */
+.hero-banner-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+.hero-text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-button-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-button-hover:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}

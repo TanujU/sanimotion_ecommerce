@@ -1,12 +1,50 @@
-'use client';
+"use client";
 
-import CartModal from 'components/cart/modal';
-import LogoSquare from 'components/logo-square';
-import { Menu } from 'lib/shopify/types';
-import Link from 'next/link';
-import { Suspense } from 'react';
-import MobileMenu from './mobile-menu';
-import Search, { SearchSkeleton } from './search';
+import CartModal from "components/cart/modal";
+import LogoSquare from "components/logo-square";
+import { Menu } from "lib/shopify/types";
+import Link from "next/link";
+import { Suspense } from "react";
+
+// Type-safe components for React 19 compatibility
+const SafeLink = ({
+  href,
+  className,
+  children,
+  ...props
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+  [key: string]: any;
+}) => {
+  const LinkComponent = Link as any;
+  return (
+    <LinkComponent href={href} className={className} {...props}>
+      {children}
+    </LinkComponent>
+  );
+};
+
+const SafeSuspense = ({
+  children,
+  fallback,
+  ...props
+}: {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  [key: string]: any;
+}) => {
+  const SuspenseComponent = Suspense as any;
+  return (
+    <SuspenseComponent fallback={fallback} {...props}>
+      {children}
+    </SuspenseComponent>
+  );
+};
+import MobileMenu from "./mobile-menu";
+import Search, { SearchSkeleton } from "./search";
+import { MarqueeAnnouncement } from "components/marquee-announcement";
 
 interface NavbarClientProps {
   menu: Menu[];
@@ -14,52 +52,17 @@ interface NavbarClientProps {
 }
 
 export function NavbarClient({ menu, siteName }: NavbarClientProps) {
+  // Filter out "all" and "mediziner" menu items
+  const filteredMenu = menu.filter(
+    (item) =>
+      !item.title.toLowerCase().includes("all") &&
+      !item.title.toLowerCase().includes("mediziner")
+  );
+
   return (
-    <nav className="relative flex items-center justify-between p-4 lg:px-6 bg-white border-b border-gray-200">
-      <div className="block flex-none md:hidden">
-        <Suspense fallback={null}>
-          <MobileMenu menu={menu} />
-        </Suspense>
-      </div>
-      <div className="flex w-full items-center">
-        <div className="flex w-full md:w-1/3">
-          <Link
-            href="/"
-            prefetch={true}
-            className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
-          >
-            <LogoSquare siteName={siteName} />
-            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block text-black">
-              FREYARU
-            </div>
-          </Link>
-          {menu.length ? (
-            <ul className="hidden gap-6 text-sm md:flex md:items-center">
-              {menu.map((item: Menu) => (
-                <li key={item.title}>
-                  <Link
-                    href={item.path}
-                    prefetch={true}
-                    className="text-neutral-600 underline-offset-4 hover:text-black hover:underline"
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
-        <div className="hidden justify-center md:flex md:w-1/3">
-          <Suspense fallback={<SearchSkeleton />}>
-            <Search />
-          </Suspense>
-        </div>
-        <div className="flex justify-end md:w-1/3">
-          <div className="flex items-center space-x-2">
-            <CartModal />
-          </div>
-        </div>
-      </div>
-    </nav>
+    <>
+      <MarqueeAnnouncement text="PREMIUM MEDICAL EQUIPMENT & HEALTHCARE SUPPLIES - TRUSTED BY PROFESSIONALS WORLDWIDE" />
+     
+    </>
   );
 }

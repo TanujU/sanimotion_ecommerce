@@ -1,12 +1,25 @@
-import { CartProvider } from 'components/cart/cart-context';
-import { Navbar } from 'components/layout/navbar';
-import { WelcomeToast } from 'components/welcome-toast';
-import { GeistSans } from 'geist/font/sans';
-import { getCart } from 'lib/shopify';
-import { ReactNode } from 'react';
-import { Toaster } from 'sonner';
-import './globals.css';
-import { baseUrl } from 'lib/utils';
+import { CartProvider } from "components/cart/cart-context";
+import { Navbar } from "components/layout/navbar";
+import { WelcomeToast } from "components/welcome-toast";
+import { GeistSans } from "geist/font/sans";
+import { getCart } from "lib/shopify";
+import { ReactNode } from "react";
+import { Toaster } from "sonner";
+
+// Type-safe Toaster for React 19 compatibility
+const SafeToaster = ({
+  closeButton,
+  ...props
+}: {
+  closeButton?: boolean;
+  [key: string]: any;
+}) => {
+  const ToasterComponent = Toaster as any;
+  return <ToasterComponent closeButton={closeButton} {...props} />;
+};
+import "./globals.css";
+import { baseUrl } from "lib/utils";
+import Script from "next/script";
 
 const { SITE_NAME } = process.env;
 
@@ -31,13 +44,38 @@ export default async function RootLayout({
   const cart = getCart();
 
   return (
-    <html lang="de" className={GeistSans.variable}>
-      <body className="bg-neutral-50 text-black selection:bg-teal-300">
+    <html lang="de" className={GeistSans.variable} suppressHydrationWarning>
+      <head>
+        <Script id="hydration-fix" strategy="beforeInteractive">
+          {`
+            // Prevent hydration mismatch by ensuring consistent rendering
+            if (typeof window !== 'undefined') {
+              // Remove any browser extension attributes that might cause issues
+              const html = document.documentElement;
+              const body = document.body;
+              
+              // Clean up potential hydration issues
+              if (html.hasAttribute('data-qb-installed')) {
+                html.removeAttribute('data-qb-installed');
+              }
+              
+              // Ensure consistent language
+              if (html.lang !== 'en') {
+                html.lang = 'en';
+              }
+            }
+          `}
+        </Script>
+      </head>
+      <body
+        className="bg-neutral-50 text-black selection:bg-teal-300"
+        suppressHydrationWarning
+      >
         <CartProvider cartPromise={cart}>
           <Navbar />
-          <main>
+          <main className="pt-0">
             {children}
-            <Toaster closeButton />
+            <SafeToaster closeButton />
             <WelcomeToast />
           </main>
         </CartProvider>

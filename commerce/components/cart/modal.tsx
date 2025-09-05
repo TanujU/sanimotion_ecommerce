@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import clsx from 'clsx';
-import { Dialog, Transition } from '@headlessui/react';
-import { ShoppingCartIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import LoadingDots from 'components/loading-dots';
-import Price from 'components/price';
-import { DEFAULT_OPTION } from 'lib/constants';
-import { createUrl } from 'lib/utils';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { createCartAndSetCookie, redirectToCheckout } from './actions';
-import { useCart } from './cart-context';
-import { DeleteItemButton } from './delete-item-button';
-import { EditItemQuantityButton } from './edit-item-quantity-button';
-import OpenCart from './open-cart';
+import clsx from "clsx";
+import { Dialog, Transition } from "@headlessui/react";
+import { ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import LoadingDots from "components/loading-dots";
+import Price from "components/price";
+import { DEFAULT_OPTION } from "lib/constants";
+import { createUrl } from "lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+import { createCartAndSetCookie, redirectToCheckout } from "./actions";
+import { useCart } from "./cart-context";
+import { DeleteItemButton } from "./delete-item-button";
+import { EditItemQuantityButton } from "./edit-item-quantity-button";
+import OpenCart from "./open-cart";
 
 type MerchandiseSearchParams = {
   [key: string]: string;
@@ -74,8 +74,8 @@ export default function CartModal() {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px]">
-              <div className="flex items-center justify-between">
+            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-1 border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px]">
+              <div className="flex items-center justify-between mt-5">
                 <p className="text-lg font-semibold">Mein Warenkorb</p>
                 <button aria-label="Warenkorb schließen" onClick={closeCart}>
                   <CloseCart />
@@ -204,7 +204,7 @@ export default function CartModal() {
                     </div>
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1">
                       <p>Versand</p>
-                                              <p className="text-right">Wird beim Checkout berechnet</p>
+                      <p className="text-right">Wird beim Checkout berechnet</p>
                     </div>
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1">
                       <p>Gesamt</p>
@@ -233,7 +233,7 @@ function CloseCart({ className }: { className?: string }) {
     <div className="relative flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors">
       <XMarkIcon
         className={clsx(
-          'h-6 transition-all ease-in-out hover:scale-110',
+          "h-6 transition-all ease-in-out hover:scale-110",
           className
         )}
       />
@@ -250,7 +250,7 @@ function CheckoutButton() {
       type="submit"
       disabled={pending}
     >
-      {pending ? <LoadingDots className="bg-white" /> : 'Zur Kasse'}
+      {pending ? <LoadingDots className="bg-white" /> : "Zur Kasse"}
     </button>
   );
 }
