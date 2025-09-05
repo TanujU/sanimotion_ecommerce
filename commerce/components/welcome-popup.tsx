@@ -7,10 +7,10 @@ export function WelcomePopup() {
   const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
-    // Show popup after 3 seconds
+    // Show popup after 6 seconds
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, 3000);
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, []);
