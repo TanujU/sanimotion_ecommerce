@@ -67,7 +67,7 @@ export default async function HomePage() {
       <div className="mx-auto max-w-7xl px-4 py-16 pt-24 sm:px-6 lg:px-8">
         <div className="text-center mb-16 scroll-reveal">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Featured Medical Equipment
+            What are you looking for today?
           </h2>
           <p className="mt-4 text-lg text-gray-600">
             High-quality medical devices and equipment for professional use

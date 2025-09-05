@@ -61,8 +61,8 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
 
   return (
     <>
-      <MarqueeAnnouncement text="PREMIUM MEDICAL EQUIPMENT & HEALTHCARE SUPPLIES - TRUSTED BY PROFESSIONALS WORLDWIDE" />
-     
+      <MarqueeAnnouncement text="Premium Medical Equipment & Healthcare Supplies - Trusted by Professionals Worldwide" />
+      {/* Navigation is handled by HeroBanner component */}
     </>
   );
 }

@@ -106,7 +106,27 @@ export function HeroBanner({
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInitialAnimation, setIsInitialAnimation] = useState(true);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  // Initial loading animation sequence
+  useEffect(() => {
+    // First: Load the navigation (but keep it hidden)
+    const loadTimer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
+
+    // Second: After navigation is loaded, start the slide animation
+    const slideTimer = setTimeout(() => {
+      setIsInitialAnimation(false);
+    }, 800); // Delay to let navigation load first
+
+    return () => {
+      clearTimeout(loadTimer);
+      clearTimeout(slideTimer);
+    };
+  }, []);
 
   // Mobile detection
   useEffect(() => {
@@ -194,55 +214,77 @@ export function HeroBanner({
       {/* Mobile Menu Button - Always visible on mobile */}
       {isMobile && (
         <button
-          className={`fixed z-30 lg:hidden bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-xl border border-gray-200 transform-gpu transition-[top,left,transform] duration-500 ease-out ${
-            isMobileMenuOpen ? "top-14 left-60" : "top-20 left-4"
+          className={`fixed z-30 lg:hidden bg-white/95 backdrop-blur-md p-4 rounded-full shadow-2xl border border-white/30 transform-gpu transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 ${
+            isMobileMenuOpen ? "top-16 left-64 rotate-180" : "top-20 left-4 rotate-0"
           }`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle mobile menu"
           aria-expanded={isMobileMenuOpen}
         >
-          <div className="flex flex-col space-y-1">
+          <div className="flex flex-col space-y-1.5">
             <div
-              className={`w-5 h-0.5 bg-gray-800 transform-gpu transition-transform duration-400 ${isMobileMenuOpen ? "rotate-45 translate-y-1.5" : ""}`}
+              className={`w-6 h-0.5 bg-gray-800 transform-gpu transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                isMobileMenuOpen ? "rotate-45 translate-y-2" : "rotate-0 translate-y-0"
+              }`}
             ></div>
             <div
-              className={`w-5 h-0.5 bg-gray-800 transition-opacity duration-400 ${isMobileMenuOpen ? "opacity-0" : ""}`}
+              className={`w-6 h-0.5 bg-gray-800 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                isMobileMenuOpen ? "opacity-0 scale-0" : "opacity-100 scale-100"
+              }`}
             ></div>
             <div
-              className={`w-5 h-0.5 bg-gray-800 transform-gpu transition-transform duration-400 ${isMobileMenuOpen ? "-rotate-45 -translate-y-1.5" : ""}`}
+              className={`w-6 h-0.5 bg-gray-800 transform-gpu transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                isMobileMenuOpen ? "-rotate-45 -translate-y-2" : "rotate-0 translate-y-0"
+              }`}
             ></div>
           </div>
         </button>
       )}
 
       {/* Mobile Menu Overlay */}
-      {isMobile && isMobileMenuOpen && (
+      {isMobile && (
         <div
-          className="fixed inset-0 bg-transparent z-10 lg:hidden"
+          className={`fixed inset-0 z-10 lg:hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            isMobileMenuOpen 
+              ? "bg-black/40 backdrop-blur-sm opacity-100 pointer-events-auto" 
+              : "bg-transparent backdrop-blur-none opacity-0 pointer-events-none"
+          }`}
           onClick={() => setIsMobileMenuOpen(false)}
         ></div>
       )}
 
       {/* Left Sidebar Navigation */}
       <div
-        className={`absolute left-0 top-10 h-full flex flex-col transform-gpu will-change-[width,transform,opacity] transition-[width,transform,opacity] duration-500 ease-out ${
+        className={`absolute left-0 top-10 h-full flex flex-col transform-gpu will-change-[width,transform,opacity] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isMobile
-            ? `w-72 ${isMobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"} bg-white/70 backdrop-blur-md border border-white/30 shadow-xl z-20`
-            : `hidden lg:flex ${isMinimized ? "w-16" : "w-80"} bg-white/40 backdrop-blur-md border border-white/20 z-20`
+            ? `w-80 ${isMobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"} bg-white/95 backdrop-blur-xl border-r border-white/40 shadow-2xl z-20`
+            : `hidden lg:flex ${
+                !isLoaded 
+                  ? "w-0 opacity-0 -translate-x-full" 
+                  : isInitialAnimation 
+                    ? "w-0 opacity-0 -translate-x-full" 
+                    : isMinimized 
+                      ? "w-20 opacity-100 translate-x-0" 
+                      : "w-80 opacity-100 translate-x-0"
+              } bg-white/50 backdrop-blur-xl border-r border-white/30 shadow-xl z-20`
         }`}
       >
         {/* Brand Logo */}
         <div
-          className={`px-8 py-8 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
+          className={`px-8 py-8 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
             isMobile
-              ? "opacity-100 border-b border-gray-100"
-              : isMinimized
-                ? "opacity-0"
-                : "opacity-100"
+              ? "opacity-100 border-b border-gray-100/50 transform translate-y-0"
+              : !isLoaded || isInitialAnimation
+                ? "opacity-0 transform -translate-y-4"
+                : isMinimized
+                  ? "opacity-0 transform -translate-y-4"
+                  : "opacity-100 transform translate-y-0"
           }`}
         >
           <h1
-            className={`font-bold text-black tracking-wider ${isMobile ? "text-2xl" : "text-3xl"}`}
+            className={`font-bold text-black tracking-wider transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 ${
+              isMobile ? "text-2xl" : "text-3xl"
+            }`}
           >
             FREYARU
           </h1>
@@ -252,18 +294,24 @@ export function HeroBanner({
 
         {/* Navigation Links */}
         <nav
-          className={`px-6 flex-1 transition-opacity duration-500 ease-out will-change-[opacity] ${
-            isMobile ? "opacity-100" : isMinimized ? "opacity-0" : "opacity-100"
+          className={`px-6 flex-1 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
+            isMobile 
+              ? "opacity-100 transform translate-y-0" 
+              : !isLoaded || isInitialAnimation
+                ? "opacity-0 transform -translate-y-4"
+                : isMinimized 
+                  ? "opacity-0 transform -translate-y-4" 
+                  : "opacity-100 transform translate-y-0"
           }`}
         >
-          <ul className={`${isMobile ? "space-y-2" : "space-y-6"}`}>
-            <li>
+          <ul className={`${isMobile ? "space-y-1" : "space-y-6"}`}>
+            <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.1s' }}>
               <SafeLink
                 href="/search"
-                className={`transition-all duration-300 ${
+                className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
                   isMobile
-                    ? "flex items-center px-4 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-base font-medium"
-                    : "text-black hover:text-gray-600 text-sm font-medium tracking-wider uppercase"
+                    ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
+                    : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
                 }`}
                 onClick={() => isMobile && setIsMobileMenuOpen(false)}
               >
@@ -286,20 +334,20 @@ export function HeroBanner({
               </SafeLink>
             </li>
             {!isMobile && (
-              <li>
+              <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.2s' }}>
                 <SafeLink
                   href="/search"
-                  className="text-black hover:text-gray-600 text-sm font-medium tracking-wider uppercase transition-colors duration-300"
+                  className="text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105"
                 >
                   CATEGORIES
                 </SafeLink>
               </li>
             )}
             {isMobile && (
-              <li>
+              <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.2s' }}>
                 <SafeLink
                   href="/search"
-                  className="flex items-center px-4 py-4 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-base font-medium transition-all duration-300"
+                  className="flex items-center px-6 py-4 text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <svg
@@ -319,13 +367,13 @@ export function HeroBanner({
                 </SafeLink>
               </li>
             )}
-            <li>
+            <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.3s' }}>
               <SafeLink
                 href="/login"
-                className={`transition-all duration-300 ${
+                className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
                   isMobile
-                    ? "flex items-center px-4 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-base font-medium"
-                    : "text-black hover:text-gray-600 text-sm font-medium tracking-wider uppercase"
+                    ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
+                    : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
                 }`}
                 onClick={() => isMobile && setIsMobileMenuOpen(false)}
               >
@@ -347,13 +395,15 @@ export function HeroBanner({
                 LOGIN/SIGNUP
               </SafeLink>
             </li>
-            <li>
+            <li className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2" style={{ animationDelay: '0.4s' }}>
               {isMobile ? (
-                <div className="flex items-center px-1 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-base font-medium cursor-pointer">
+                <div className="flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105">
                   <CartLink />
                 </div>
               ) : (
-                <CartLink />
+                <div className="transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105">
+                  <CartLink />
+                </div>
               )}
             </li>
           </ul>
@@ -362,8 +412,14 @@ export function HeroBanner({
 
       {/* Content */}
       <div
-        className={`relative z-10 w-full transform-gpu will-change-[margin] transition-[margin] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isMobile ? "ml-0" : isMinimized ? "lg:ml-16" : "lg:ml-80"
+        className={`relative z-10 w-full transform-gpu will-change-[margin] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isMobile 
+            ? "ml-0" 
+            : isInitialAnimation 
+              ? "lg:ml-0" 
+              : isMinimized 
+                ? "lg:ml-20" 
+                : "lg:ml-80"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
