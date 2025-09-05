@@ -1,13 +1,16 @@
-import Grid from "components/grid";
-import ProductGridItems from "components/layout/product-grid-items";
+//import Grid from "components/grid";
+//import ProductGridItems from "components/layout/product-grid-items";
 import Footer from "components/layout/footer";
 import { getProducts } from "lib/shopify";
 import { GridTileImage } from "components/grid/tile";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { ScrollAnimations } from "components/scroll-animations";
-import AutoScrollCarousel from "components/auto-scroll-carousel";
+//import AutoScrollCarousel from "components/auto-scroll-carousel";
 import { HeroBanner } from "components/hero-banner";
+//import { BestsellersCarousel } from "../components/bestsellers-carousel";
+import type { Metadata } from "next";
+import { BestsellersCarousel } from "../components/bestsellers-carousel";
 
 // Type-safe Link wrapper for React 19 compatibility
 const SafeLink = ({
@@ -31,7 +34,7 @@ const SafeLink = ({
   );
 };
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Sanimotion - Professional Medical Equipment & Healthcare Supplies",
   description:
     "Premium Medical Equipment and Healthcare Supplies - Professional Grade Medical Devices and Medicines. Trusted by healthcare professionals worldwide.",
@@ -46,6 +49,50 @@ export const metadata = {
 
 export default async function HomePage() {
   const products = await getProducts({});
+
+  // Bestsellers data with 5 products
+  const bestsellersData = [
+    {
+      id: "1",
+      title: "Aqualyx",
+      price: "$89.99",
+      sizes: ["5ml", "10ml"],
+      image: "/images/aqualyx.jpg",
+      alt: "Aqualyx - Fat Dissolving Treatment"
+    },
+    {
+      id: "2", 
+      title: "Juvederm",
+      price: "$299.99",
+      sizes: ["0.5ml", "1ml"],
+      image: "/images/juvederm.jpg",
+      alt: "Juvederm - Dermal Filler"
+    },
+    {
+      id: "3",
+      title: "Profhilo", 
+      price: "$199.99",
+      sizes: ["2ml", "4ml"],
+      image: "/images/profhilo.jpg",
+      alt: "Profhilo - Skin Booster"
+    },
+    {
+      id: "4",
+      title: "Restylane",
+      price: "$249.99", 
+      sizes: ["0.5ml", "1ml"],
+      image: "/images/restylane.jpg",
+      alt: "Restylane - Hyaluronic Acid Filler"
+    },
+    {
+      id: "5",
+      title: "Belotero",
+      price: "$179.99",
+      sizes: ["0.5ml", "1ml"], 
+      image: "/images/belotero.jpg",
+      alt: "Belotero - Dermal Filler"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
@@ -136,6 +183,17 @@ export default async function HomePage() {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Bestsellers Section */}
+        <div className="mb-16">
+          <div className="text-left mb-12 scroll-reveal">
+            <h2 className="text-3xl font-light tracking-wide text-gray-900 sm:text-4xl">
+              Bestsellers
+            </h2>
+          </div>
+          
+          <BestsellersCarousel products={bestsellersData} />
         </div>
 
         {/* Enhanced Product Grid with Advanced Hover Animations */}
