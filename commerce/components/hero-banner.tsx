@@ -110,9 +110,9 @@ export function HeroBanner({
   const [isInitialAnimation, setIsInitialAnimation] = useState(true);
   const [showNavItems, setShowNavItems] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isScrollingToTop, setIsScrollingToTop] = useState(false);
   const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] =
     useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
   // Hero slides data
@@ -167,12 +167,12 @@ export function HeroBanner({
     // Second: After navigation is loaded, start the slide animation
     const slideTimer = setTimeout(() => {
       setIsInitialAnimation(false);
-    }, 800); // Delay to let navigation load first
+    }, 800);
 
     // Third: After sidebar slides in, show the navigation items
     const navItemsTimer = setTimeout(() => {
       setShowNavItems(true);
-    }, 1500); // Delay to let sidebar slide in first
+    }, 1500);
 
     return () => {
       clearTimeout(loadTimer);
@@ -183,59 +183,91 @@ export function HeroBanner({
 
   // Auto-advance slideshow
   useEffect(() => {
-    const interval = setInterval(
-      () => {
-        setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-      },
-      isScrollingToTop ? 8000 : 5000
-    ); // Slower when scrolling to top
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000); // Fixed 5 second interval
 
     return () => clearInterval(interval);
-  }, [heroSlides.length, isScrollingToTop]);
+  }, [heroSlides.length]);
 
-  // Smooth slideshow reset when scrolling back to top
+  // Hero banner scroll animations
   useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
-    let lastScrollY = window.scrollY; // Initialize with current scroll position
     let isInitialized = false;
 
-    // Delay the scroll handler to prevent immediate triggering on page load
     const initTimer = setTimeout(() => {
       isInitialized = true;
-    }, 1000); // Wait 1 second after component mount
+    }, 1000);
 
     const handleScroll = () => {
-      // Don't handle scroll until component is fully initialized
       if (!isInitialized) return;
 
       const currentScrollY = window.scrollY;
+      const heroHeight = heroRef.current?.offsetHeight || 0;
 
-      // Clear any existing timeout
-      clearTimeout(scrollTimeout);
-
-      // If we're scrolling back to top (within 200px), start the slow animation
-      if (currentScrollY < 200 && lastScrollY >= 200) {
-        setIsScrollingToTop(true);
-
-        // Gradually reset to first slide over time
-        scrollTimeout = setTimeout(() => {
-          setCurrentSlide(0);
-          setIsScrollingToTop(false);
-        }, 1000); // Take 1 second to reset
-      } else if (currentScrollY >= 200 && lastScrollY < 200) {
-        setIsScrollingToTop(false);
+      // When scrolling down from hero banner
+      if (
+        currentScrollY > heroHeight * 0.3 &&
+        lastScrollY <= heroHeight * 0.3
+      ) {
+        // Start transitioning to next slide smoothly
+        setIsTransitioning(true);
+        setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+        setTimeout(() => setIsTransitioning(false), 1500);
       }
 
-      lastScrollY = currentScrollY;
+      // When scrolling back to hero banner
+      if (
+        currentScrollY < heroHeight * 0.3 &&
+        lastScrollY >= heroHeight * 0.3
+      ) {
+        // Reset to first slide smoothly
+        setIsTransitioning(true);
+        setCurrentSlide(0);
+        setTimeout(() => setIsTransitioning(false), 1500);
+      }
+
+      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      clearTimeout(scrollTimeout);
       clearTimeout(initTimer);
     };
-  }, []);
+  }, [lastScrollY, heroSlides.length]);
+
+  // Sidebar scroll behavior
+  useEffect(() => {
+    let isInitialized = false;
+
+    const initTimer = setTimeout(() => {
+      isInitialized = true;
+    }, 1000);
+
+    const handleScroll = () => {
+      if (!isInitialized || isMobile) return;
+
+      const currentScrollY = window.scrollY;
+      const heroHeight = heroRef.current?.offsetHeight || 0;
+      const isInHeroSection = currentScrollY < heroHeight - 100;
+
+      if (isInHeroSection) {
+        setIsMinimized(false);
+      } else {
+        if (currentScrollY > lastScrollY && currentScrollY > heroHeight - 100) {
+          setIsMinimized(true);
+        } else if (currentScrollY < lastScrollY) {
+          setIsMinimized(false);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(initTimer);
+    };
+  }, [lastScrollY, isMobile]);
 
   // Mobile detection
   useEffect(() => {
@@ -251,55 +283,6 @@ export function HeroBanner({
     };
   }, []);
 
-  useEffect(() => {
-    let isInitialized = false;
-
-    // Delay the scroll handler to prevent immediate triggering on page load
-    const initTimer = setTimeout(() => {
-      isInitialized = true;
-    }, 1500); // Wait 1.5 seconds after component mount
-
-    const handleScroll = () => {
-      // Don't handle scroll until component is fully initialized
-      if (!isInitialized) return;
-
-      const currentScrollY = window.scrollY;
-      const heroHeight = heroRef.current?.offsetHeight || 0;
-
-      // Check if we're in the hero section (with some buffer)
-      const isInHeroSection = currentScrollY < heroHeight - 100;
-
-      // Only apply scroll animation on desktop
-      if (!isMobile) {
-        if (isInHeroSection) {
-          // In hero section - always show full sidebar
-          setIsMinimized(false);
-        } else {
-          // Outside hero section - minimize on scroll down, expand on scroll up
-          if (
-            currentScrollY > lastScrollY &&
-            currentScrollY > heroHeight - 100
-          ) {
-            // Scrolling down - minimize
-            setIsMinimized(true);
-          } else if (currentScrollY < lastScrollY) {
-            // Scrolling up - expand
-            setIsMinimized(false);
-          }
-        }
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      clearTimeout(initTimer);
-    };
-  }, [lastScrollY, isMobile]);
-
   return (
     <div
       ref={heroRef}
@@ -310,7 +293,7 @@ export function HeroBanner({
         {heroSlides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -629,7 +612,38 @@ export function HeroBanner({
                     />
                   </svg>
                 )}
-                LOGIN/SIGNUP
+                LOGIN
+              </SafeLink>
+            </li>
+            <li
+              className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
+              style={{ transitionDelay: showNavItems ? "0.35s" : "0s" }}
+            >
+              <SafeLink
+                href="/signup"
+                className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
+                  isMobile
+                    ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
+                    : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
+                }`}
+                onClick={() => isMobile && setIsMobileMenuOpen(false)}
+              >
+                {isMobile && (
+                  <svg
+                    className="w-5 h-5 mr-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                    />
+                  </svg>
+                )}
+                SIGNUP
               </SafeLink>
             </li>
             <li
@@ -665,7 +679,13 @@ export function HeroBanner({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Text Content - Slideshow */}
-            <div className="text-white space-y-6">
+            <div
+              className={`text-white space-y-6 transition-all duration-1000 ease-in-out ${
+                isTransitioning
+                  ? "transform scale-105 opacity-90"
+                  : "transform scale-100 opacity-100"
+              }`}
+            >
               <div className="space-y-2">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight hero-text-shadow transition-all duration-1000 ease-in-out">
                   {heroSlides[currentSlide]?.title || title}

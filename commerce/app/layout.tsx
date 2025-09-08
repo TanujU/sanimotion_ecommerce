@@ -66,6 +66,17 @@ export default async function RootLayout({
             }
           `}
         </Script>
+        <Script id="scroll-fix" strategy="beforeInteractive">
+          {`
+            // Simple scroll restoration prevention
+            (function() {
+              // Disable browser scroll restoration
+              if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+              }
+            })();
+          `}
+        </Script>
       </head>
       <body
         className="bg-neutral-50 text-black selection:bg-teal-300"
