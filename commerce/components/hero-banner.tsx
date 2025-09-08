@@ -111,6 +111,8 @@ export function HeroBanner({
   const [showNavItems, setShowNavItems] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isScrollingToTop, setIsScrollingToTop] = useState(false);
+  const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] =
+    useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
   // Hero slides data
@@ -118,24 +120,41 @@ export function HeroBanner({
     {
       title: "Sanimotion",
       subtitle: "Medical Excellence",
-      description: "Premium medical equipment and healthcare supplies trusted by professionals worldwide. Discover our comprehensive range of medical devices, equipment, and supplies for hospitals, clinics, and medical practices.",
-      imageUrl: "https://img.freepik.com/premium-photo/medical-supplies-equipment-blue-background_690064-9800.jpg?semt=ais_hybrid&w=740&q=80",
-      imageAlt: "3D online pharmacy store with medical supplies and healthcare products"
+      description:
+        "Premium medical equipment and healthcare supplies trusted by professionals worldwide. Discover our comprehensive range of medical devices, equipment, and supplies for hospitals, clinics, and medical practices.",
+      imageUrl:
+        "https://img.freepik.com/premium-photo/medical-supplies-equipment-blue-background_690064-9800.jpg?semt=ais_hybrid&w=740&q=80",
+      imageAlt:
+        "3D online pharmacy store with medical supplies and healthcare products",
     },
     {
       title: "Advanced Technology",
       subtitle: "Innovation in Healthcare",
-      description: "Cutting-edge medical technology and state-of-the-art equipment designed to enhance patient care and improve clinical outcomes. Trusted by leading healthcare institutions worldwide.",
-      imageUrl: "https://img.freepik.com/premium-photo/medical-equipment-hospital-room-modern-technology_690064-9801.jpg?semt=ais_hybrid&w=740&q=80",
-      imageAlt: "Modern medical equipment and technology in hospital setting"
+      description:
+        "Cutting-edge medical technology and state-of-the-art equipment designed to enhance patient care and improve clinical outcomes. Trusted by leading healthcare institutions worldwide.",
+      imageUrl:
+        "https://img.freepik.com/premium-photo/medical-equipment-hospital-room-modern-technology_690064-9801.jpg?semt=ais_hybrid&w=740&q=80",
+      imageAlt: "Modern medical equipment and technology in hospital setting",
     },
     {
       title: "Professional Grade",
       subtitle: "Quality Assurance",
-      description: "Rigorous quality standards and professional-grade medical supplies that meet international healthcare regulations. Your trusted partner in medical excellence and patient safety.",
-      imageUrl: "https://img.freepik.com/premium-photo/medical-professionals-working-modern-hospital_690064-9802.jpg?semt=ais_hybrid&w=740&q=80",
-      imageAlt: "Medical professionals working with advanced equipment"
-    }
+      description:
+        "Rigorous quality standards and professional-grade medical supplies that meet international healthcare regulations. Your trusted partner in medical excellence and patient safety.",
+      imageUrl:
+        "https://img.freepik.com/premium-photo/medical-professionals-working-modern-hospital_690064-9802.jpg?semt=ais_hybrid&w=740&q=80",
+      imageAlt: "Medical professionals working with advanced equipment",
+    },
+  ];
+
+  // Categories data for dropdown
+  const categories = [
+    { title: "Diagnostic Equipment", path: "/search/diagnostic-equipment" },
+    { title: "Surgical Instruments", path: "/search/surgical-instruments" },
+    { title: "Patient Care", path: "/search/patient-care" },
+    { title: "Laboratory Equipment", path: "/search/laboratory-equipment" },
+    { title: "Emergency & Trauma", path: "/search/emergency-trauma" },
+    { title: "Rehabilitation", path: "/search/rehabilitation" },
   ];
 
   // Initial loading animation sequence
@@ -164,9 +183,12 @@ export function HeroBanner({
 
   // Auto-advance slideshow
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, isScrollingToTop ? 8000 : 5000); // Slower when scrolling to top
+    const interval = setInterval(
+      () => {
+        setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+      },
+      isScrollingToTop ? 8000 : 5000
+    ); // Slower when scrolling to top
 
     return () => clearInterval(interval);
   }, [heroSlides.length, isScrollingToTop]);
@@ -174,31 +196,44 @@ export function HeroBanner({
   // Smooth slideshow reset when scrolling back to top
   useEffect(() => {
     let scrollTimeout: NodeJS.Timeout;
-    
+    let lastScrollY = window.scrollY; // Initialize with current scroll position
+    let isInitialized = false;
+
+    // Delay the scroll handler to prevent immediate triggering on page load
+    const initTimer = setTimeout(() => {
+      isInitialized = true;
+    }, 1000); // Wait 1 second after component mount
+
     const handleScroll = () => {
+      // Don't handle scroll until component is fully initialized
+      if (!isInitialized) return;
+
       const currentScrollY = window.scrollY;
-      
+
       // Clear any existing timeout
       clearTimeout(scrollTimeout);
-      
+
       // If we're scrolling back to top (within 200px), start the slow animation
-      if (currentScrollY < 200) {
+      if (currentScrollY < 200 && lastScrollY >= 200) {
         setIsScrollingToTop(true);
-        
+
         // Gradually reset to first slide over time
         scrollTimeout = setTimeout(() => {
           setCurrentSlide(0);
           setIsScrollingToTop(false);
         }, 1000); // Take 1 second to reset
-      } else {
+      } else if (currentScrollY >= 200 && lastScrollY < 200) {
         setIsScrollingToTop(false);
       }
+
+      lastScrollY = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
       clearTimeout(scrollTimeout);
+      clearTimeout(initTimer);
     };
   }, []);
 
@@ -217,21 +252,22 @@ export function HeroBanner({
   }, []);
 
   useEffect(() => {
+    let isInitialized = false;
+
+    // Delay the scroll handler to prevent immediate triggering on page load
+    const initTimer = setTimeout(() => {
+      isInitialized = true;
+    }, 1500); // Wait 1.5 seconds after component mount
+
     const handleScroll = () => {
+      // Don't handle scroll until component is fully initialized
+      if (!isInitialized) return;
+
       const currentScrollY = window.scrollY;
       const heroHeight = heroRef.current?.offsetHeight || 0;
 
       // Check if we're in the hero section (with some buffer)
       const isInHeroSection = currentScrollY < heroHeight - 100;
-
-      console.log("Scroll Debug:", {
-        currentScrollY,
-        heroHeight,
-        isInHeroSection,
-        lastScrollY,
-        isMinimized,
-        isMobile,
-      });
 
       // Only apply scroll animation on desktop
       if (!isMobile) {
@@ -256,13 +292,11 @@ export function HeroBanner({
       setLastScrollY(currentScrollY);
     };
 
-    // Initial check
-    handleScroll();
-
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      clearTimeout(initTimer);
     };
   }, [lastScrollY, isMobile]);
 
@@ -277,7 +311,7 @@ export function HeroBanner({
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
+              index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
             <SafeImage
@@ -298,7 +332,9 @@ export function HeroBanner({
       {isMobile && (
         <button
           className={`fixed z-30 lg:hidden bg-white/95 backdrop-blur-md p-4 rounded-full shadow-2xl border border-white/30 transform-gpu transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 ${
-            isMobileMenuOpen ? "top-16 left-64 rotate-180" : "top-20 left-4 rotate-0"
+            isMobileMenuOpen
+              ? "top-16 left-64 rotate-180"
+              : "top-20 left-4 rotate-0"
           }`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle mobile menu"
@@ -307,7 +343,9 @@ export function HeroBanner({
           <div className="flex flex-col space-y-1.5">
             <div
               className={`w-6 h-0.5 bg-gray-800 transform-gpu transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                isMobileMenuOpen ? "rotate-45 translate-y-2" : "rotate-0 translate-y-0"
+                isMobileMenuOpen
+                  ? "rotate-45 translate-y-2"
+                  : "rotate-0 translate-y-0"
               }`}
             ></div>
             <div
@@ -317,7 +355,9 @@ export function HeroBanner({
             ></div>
             <div
               className={`w-6 h-0.5 bg-gray-800 transform-gpu transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                isMobileMenuOpen ? "-rotate-45 -translate-y-2" : "rotate-0 translate-y-0"
+                isMobileMenuOpen
+                  ? "-rotate-45 -translate-y-2"
+                  : "rotate-0 translate-y-0"
               }`}
             ></div>
           </div>
@@ -328,8 +368,8 @@ export function HeroBanner({
       {isMobile && (
         <div
           className={`fixed inset-0 z-10 lg:hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            isMobileMenuOpen 
-              ? "bg-black/40 backdrop-blur-sm opacity-100 pointer-events-auto" 
+            isMobileMenuOpen
+              ? "bg-black/40 backdrop-blur-sm opacity-100 pointer-events-auto"
               : "bg-transparent backdrop-blur-none opacity-0 pointer-events-none"
           }`}
           onClick={() => setIsMobileMenuOpen(false)}
@@ -342,12 +382,12 @@ export function HeroBanner({
           isMobile
             ? `w-80 ${isMobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"} bg-white/95 backdrop-blur-xl border-r border-white/40 shadow-2xl z-20`
             : `hidden lg:flex ${
-                !isLoaded 
-                  ? "w-0 opacity-0 -translate-x-full" 
-                  : isInitialAnimation 
-                    ? "w-0 opacity-0 -translate-x-full" 
-                    : isMinimized 
-                      ? "w-20 opacity-100 translate-x-0" 
+                !isLoaded
+                  ? "w-0 opacity-0 -translate-x-full"
+                  : isInitialAnimation
+                    ? "w-0 opacity-0 -translate-x-full"
+                    : isMinimized
+                      ? "w-20 opacity-100 translate-x-0"
                       : "w-80 opacity-100 translate-x-0"
               } bg-white/50 backdrop-blur-xl border-r border-white/30 shadow-xl z-20`
         }`}
@@ -414,17 +454,20 @@ export function HeroBanner({
         {/* Navigation Links */}
         <nav
           className={`px-6 flex-1 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
-            isMobile 
-              ? "opacity-100 transform translate-y-0" 
+            isMobile
+              ? "opacity-100 transform translate-y-0"
               : !isLoaded || isInitialAnimation || !showNavItems
                 ? "opacity-0 transform -translate-y-4"
-                : isMinimized 
-                  ? "opacity-0 transform -translate-y-4" 
+                : isMinimized
+                  ? "opacity-0 transform -translate-y-4"
                   : "opacity-100 transform translate-y-0"
           }`}
         >
           <ul className={`${isMobile ? "space-y-1" : "space-y-6"}`}>
-            <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.1s' : '0s' }}>
+            <li
+              className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
+              style={{ transitionDelay: showNavItems ? "0.1s" : "0s" }}
+            >
               <SafeLink
                 href="/search"
                 className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
@@ -453,21 +496,63 @@ export function HeroBanner({
               </SafeLink>
             </li>
             {!isMobile && (
-              <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.2s' : '0s' }}>
-                <SafeLink
-                  href="/search"
-                  className="text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105"
+              <>
+                <li
+                  className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
+                  style={{ transitionDelay: showNavItems ? "0.2s" : "0s" }}
                 >
-                  CATEGORIES
-                </SafeLink>
-              </li>
+                  <button
+                    className="text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 cursor-pointer"
+                    onClick={() =>
+                      setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
+                    }
+                  >
+                    CATEGORIES
+                    <svg
+                      className={`inline-block ml-1 w-3 h-3 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                </li>
+
+                {/* Categories List - Shows inline when clicked */}
+                {isCategoriesDropdownOpen && (
+                  <li className="w-full">
+                    <div className="mt-4 space-y-2">
+                      {categories.map((category, index) => (
+                        <SafeLink
+                          key={category.title}
+                          href={category.path}
+                          className="block px-6 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-lg transition-all duration-200 hover:translate-x-2"
+                          style={{ animationDelay: `${index * 50}ms` }}
+                        >
+                          {category.title}
+                        </SafeLink>
+                      ))}
+                    </div>
+                  </li>
+                )}
+              </>
             )}
             {isMobile && (
-              <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.2s' : '0s' }}>
-                <SafeLink
-                  href="/search"
-                  className="flex items-center px-6 py-4 text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105"
-                  onClick={() => setIsMobileMenuOpen(false)}
+              <li
+                className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
+                style={{ transitionDelay: showNavItems ? "0.2s" : "0s" }}
+              >
+                <button
+                  className="flex items-center px-6 py-4 text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105 w-full"
+                  onClick={() =>
+                    setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
+                  }
                 >
                   <svg
                     className="w-5 h-5 mr-3"
@@ -483,10 +568,43 @@ export function HeroBanner({
                     />
                   </svg>
                   CATEGORIES
-                </SafeLink>
+                  <svg
+                    className={`ml-auto w-4 h-4 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {/* Mobile Categories List - Shows inline when clicked */}
+                {isCategoriesDropdownOpen && (
+                  <div className="ml-8 mt-2 space-y-2">
+                    {categories.map((category, index) => (
+                      <SafeLink
+                        key={category.title}
+                        href={category.path}
+                        className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-lg transition-all duration-200"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        style={{ animationDelay: `${index * 50}ms` }}
+                      >
+                        {category.title}
+                      </SafeLink>
+                    ))}
+                  </div>
+                )}
               </li>
             )}
-            <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.3s' : '0s' }}>
+            <li
+              className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
+              style={{ transitionDelay: showNavItems ? "0.3s" : "0s" }}
+            >
               <SafeLink
                 href="/login"
                 className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
@@ -514,7 +632,10 @@ export function HeroBanner({
                 LOGIN/SIGNUP
               </SafeLink>
             </li>
-            <li className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? 'opacity-0 -translate-x-8' : 'opacity-100 translate-x-0'}`} style={{ transitionDelay: showNavItems ? '0.4s' : '0s' }}>
+            <li
+              className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
+              style={{ transitionDelay: showNavItems ? "0.4s" : "0s" }}
+            >
               {isMobile ? (
                 <div className="flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105">
                   <CartLink />
@@ -532,12 +653,12 @@ export function HeroBanner({
       {/* Content */}
       <div
         className={`relative z-10 w-full transform-gpu will-change-[margin] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isMobile 
-            ? "ml-0" 
-            : isInitialAnimation 
-              ? "lg:ml-0" 
-              : isMinimized 
-                ? "lg:ml-20" 
+          isMobile
+            ? "ml-0"
+            : isInitialAnimation
+              ? "lg:ml-0"
+              : isMinimized
+                ? "lg:ml-20"
                 : "lg:ml-80"
         }`}
       >
@@ -588,8 +709,8 @@ export function HeroBanner({
                     onClick={() => setCurrentSlide(index)}
                     className={`w-3 h-3 rounded-full transition-all duration-300 ${
                       index === currentSlide
-                        ? 'bg-white scale-125'
-                        : 'bg-white/50 hover:bg-white/75'
+                        ? "bg-white scale-125"
+                        : "bg-white/50 hover:bg-white/75"
                     }`}
                     aria-label={`Go to slide ${index + 1}`}
                   />

@@ -359,6 +359,30 @@ export async function getMenu(handle: string): Promise<Menu[]> {
     {
       title: 'Mediziner',
       path: '/search/mediziner'
+    },
+    {
+      title: 'Diagnostic Equipment',
+      path: '/search/diagnostic-equipment'
+    },
+    {
+      title: 'Surgical Instruments',
+      path: '/search/surgical-instruments'
+    },
+    {
+      title: 'Patient Care',
+      path: '/search/patient-care'
+    },
+    {
+      title: 'Laboratory Equipment',
+      path: '/search/laboratory-equipment'
+    },
+    {
+      title: 'Emergency & Trauma',
+      path: '/search/emergency-trauma'
+    },
+    {
+      title: 'Rehabilitation',
+      path: '/search/rehabilitation'
     }
   ];
 }
