@@ -55,23 +55,34 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const { error } = await signIn(formData.email, formData.password);
+      const result = await signIn(formData.email, formData.password);
 
-      if (error) {
-        if (error.message.includes("Invalid login credentials")) {
+      if (result.error) {
+        const errorMessage = result.error.message || result.error;
+        
+        if (errorMessage.includes("Invalid login credentials") || errorMessage.includes("Invalid email or password")) {
           showError("Sign In Failed", "Invalid email or password. Please check your credentials and try again.");
-        } else if (error.message.includes("Email not confirmed")) {
+        } else if (errorMessage.includes("Email not confirmed")) {
           showError("Email Not Verified", "Please check your email and click the verification link before signing in.");
+        } else if (errorMessage.includes("Too many login attempts")) {
+          showError("Too Many Attempts", errorMessage);
+        } else if (errorMessage.includes("Please enter a valid email address")) {
+          showError("Invalid Email", "Please enter a valid email address.");
+        } else if (errorMessage.includes("Password is required")) {
+          showError("Password Required", "Please enter your password.");
         } else {
-          showError("Sign In Failed", error.message);
+          showError("Sign In Failed", errorMessage);
         }
-        setError(error.message || "Invalid email or password");
-      } else {
+        setError(errorMessage);
+      } else if (result.success) {
         showSuccess("Welcome Back!", "You have successfully signed in.");
         // Redirect to home page after successful login
         setTimeout(() => {
           router.push("/");
         }, 1500);
+      } else {
+        showError("Sign In Failed", "An unexpected error occurred. Please try again.");
+        setError("An unexpected error occurred. Please try again.");
       }
     } catch (err) {
       console.error("Login error:", err);

@@ -242,17 +242,26 @@ export class SupabaseAuthSecurity {
       const identifier = clientIP || 'unknown';
       if (!rateLimiters.login.isAllowed(identifier)) {
         const remainingTime = Math.ceil(rateLimiters.login.getRemainingTime(identifier) / 60000);
-        throw new Error(`Too many login attempts. Please try again in ${remainingTime} minutes.`);
+        return {
+          success: false,
+          error: `Too many login attempts. Please try again in ${remainingTime} minutes.`,
+        };
       }
       
       // Validate email
       if (!validateEmail(email)) {
-        throw new Error('Please enter a valid email address');
+        return {
+          success: false,
+          error: 'Please enter a valid email address',
+        };
       }
       
       // Validate password (basic check)
       if (!password || password.length < 1) {
-        throw new Error('Password is required');
+        return {
+          success: false,
+          error: 'Password is required',
+        };
       }
       
       // Attempt sign in
@@ -262,7 +271,10 @@ export class SupabaseAuthSecurity {
       });
       
       if (error) {
-        throw error;
+        return {
+          success: false,
+          error: error.message || 'Invalid login credentials',
+        };
       }
       
       // Reset rate limiter on successful login
