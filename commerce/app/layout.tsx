@@ -5,6 +5,8 @@ import { GeistSans } from "geist/font/sans";
 import { getCart } from "lib/shopify";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
+import { AuthProvider } from "lib/auth-context";
+import { SessionWarningModal } from "components/session-warning";
 
 // Type-safe Toaster for React 19 compatibility
 const SafeToaster = ({
@@ -82,14 +84,17 @@ export default async function RootLayout({
         className="bg-neutral-50 text-black selection:bg-teal-300"
         suppressHydrationWarning
       >
-        <CartProvider cartPromise={cart}>
-          <Navbar />
-          <main className="pt-0">
-            {children}
-            <SafeToaster closeButton />
-            <WelcomeToast />
-          </main>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider cartPromise={cart}>
+            <Navbar />
+            <main className="pt-0">
+              {children}
+              <SafeToaster closeButton />
+              <WelcomeToast />
+              <SessionWarningModal />
+            </main>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

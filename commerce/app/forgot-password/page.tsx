@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { securePasswordReset } from "../../lib/security/auth";
+import { useToast, ToastContainer } from "../../components/ui/toast-notifications";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ export default function ForgotPasswordPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const { showSuccess, showError, toasts, removeToast } = useToast();
 
   useEffect(() => {
     setIsVisible(true);
@@ -25,12 +27,19 @@ export default function ForgotPasswordPage() {
       const result = await securePasswordReset(email);
 
       if (result.success) {
+        showSuccess("Reset Email Sent", "Please check your email for password reset instructions.");
         setIsSubmitted(true);
       } else {
+        if (result.message.includes("User not found")) {
+          showError("Email Not Found", "No account found with this email address. Please check your email or create a new account.");
+        } else {
+          showError("Reset Failed", result.message);
+        }
         setError(result.message);
       }
     } catch (err) {
       console.error("Password reset error:", err);
+      showError("Reset Failed", "An unexpected error occurred. Please try again.");
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -214,6 +223,9 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
       </div>
+      
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>
   );
 }

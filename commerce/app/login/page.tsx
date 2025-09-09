@@ -3,23 +3,43 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { secureLogin } from "../../lib/security/auth";
-import type { LoginFormData } from "../../lib/security/validation";
+import { useAuth } from "../../lib/auth-context";
+import { useToast, ToastContainer } from "../../components/ui/toast-notifications";
 
 export default function LoginPage() {
-  const [formData, setFormData] = useState<LoginFormData>({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [errors, setErrors] = useState<string[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
+  const { signIn, user, loading } = useAuth();
+  const { showSuccess, showError, toasts, removeToast } = useToast();
 
   useEffect(() => {
     setIsVisible(true);
-  }, []);
+    // Redirect if already logged in
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
+  // Show loading state while auth is initializing
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <svg className="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span className="text-gray-600">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -27,30 +47,36 @@ export default function LoginPage() {
       [e.target.name]: e.target.value,
     });
     setError("");
-    setErrors([]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    setErrors([]);
 
     try {
-      // Use secure authentication
-      const result = await secureLogin(formData);
+      const { error } = await signIn(formData.email, formData.password);
 
-      if (result.success) {
-        // Redirect to home page after successful login
-        router.push(result.redirectTo || "/");
+      if (error) {
+        if (error.message.includes("Invalid login credentials")) {
+          showError("Sign In Failed", "Invalid email or password. Please check your credentials and try again.");
+        } else if (error.message.includes("Email not confirmed")) {
+          showError("Email Not Verified", "Please check your email and click the verification link before signing in.");
+        } else {
+          showError("Sign In Failed", error.message);
+        }
+        setError(error.message || "Invalid email or password");
       } else {
-        setError(result.message);
-        setErrors(result.errors || []);
+        showSuccess("Welcome Back!", "You have successfully signed in.");
+        // Redirect to home page after successful login
+        setTimeout(() => {
+          router.push("/");
+        }, 1500);
       }
     } catch (err) {
       console.error("Login error:", err);
+      showError("Sign In Failed", "An unexpected error occurred. Please try again.");
       setError("An unexpected error occurred. Please try again.");
-      setErrors(["Internal server error"]);
     } finally {
       setIsLoading(false);
     }
@@ -126,16 +152,9 @@ export default function LoginPage() {
               />
             </div>
 
-            {(error || errors.length > 0) && (
+            {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm animate-shake">
-                {error && <div className="font-medium">{error}</div>}
-                {errors.length > 0 && (
-                  <ul className="mt-2 list-disc list-inside">
-                    {errors.map((err, index) => (
-                      <li key={index}>{err}</li>
-                    ))}
-                  </ul>
-                )}
+                <div className="font-medium">{error}</div>
               </div>
             )}
 
@@ -218,6 +237,9 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
+      
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>
   );
 }

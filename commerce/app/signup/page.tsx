@@ -3,26 +3,31 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { secureSignup } from "../../lib/security/auth";
-import type { SignupFormData } from "../../lib/security/validation";
+import { useAuth } from "../../lib/auth-context";
+import { useToast, ToastContainer } from "../../components/ui/toast-notifications";
 
 export default function SignupPage() {
-  const [formData, setFormData] = useState<SignupFormData>({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmPassword: "",
-    firstName: "",
-    lastName: "",
+    name: "",
+    phoneNumber: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [errors, setErrors] = useState<string[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
+  const { signUp, user } = useAuth();
+  const { showSuccess, showError, toasts, removeToast } = useToast();
 
   useEffect(() => {
     setIsVisible(true);
-  }, []);
+    // Redirect if already logged in
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -30,30 +35,63 @@ export default function SignupPage() {
       [e.target.name]: e.target.value,
     });
     setError("");
-    setErrors([]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    setErrors([]);
+
+    // Validate password confirmation
+    if (formData.password !== formData.confirmPassword) {
+      showError("Password Mismatch", "Passwords do not match. Please make sure both password fields are identical.");
+      setError("Passwords do not match");
+      setIsLoading(false);
+      return;
+    }
 
     try {
-      // Use secure signup
-      const result = await secureSignup(formData);
+      const { error } = await signUp(
+        formData.email,
+        formData.password,
+        formData.name,
+        formData.phoneNumber
+      );
 
-      if (result.success) {
-        // Redirect to home page after successful signup
-        router.push(result.redirectTo || "/");
+      if (error) {
+        // Handle different types of errors
+        let errorMessage = "Failed to create account";
+        
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error.details) {
+          errorMessage = error.details;
+        } else if (error.hint) {
+          errorMessage = error.hint;
+        }
+        
+        if (errorMessage.includes("User already registered")) {
+          showError("Account Exists", "An account with this email already exists. Please sign in instead.");
+        } else if (errorMessage.includes("Password should be at least")) {
+          showError("Weak Password", "Please choose a stronger password with at least 6 characters.");
+        } else {
+          showError("Sign Up Failed", errorMessage);
+        }
+        
+        setError(errorMessage);
       } else {
-        setError(result.message);
-        setErrors(result.errors || []);
+        showSuccess("Account Created!", "Please check your email and click the verification link to activate your account.");
+        // Redirect to home page after successful signup
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
       }
     } catch (err) {
       console.error("Signup error:", err);
+      showError("Sign Up Failed", "An unexpected error occurred. Please try again.");
       setError("An unexpected error occurred. Please try again.");
-      setErrors(["Internal server error"]);
     } finally {
       setIsLoading(false);
     }
@@ -91,43 +129,41 @@ export default function SignupPage() {
         {/* Form */}
         <div className="bg-white/95 backdrop-blur-xl py-8 px-6 shadow-2xl rounded-2xl border border-white/30 animate-slide-up">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="firstName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  First Name *
-                </label>
-                <input
-                  id="firstName"
-                  name="firstName"
-                  type="text"
-                  required
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-gray-300 hover:shadow-md"
-                  placeholder="John"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="lastName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Last Name *
-                </label>
-                <input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  required
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-gray-300 hover:shadow-md"
-                  placeholder="Doe"
-                />
-              </div>
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Full Name *
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                value={formData.name}
+                onChange={handleInputChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-gray-300 hover:shadow-md"
+                placeholder="John Doe"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="phoneNumber"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Phone Number
+              </label>
+              <input
+                id="phoneNumber"
+                name="phoneNumber"
+                type="tel"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-gray-300 hover:shadow-md"
+                placeholder="+1 (555) 123-4567"
+              />
             </div>
 
             <div>
@@ -190,16 +226,9 @@ export default function SignupPage() {
               />
             </div>
 
-            {(error || errors.length > 0) && (
+            {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm animate-shake">
-                {error && <div className="font-medium">{error}</div>}
-                {errors.length > 0 && (
-                  <ul className="mt-2 list-disc list-inside">
-                    {errors.map((err, index) => (
-                      <li key={index}>{err}</li>
-                    ))}
-                  </ul>
-                )}
+                <div className="font-medium">{error}</div>
               </div>
             )}
 
@@ -272,6 +301,9 @@ export default function SignupPage() {
           </p>
         </div>
       </div>
+      
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>
   );
 }
