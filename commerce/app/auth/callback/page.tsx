@@ -20,10 +20,18 @@ export default function AuthCallback() {
         }
 
         if (data.session) {
-          // User is authenticated, redirect to home or intended page
+          // Check if this is a password reset session
           const urlParams = new URLSearchParams(window.location.search);
-          const redirectTo = urlParams.get('redirectTo') || '/';
-          router.push(redirectTo);
+          const type = urlParams.get('type');
+          
+          if (type === 'recovery') {
+            // This is a password reset session, redirect to reset password page
+            router.push('/reset-password');
+          } else {
+            // Regular authentication, redirect to home or intended page
+            const redirectTo = urlParams.get('redirectTo') || '/';
+            router.push(redirectTo);
+          }
         } else {
           // No session, redirect to login
           router.push('/login');

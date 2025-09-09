@@ -318,7 +318,7 @@ export class SupabaseAuthSecurity {
       
       // Request password reset
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/forgot-password`,
+        redirectTo: `${window.location.origin}/reset-password`,
       });
       
       if (error) {

@@ -24,7 +24,16 @@ export default function LoginPage() {
     if (user) {
       router.push("/");
     }
-  }, [user, router]);
+    
+    // Check for success message from password reset
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+    if (message === 'password_reset_success') {
+      showSuccess("Password Reset Successful", "Your password has been reset. Please sign in with your new password.");
+      // Clean up the URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [user, router, showSuccess]);
 
   // Show loading state while auth is initializing
   if (loading) {

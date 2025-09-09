@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { securePasswordReset } from "../../lib/security/auth";
+import { SupabaseAuthSecurity } from "../../lib/security/supabase-security";
 import { useToast, ToastContainer } from "../../components/ui/toast-notifications";
 
 export default function ForgotPasswordPage() {
@@ -24,18 +24,23 @@ export default function ForgotPasswordPage() {
 
     try {
       // Use secure password reset
-      const result = await securePasswordReset(email);
+      const result = await SupabaseAuthSecurity.securePasswordReset(email);
 
       if (result.success) {
         showSuccess("Reset Email Sent", "Please check your email for password reset instructions.");
         setIsSubmitted(true);
       } else {
-        if (result.message.includes("User not found")) {
+        const errorMessage = result.error || result.message || "Failed to send reset email";
+        if (errorMessage.includes("User not found")) {
           showError("Email Not Found", "No account found with this email address. Please check your email or create a new account.");
+        } else if (errorMessage.includes("Too many password reset attempts")) {
+          showError("Too Many Attempts", errorMessage);
+        } else if (errorMessage.includes("Please enter a valid email address")) {
+          showError("Invalid Email", "Please enter a valid email address.");
         } else {
-          showError("Reset Failed", result.message);
+          showError("Reset Failed", errorMessage);
         }
-        setError(result.message);
+        setError(errorMessage);
       }
     } catch (err) {
       console.error("Password reset error:", err);
