@@ -615,7 +615,7 @@ export function HeroBanner({
                 LOGIN
               </SafeLink>
             </li>
-            <li
+            {/* <li
               className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
               style={{ transitionDelay: showNavItems ? "0.35s" : "0s" }}
             >
@@ -645,7 +645,7 @@ export function HeroBanner({
                 )}
                 SIGNUP
               </SafeLink>
-            </li>
+            </li> */}
             <li
               className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
               style={{ transitionDelay: showNavItems ? "0.4s" : "0s" }}
