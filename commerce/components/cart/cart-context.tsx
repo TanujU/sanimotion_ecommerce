@@ -205,7 +205,7 @@ export function CartProvider({
   cartPromise
 }: {
   children: React.ReactNode;
-  cartPromise: Promise<Cart | undefined>;
+  cartPromise?: Promise<Cart | undefined>;
 }) {
   const [cart, setCartState] = useState<Cart | undefined>(undefined);
 
@@ -230,24 +230,29 @@ export function CartProvider({
       }
 
       // If no saved cart, load from promise
-      cartPromise.then((initialCart) => {
-        try {
-          const cartToSet = initialCart || createEmptyCart();
-          setCartState(cartToSet);
-          // Save to localStorage
+      if (cartPromise) {
+        cartPromise.then((initialCart) => {
           try {
-            localStorage.setItem('cart', JSON.stringify(cartToSet));
+            const cartToSet = initialCart || createEmptyCart();
+            setCartState(cartToSet);
+            // Save to localStorage
+            try {
+              localStorage.setItem('cart', JSON.stringify(cartToSet));
+            } catch (error) {
+              console.warn('Error saving cart to localStorage:', error);
+            }
           } catch (error) {
-            console.warn('Error saving cart to localStorage:', error);
+            console.error('Error setting initial cart:', error);
+            setCartState(createEmptyCart());
           }
-        } catch (error) {
-          console.error('Error setting initial cart:', error);
+        }).catch((error) => {
+          console.error('Error loading cart from promise:', error);
           setCartState(createEmptyCart());
-        }
-      }).catch((error) => {
-        console.error('Error loading cart from promise:', error);
+        });
+      } else {
+        // If no cartPromise provided, create empty cart
         setCartState(createEmptyCart());
-      });
+      }
     } catch (error) {
       console.error('Error in cart initialization:', error);
       setCartState(createEmptyCart());
