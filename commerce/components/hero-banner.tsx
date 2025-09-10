@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { useCart } from "./cart/cart-context";
 import CartModal from "./cart/modal";
 import { AuthNav } from "./auth-nav";
+import { ScrollNav } from "./scroll-nav";
 
 // Type-safe components for React 19 compatibility
 const SafeImage = ({
@@ -114,6 +115,7 @@ export function HeroBanner({
   const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] =
     useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isScrollNavVisible, setIsScrollNavVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
 
   // Hero slides data
@@ -237,7 +239,7 @@ export function HeroBanner({
     };
   }, [lastScrollY, heroSlides.length]);
 
-  // Sidebar scroll behavior
+  // Sidebar scroll behavior and scroll nav visibility
   useEffect(() => {
     let isInitialized = false;
 
@@ -246,20 +248,23 @@ export function HeroBanner({
     }, 1000);
 
     const handleScroll = () => {
-      if (!isInitialized || isMobile) return;
+      if (!isInitialized) return;
 
       const currentScrollY = window.scrollY;
       const heroHeight = heroRef.current?.offsetHeight || 0;
       const isInHeroSection = currentScrollY < heroHeight - 100;
+      const shouldShowScrollNav = currentScrollY > heroHeight * 0.8;
 
-      if (isInHeroSection) {
+      // Update scroll nav visibility
+      setIsScrollNavVisible(shouldShowScrollNav);
+
+      if (isMobile) return;
+
+      // Show sidebar when in hero section or scrolling back up
+      if (isInHeroSection || currentScrollY < lastScrollY) {
         setIsMinimized(false);
-      } else {
-        if (currentScrollY > lastScrollY && currentScrollY > heroHeight - 100) {
-          setIsMinimized(true);
-        } else if (currentScrollY < lastScrollY) {
-          setIsMinimized(false);
-        }
+      } else if (shouldShowScrollNav && currentScrollY > lastScrollY) {
+        setIsMinimized(true);
       }
     };
 
@@ -285,10 +290,14 @@ export function HeroBanner({
   }, []);
 
   return (
-    <div
-      ref={heroRef}
-      className={`relative min-h-[100vh] flex items-center overflow-hidden mt-0 pt-0 ${className}`}
-    >
+    <>
+      {/* Scroll-based Navigation */}
+      <ScrollNav heroRef={heroRef} />
+      
+      <div
+        ref={heroRef}
+        className={`relative min-h-[100vh] flex items-center overflow-hidden mt-0 pt-0 ${className}`}
+      >
       {/* Background Images - Slideshow */}
       <div className="absolute inset-0 z-0">
         {heroSlides.map((slide, index) => (
@@ -370,9 +379,11 @@ export function HeroBanner({
                   ? "w-0 opacity-0 -translate-x-full"
                   : isInitialAnimation
                     ? "w-0 opacity-0 -translate-x-full"
-                    : isMinimized
-                      ? "w-20 opacity-100 translate-x-0"
-                      : "w-80 opacity-100 translate-x-0"
+                    : isScrollNavVisible
+                      ? "w-0 opacity-0 -translate-x-full"
+                      : isMinimized
+                        ? "w-20 opacity-100 translate-x-0"
+                        : "w-80 opacity-100 translate-x-0"
               } bg-white/50 backdrop-blur-xl border-r border-white/30 shadow-xl z-20`
         }`}
       >
@@ -614,9 +625,11 @@ export function HeroBanner({
             ? "ml-0"
             : isInitialAnimation
               ? "lg:ml-0"
-              : isMinimized
+              : isScrollNavVisible
                 ? "lg:ml-20"
-                : "lg:ml-80"
+                : isMinimized
+                  ? "lg:ml-20"
+                  : "lg:ml-80"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -686,5 +699,6 @@ export function HeroBanner({
         </div>
       </div>
     </div>
+    </>
   );
 }
