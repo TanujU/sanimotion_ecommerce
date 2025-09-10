@@ -44,6 +44,14 @@ export default function Footer() {
                     Medizinproduktegesetz
                   </span>
                 </li>
+                <li>
+                  <Link
+                    href="/cookie-policy"
+                    className="text-gray-600 hover:text-black transition-colors"
+                  >
+                    Cookie Policy
+                  </Link>
+                </li>
               </ul>
             </div>
 

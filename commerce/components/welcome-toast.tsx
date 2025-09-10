@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useAuth } from "../lib/auth-context";
 
 export function WelcomeToast() {
   const [mounted, setMounted] = useState(false);
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -12,6 +14,9 @@ export function WelcomeToast() {
 
   useEffect(() => {
     if (!mounted) return;
+
+    // Only show toast if user is not logged in and not loading
+    if (loading || user) return;
 
     // ignore if screen height is too small
     if (window.innerHeight < 650) return;
@@ -34,7 +39,7 @@ export function WelcomeToast() {
         ),
       });
     }
-  }, [mounted]);
+  }, [mounted, user, loading]);
 
   // Don't render anything until mounted to prevent hydration mismatch
   if (!mounted) return null;

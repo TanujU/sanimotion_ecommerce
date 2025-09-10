@@ -59,40 +59,40 @@ export default async function HomePage() {
       price: "$89.99",
       sizes: ["5ml", "10ml"],
       image: "/images/aqualyx.jpg",
-      alt: "Aqualyx - Fat Dissolving Treatment"
+      alt: "Aqualyx - Fat Dissolving Treatment",
     },
     {
-      id: "2", 
+      id: "2",
       title: "Juvederm",
       price: "$299.99",
       sizes: ["0.5ml", "1ml"],
       image: "/images/juvederm.jpg",
-      alt: "Juvederm - Dermal Filler"
+      alt: "Juvederm - Dermal Filler",
     },
     {
       id: "3",
-      title: "Profhilo", 
+      title: "Profhilo",
       price: "$199.99",
       sizes: ["2ml", "4ml"],
       image: "/images/profhilo.jpg",
-      alt: "Profhilo - Skin Booster"
+      alt: "Profhilo - Skin Booster",
     },
     {
       id: "4",
       title: "Restylane",
-      price: "$249.99", 
+      price: "$249.99",
       sizes: ["0.5ml", "1ml"],
       image: "/images/restylane.jpg",
-      alt: "Restylane - Hyaluronic Acid Filler"
+      alt: "Restylane - Hyaluronic Acid Filler",
     },
     {
       id: "5",
       title: "Belotero",
       price: "$179.99",
-      sizes: ["0.5ml", "1ml"], 
+      sizes: ["0.5ml", "1ml"],
       image: "/images/belotero.jpg",
-      alt: "Belotero - Dermal Filler"
-    }
+      alt: "Belotero - Dermal Filler",
+    },
   ];
 
   return (
@@ -104,8 +104,8 @@ export default async function HomePage() {
         title="Sanimotion"
         subtitle="Medical Excellence"
         description="Premium medical equipment and healthcare supplies trusted by professionals worldwide. Discover our comprehensive range of medical devices, equipment, and supplies for hospitals, clinics, and medical practices."
-        imageUrl="https://img.freepik.com/premium-photo/medical-supplies-equipment-blue-background_690064-9800.jpg?semt=ais_hybrid&w=740&q=80"
-        imageAlt="3D online pharmacy store with medical supplies and healthcare products"
+        imageUrl="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+        imageAlt="Modern hospital room with advanced medical equipment and monitoring systems"
         buttonText="Explore Medical Equipment"
         buttonLink="/search"
         className="scroll-reveal"
@@ -193,9 +193,9 @@ export default async function HomePage() {
               Bestsellers
             </h2>
           </div>
-          
+
           <BestsellersCarousel products={bestsellersData} />
-              </div>
+        </div>
 
         {/* Shop by Category Section */}
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -203,8 +203,8 @@ export default async function HomePage() {
             <h2 className="text-3xl font-light tracking-wide text-gray-900 sm:text-4xl">
               Shop by Category
             </h2>
-              </div>
-          
+          </div>
+
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-7xl mx-auto stagger-reveal">
             {/* Weight Loss */}
             <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-100">
@@ -304,7 +304,8 @@ export default async function HomePage() {
                 </h2>
               </div>
               <p className="text-lg text-gray-500 leading-relaxed">
-                Filter our medical products based on your concerns, you'd like to address most.
+                Filter our medical products based on your concerns, you'd like
+                to address most.
               </p>
             </div>
 
@@ -316,30 +317,52 @@ export default async function HomePage() {
                     <label className="block text-lg font-medium text-gray-800 mb-4">
                       I am looking for
                     </label>
-                    
+
                     {/* Product Type Dropdown */}
                     <div className="relative mb-2">
-                      <select className="w-full bg-transparent border-0 border-b border-gray-400 py-3 pr-8 text-gray-600 focus:outline-none focus:border-gray-600 focus:ring-0 appearance-none cursor-pointer text-base" defaultValue="">
-                        <option value="" disabled>product type</option>
+                      <select
+                        className="w-full bg-transparent border-0 border-b border-gray-400 py-3 pr-8 text-gray-600 focus:outline-none focus:border-gray-600 focus:ring-0 appearance-none cursor-pointer text-base"
+                        defaultValue=""
+                      >
+                        <option value="" disabled>
+                          product type
+                        </option>
                         <option value="dermal-filler">Dermal Filler</option>
                         <option value="skin-booster">Skin Booster</option>
                         <option value="fat-dissolving">Fat Dissolving</option>
-                        <option value="wrinkle-treatment">Wrinkle Treatment</option>
+                        <option value="wrinkle-treatment">
+                          Wrinkle Treatment
+                        </option>
                         <option value="lip-enhancement">Lip Enhancement</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none">
-                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        <svg
+                          className="w-4 h-4 text-gray-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
                         </svg>
                       </div>
                     </div>
-                    
+
                     <div className="text-sm text-gray-500 mb-2">to target</div>
-                    
+
                     {/* Concern Dropdown */}
                     <div className="relative">
-                      <select className="w-full bg-transparent border-0 border-b border-gray-400 py-3 pr-8 text-gray-600 focus:outline-none focus:border-gray-600 focus:ring-0 appearance-none cursor-pointer text-base" defaultValue="">
-                        <option value="" disabled>concern</option>
+                      <select
+                        className="w-full bg-transparent border-0 border-b border-gray-400 py-3 pr-8 text-gray-600 focus:outline-none focus:border-gray-600 focus:ring-0 appearance-none cursor-pointer text-base"
+                        defaultValue=""
+                      >
+                        <option value="" disabled>
+                          concern
+                        </option>
                         <option value="fine-lines">Fine Lines</option>
                         <option value="volume-loss">Volume Loss</option>
                         <option value="skin-texture">Skin Texture</option>
@@ -348,15 +371,25 @@ export default async function HomePage() {
                         <option value="lip-volume">Lip Volume</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none">
-                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        <svg
+                          className="w-4 h-4 text-gray-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
                         </svg>
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Submit Button */}
-                  <button 
+                  <button
                     type="submit"
                     className="w-full bg-transparent border-2 border-gray-300 text-gray-700 py-4 px-8 rounded-full hover:border-gray-400 hover:text-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50 text-base font-medium"
                   >
@@ -367,11 +400,10 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
-
       </div>
 
       <Footer />
-      
+
       {/* Welcome Popup */}
       <WelcomePopup />
     </div>

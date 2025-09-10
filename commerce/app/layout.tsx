@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import { AuthProvider } from "lib/auth-context";
 import { SessionWarningModal } from "components/session-warning";
+import { CookieConsentBanner } from "components/cookie-consent-banner";
 
 // Type-safe Toaster for React 19 compatibility
 const SafeToaster = ({
@@ -92,6 +93,7 @@ export default async function RootLayout({
               <SafeToaster closeButton />
               <WelcomeToast />
               <SessionWarningModal />
+              <CookieConsentBanner />
             </main>
           </CartProvider>
         </AuthProvider>

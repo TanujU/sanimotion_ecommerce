@@ -413,6 +413,10 @@ export async function getFooterMenu(): Promise<Menu[]> {
     {
       title: 'FAQ',
       path: '/faq'
+    },
+    {
+      title: 'Cookie Policy',
+      path: '/cookie-policy'
     }
   ];
 }
