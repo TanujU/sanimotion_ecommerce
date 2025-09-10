@@ -34,15 +34,33 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
             className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
               isMobile
                 ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105 w-full"
-                : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
+                : "flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl hover:scale-110"
             }`}
             onClick={() => {
               if (onMobileMenuClose) onMobileMenuClose();
             }}
+            title="Profile"
           >
-            {isMobile && (
+            {isMobile ? (
+              <>
+                <svg
+                  className="w-5 h-5 mr-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                PROFILE
+              </>
+            ) : (
               <svg
-                className="w-5 h-5 mr-3"
+                className="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -55,7 +73,6 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
                 />
               </svg>
             )}
-            PROFILE
           </Link>
         </li>
 
@@ -170,7 +187,6 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
           SIGNUP
         </Link>
       </li> */}
-
     </>
   );
 }

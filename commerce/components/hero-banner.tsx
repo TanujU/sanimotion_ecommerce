@@ -124,9 +124,9 @@ export function HeroBanner({
       description:
         "Premium medical equipment and healthcare supplies trusted by professionals worldwide. Discover our comprehensive range of medical devices, equipment, and supplies for hospitals, clinics, and medical practices.",
       imageUrl:
-        "https://img.freepik.com/premium-photo/medical-supplies-equipment-blue-background_690064-9800.jpg?semt=ais_hybrid&w=740&q=80",
+        "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       imageAlt:
-        "3D online pharmacy store with medical supplies and healthcare products",
+        "Modern hospital room with advanced medical equipment and monitoring systems",
     },
     {
       title: "Advanced Technology",
@@ -134,8 +134,9 @@ export function HeroBanner({
       description:
         "Cutting-edge medical technology and state-of-the-art equipment designed to enhance patient care and improve clinical outcomes. Trusted by leading healthcare institutions worldwide.",
       imageUrl:
-        "https://img.freepik.com/premium-photo/medical-equipment-hospital-room-modern-technology_690064-9801.jpg?semt=ais_hybrid&w=740&q=80",
-      imageAlt: "Modern medical equipment and technology in hospital setting",
+        "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      imageAlt:
+        "High-tech medical laboratory with diagnostic equipment and instruments",
     },
     {
       title: "Professional Grade",
@@ -143,8 +144,9 @@ export function HeroBanner({
       description:
         "Rigorous quality standards and professional-grade medical supplies that meet international healthcare regulations. Your trusted partner in medical excellence and patient safety.",
       imageUrl:
-        "https://img.freepik.com/premium-photo/medical-professionals-working-modern-hospital_690064-9802.jpg?semt=ais_hybrid&w=740&q=80",
-      imageAlt: "Medical professionals working with advanced equipment",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+      imageAlt:
+        "Surgical instruments and medical tools in a sterile environment",
     },
   ];
 
@@ -585,9 +587,9 @@ export function HeroBanner({
                 )}
               </li>
             )}
-            <AuthNav 
-              isMobile={isMobile} 
-              onMobileMenuClose={() => setIsMobileMenuOpen(false)} 
+            <AuthNav
+              isMobile={isMobile}
+              onMobileMenuClose={() => setIsMobileMenuOpen(false)}
             />
             <li
               className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}

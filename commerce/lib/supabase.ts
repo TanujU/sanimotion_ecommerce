@@ -74,6 +74,8 @@ export interface UserProfile {
   id: string
   name: string
   phone_number: string
+  bio?: string
+  last_login_at?: string
   created_at: string
   updated_at: string
 }
