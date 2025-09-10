@@ -596,13 +596,9 @@ export function HeroBanner({
                 )}
               </li>
             )}
-            <AuthNav 
-              isMobile={isMobile} 
-              onMobileMenuClose={() => setIsMobileMenuOpen(false)} 
-            />
             <li
               className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
-              style={{ transitionDelay: showNavItems ? "0.4s" : "0s" }}
+              style={{ transitionDelay: showNavItems ? "0.3s" : "0s" }}
             >
               {isMobile ? (
                 <div className="flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105">
@@ -614,6 +610,10 @@ export function HeroBanner({
                 </div>
               )}
             </li>
+            <AuthNav 
+              isMobile={isMobile} 
+              onMobileMenuClose={() => setIsMobileMenuOpen(false)} 
+            />
           </ul>
         </nav>
       </div>

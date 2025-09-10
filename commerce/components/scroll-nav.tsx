@@ -297,10 +297,10 @@ export function ScrollNav({ heroRef }: ScrollNavProps) {
                    <ProfileIcon />
                  </div>
                  <div className="transition-all duration-300 hover:scale-105">
-                   <LogoutIcon />
+                   <CartIcon />
                  </div>
                  <div className="transition-all duration-300 hover:scale-105">
-                   <CartIcon />
+                   <LogoutIcon />
                  </div>
                </div>
       </div>

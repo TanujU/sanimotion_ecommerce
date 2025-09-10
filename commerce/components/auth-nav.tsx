@@ -27,7 +27,7 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
           className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${
             !isMobile ? "opacity-100 translate-x-0" : ""
           }`}
-          style={{ transitionDelay: !isMobile ? "0.3s" : "0s" }}
+          style={{ transitionDelay: !isMobile ? "0.4s" : "0s" }}
         >
           <Link
             href="/profile"
@@ -64,7 +64,7 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
           className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${
             !isMobile ? "opacity-100 translate-x-0" : ""
           }`}
-          style={{ transitionDelay: !isMobile ? "0.4s" : "0s" }}
+          style={{ transitionDelay: !isMobile ? "0.5s" : "0s" }}
         >
           <button
             onClick={async () => {
