@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { useCart } from "./cart/cart-context";
 import CartModal from "./cart/modal";
 import { AuthNav } from "./auth-nav";
-import { ScrollNav, SearchIcon, HamburgerIcon, CartIcon, ProfileIcon, LogoutIcon } from "./scroll-nav";
+import { ScrollNav, SearchIcon, CartIcon, ProfileIcon, LogoutIcon } from "./scroll-nav";
 
 // Type-safe components for React 19 compatibility
 const SafeImage = ({
@@ -394,7 +394,7 @@ export function HeroBanner({
 
       {/* Left Sidebar Navigation */}
       <div
-        className={`absolute left-0 top-10 h-full flex flex-col transform-gpu will-change-[width,transform,opacity] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        className={`absolute left-0 top-0 h-screen flex flex-col transform-gpu will-change-[width,transform,opacity] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
           isMobile
             ? `w-80 ${isMobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"} bg-white/95 backdrop-blur-xl border-r border-white/40 shadow-2xl z-20`
             : `hidden lg:flex ${
@@ -524,13 +524,25 @@ export function HeroBanner({
             {!isMobile && (
               <>
                 <li
-                  className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
+                  className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 -mt-6 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
                   style={{ transitionDelay: showNavItems ? "0.2s" : "0s" }}
                 >
                   <div className="flex items-center">
                     {/* Hamburger Icon - Left of CATEGORIES text */}
                     <div className="mr-3 transition-all duration-300 hover:scale-105">
-                      <HamburgerIcon />
+                      <svg
+                        className="w-5 h-5 text-black hover:text-blue-600 transition-colors duration-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 6h16M4 12h16M4 18h16"
+                        />
+                      </svg>
                     </div>
                     <button
                       className="text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 cursor-pointer"
