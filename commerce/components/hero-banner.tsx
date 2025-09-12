@@ -272,8 +272,8 @@ export function HeroBanner({
 
       const currentScrollY = window.scrollY;
       const heroHeight = heroRef.current?.offsetHeight || 0;
-      const isInHeroSection = currentScrollY < heroHeight - 100;
-      const shouldShowScrollNav = currentScrollY > heroHeight * 0.8;
+      const isInHeroSection = currentScrollY < heroHeight - 50;
+      const shouldShowScrollNav = currentScrollY > heroHeight * 0.7;
 
       // Update scroll nav visibility
       setIsScrollNavVisible(shouldShowScrollNav);

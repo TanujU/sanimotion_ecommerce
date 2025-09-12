@@ -259,7 +259,7 @@ export function ScrollNav({ heroRef }: ScrollNavProps) {
       const threshold = heroHeight * 0.9; // Start transition at 90% of hero height
 
       const shouldBeScrolled = scrollY > threshold;
-      const shouldBeVisible = scrollY > heroHeight * 0.8; // Start showing at 80% of hero height
+      const shouldBeVisible = scrollY > heroHeight * 0.4; // Start showing at 70% of hero height for immediate transition
 
       setIsScrolled(shouldBeScrolled);
       setIsVisible(shouldBeVisible);
