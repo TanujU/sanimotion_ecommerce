@@ -69,7 +69,7 @@ function CartLink({ isMobile = false }: { isMobile?: boolean }) {
       {/* Simple Cart Icon - Left of CART text */}
       <div className={`${isMobile ? 'mr-3' : 'mr-3'} transition-all duration-300 hover:scale-105`}>
         <svg
-          className={`${isMobile ? 'w-5 h-5' : 'w-5 h-5'} ${isMobile ? 'text-gray-700' : 'text-black'} hover:text-blue-600 transition-colors duration-300`}
+          className={`${isMobile ? 'w-5 h-5' : 'w-5 h-5'} ${isMobile ? 'text-gray-700' : 'text-black'} transition-colors duration-300`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -91,9 +91,9 @@ function CartLink({ isMobile = false }: { isMobile?: boolean }) {
           }
         }}
         className={`${isMobile 
-          ? 'text-gray-700 hover:text-blue-600 text-base font-medium' 
-          : 'text-black hover:text-gray-600 text-sm font-medium tracking-wider uppercase'
-        } transition-colors duration-300 cursor-pointer`}
+          ? 'text-gray-700 hover:font-bold text-base font-medium' 
+          : 'text-black hover:font-bold text-sm font-medium tracking-wider uppercase'
+        } transition-all duration-300 cursor-pointer`}
       >
         CART
       </button>
@@ -500,7 +500,7 @@ export function HeroBanner({
                   className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
                     isMobile
                       ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
-                      : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
+                      : "text-black hover:font-bold text-sm font-medium tracking-wider uppercase hover:scale-105"
                   }`}
                   onClick={() => isMobile && setIsMobileMenuOpen(false)}
                 >
@@ -533,7 +533,7 @@ export function HeroBanner({
                     {/* Hamburger Icon - Left of CATEGORIES text */}
                     <div className="mr-3 transition-all duration-300 hover:scale-105">
                       <svg
-                        className="w-5 h-5 text-black hover:text-blue-600 transition-colors duration-300"
+                        className="w-5 h-5 text-black transition-colors duration-300"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -547,7 +547,7 @@ export function HeroBanner({
                       </svg>
                     </div>
                     <button
-                      className="text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 cursor-pointer"
+                      className="text-black hover:font-bold text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 cursor-pointer"
                       onClick={() =>
                         setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
                       }

@@ -23,8 +23,8 @@ export function SessionWarningModal() {
     // Set up logout callback
     sessionManager.setOnLogoutCallback(() => {
       setWarning(null);
-      // Redirect to login page
-      window.location.href = '/login';
+      // Keep user on current page - no automatic redirect to login
+      console.log('Session expired - user remains on current page');
     });
 
     return () => {

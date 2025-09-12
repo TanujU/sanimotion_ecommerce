@@ -33,7 +33,7 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
           {/* Profile Icon - Left of PROFILE text */}
           <div className="mr-3 transition-all duration-300 hover:scale-105">
             <svg
-              className="w-5 h-5 text-black hover:text-blue-600 transition-colors duration-300"
+              className="w-5 h-5 text-black transition-colors duration-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -50,8 +50,8 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
             href="/profile"
             className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
               isMobile
-                ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105 w-full"
-                : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
+                ? "flex items-center px-6 py-4 text-gray-700 hover:font-bold hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105 w-full"
+                : "text-black hover:font-bold text-sm font-medium tracking-wider uppercase hover:scale-105"
             }`}
             onClick={() => {
               if (onMobileMenuClose) onMobileMenuClose();
@@ -113,8 +113,8 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
               }}
               className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
                 isMobile
-                  ? "flex items-center px-6 py-4 text-gray-700 hover:text-red-600 hover:bg-red-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105 w-full"
-                  : "text-black hover:text-red-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
+                  ? "flex items-center px-6 py-4 text-gray-700 hover:text-red-600 hover:font-bold hover:bg-red-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105 w-full"
+                  : "text-black hover:text-red-600 hover:font-bold text-sm font-medium tracking-wider uppercase hover:scale-105"
               }`}
             >
               {isMobile && (
