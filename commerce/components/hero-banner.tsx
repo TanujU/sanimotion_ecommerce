@@ -315,7 +315,9 @@ export function HeroBanner({
       <ScrollNav heroRef={heroRef} />
       
       {/* Global Cart Modal - rendered once */}
-      <CartModal />
+      <div className="hidden">
+        <CartModal />
+      </div>
       
       <div
         ref={heroRef}
