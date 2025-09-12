@@ -481,7 +481,7 @@ export function HeroBanner({
                   : "opacity-100 transform translate-y-0"
           }`}
         >
-          <ul className={`${isMobile ? "space-y-1" : "space-y-6"}`}>
+          <ul className={`${isMobile ? "space-y-1" : "space-y-8"}`}>
             <li
               className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
               style={{ transitionDelay: showNavItems ? "0.1s" : "0s" }}
