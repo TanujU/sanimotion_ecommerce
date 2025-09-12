@@ -414,7 +414,7 @@ export function HeroBanner({
       >
         {/* Brand Logo */}
         <div
-          className={`px-8 py-8 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
+          className={`px-10 pt-16 pb-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
             isMobile
               ? "opacity-100 border-b border-gray-100/50 transform translate-y-0"
               : !isLoaded || isInitialAnimation || !showNavItems
