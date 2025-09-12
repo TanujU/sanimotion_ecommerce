@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { useCart } from "./cart/cart-context";
 import CartModal from "./cart/modal";
 import { AuthNav } from "./auth-nav";
-import { ScrollNav } from "./scroll-nav";
+import { ScrollNav, SearchIcon, HamburgerIcon, CartIcon, ProfileIcon, LogoutIcon } from "./scroll-nav";
 
 // Type-safe components for React 19 compatibility
 const SafeImage = ({
@@ -60,12 +60,28 @@ const SafeLink = ({
 };
 
 // Cart Link Component
-function CartLink() {
+function CartLink({ isMobile = false }: { isMobile?: boolean }) {
   const { cart } = useCart();
   const cartQuantity = cart?.totalQuantity || 0;
 
   return (
-    <>
+    <div className="flex items-center">
+      {/* Simple Cart Icon - Left of CART text */}
+      <div className={`${isMobile ? 'mr-3' : 'mr-3'} transition-all duration-300 hover:scale-105`}>
+        <svg
+          className={`${isMobile ? 'w-5 h-5' : 'w-5 h-5'} ${isMobile ? 'text-gray-700' : 'text-black'} hover:text-blue-600 transition-colors duration-300`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5zM18.75 20.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+          />
+        </svg>
+      </div>
       <button
         onClick={() => {
           // Trigger the existing cart modal
@@ -74,12 +90,14 @@ function CartLink() {
             (cartButton as HTMLElement).click();
           }
         }}
-        className="text-black hover:text-gray-600 transition-colors duration-300 text-sm font-medium tracking-wider uppercase cursor-pointer"
-      ></button>
-
-      {/* Use existing CartModal component */}
-      <CartModal />
-    </>
+        className={`${isMobile 
+          ? 'text-gray-700 hover:text-blue-600 text-base font-medium' 
+          : 'text-black hover:text-gray-600 text-sm font-medium tracking-wider uppercase'
+        } transition-colors duration-300 cursor-pointer`}
+      >
+        CART
+      </button>
+    </div>
   );
 }
 
@@ -217,7 +235,7 @@ export function HeroBanner({
         // Start transitioning to next slide smoothly
         setIsTransitioning(true);
         setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-        setTimeout(() => setIsTransitioning(false), 1500);
+        setTimeout(() => setIsTransitioning(false), 1000);
       }
 
       // When scrolling back to hero banner
@@ -228,7 +246,7 @@ export function HeroBanner({
         // Reset to first slide smoothly
         setIsTransitioning(true);
         setCurrentSlide(0);
-        setTimeout(() => setIsTransitioning(false), 1500);
+        setTimeout(() => setIsTransitioning(false), 1000);
       }
 
       setLastScrollY(currentScrollY);
@@ -296,6 +314,9 @@ export function HeroBanner({
       {/* Scroll-based Navigation */}
       <ScrollNav heroRef={heroRef} />
       
+      {/* Global Cart Modal - rendered once */}
+      <CartModal />
+      
       <div
         ref={heroRef}
         className={`relative min-h-[100vh] flex items-center overflow-hidden mt-0 pt-0 ${className}`}
@@ -305,7 +326,7 @@ export function HeroBanner({
         {heroSlides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1500 ease-in-out ${
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -465,48 +486,25 @@ export function HeroBanner({
               className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
               style={{ transitionDelay: showNavItems ? "0.1s" : "0s" }}
             >
-              <SafeLink
-                href="/search"
-                className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
-                  isMobile
-                    ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
-                    : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
-                }`}
-                onClick={() => isMobile && setIsMobileMenuOpen(false)}
-              >
-                {isMobile && (
-                  <svg
-                    className="w-5 h-5 mr-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
+              <div className="flex items-center">
+                {/* Search Icon - Left of SEARCH text */}
+                {!isMobile && (
+                  <div className="mr-3 transition-all duration-300 hover:scale-105">
+                    <SearchIcon />
+                  </div>
                 )}
-                SEARCH
-              </SafeLink>
-            </li>
-            {!isMobile && (
-              <>
-                <li
-                  className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
-                  style={{ transitionDelay: showNavItems ? "0.2s" : "0s" }}
+                <SafeLink
+                  href="/search"
+                  className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
+                    isMobile
+                      ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
+                      : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
+                  }`}
+                  onClick={() => isMobile && setIsMobileMenuOpen(false)}
                 >
-                  <button
-                    className="text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 cursor-pointer"
-                    onClick={() =>
-                      setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
-                    }
-                  >
-                    CATEGORIES
+                  {isMobile && (
                     <svg
-                      className={`inline-block ml-1 w-3 h-3 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
+                      className="w-5 h-5 mr-3"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -515,10 +513,47 @@ export function HeroBanner({
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                       />
                     </svg>
-                  </button>
+                  )}
+                  SEARCH
+                </SafeLink>
+              </div>
+            </li>
+            {!isMobile && (
+              <>
+                <li
+                  className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
+                  style={{ transitionDelay: showNavItems ? "0.2s" : "0s" }}
+                >
+                  <div className="flex items-center">
+                    {/* Hamburger Icon - Left of CATEGORIES text */}
+                    <div className="mr-3 transition-all duration-300 hover:scale-105">
+                      <HamburgerIcon />
+                    </div>
+                    <button
+                      className="text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 cursor-pointer"
+                      onClick={() =>
+                        setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
+                      }
+                    >
+                      CATEGORIES
+                      <svg
+                        className={`inline-block ml-1 w-3 h-3 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </li>
 
                 {/* Categories List - Shows inline when clicked */}
@@ -604,11 +639,11 @@ export function HeroBanner({
             >
               {isMobile ? (
                 <div className="flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105">
-                  <CartLink />
+                  <CartLink isMobile={true} />
                 </div>
               ) : (
                 <div className="transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105">
-                  <CartLink />
+                  <CartLink isMobile={false} />
                 </div>
               )}
             </li>

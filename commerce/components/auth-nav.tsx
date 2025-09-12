@@ -29,12 +29,29 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
           }`}
           style={{ transitionDelay: !isMobile ? "0.4s" : "0s" }}
         >
+        <div className="flex items-center">
+          {/* Profile Icon - Left of PROFILE text */}
+          <div className="mr-3 transition-all duration-300 hover:scale-105">
+            <svg
+              className="w-5 h-5 text-black hover:text-blue-600 transition-colors duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
           <Link
             href="/profile"
             className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
               isMobile
                 ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105 w-full"
-                : "flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl hover:scale-110"
+                : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
             }`}
             onClick={() => {
               if (onMobileMenuClose) onMobileMenuClose();
@@ -59,21 +76,10 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
                 PROFILE
               </>
             ) : (
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
+              "PROFILE"
             )}
           </Link>
+        </div>
         </li>
 
         {/* Logout option - visible when logged in */}
@@ -83,20 +89,11 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
           }`}
           style={{ transitionDelay: !isMobile ? "0.5s" : "0s" }}
         >
-          <button
-            onClick={async () => {
-              await signOut();
-              if (onMobileMenuClose) onMobileMenuClose();
-            }}
-            className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
-              isMobile
-                ? "flex items-center px-6 py-4 text-gray-700 hover:text-red-600 hover:bg-red-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105 w-full"
-                : "text-black hover:text-red-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
-            }`}
-          >
-            {isMobile && (
+          <div className="flex items-center">
+            {/* Logout Icon - Left of LOGOUT text */}
+            <div className="mr-3 transition-all duration-300 hover:scale-105">
               <svg
-                className="w-5 h-5 mr-3"
+                className="w-5 h-5 text-black hover:text-red-600 transition-colors duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -108,9 +105,36 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
                   d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                 />
               </svg>
-            )}
-            LOGOUT
-          </button>
+            </div>
+            <button
+              onClick={async () => {
+                await signOut();
+                if (onMobileMenuClose) onMobileMenuClose();
+              }}
+              className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
+                isMobile
+                  ? "flex items-center px-6 py-4 text-gray-700 hover:text-red-600 hover:bg-red-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105 w-full"
+                  : "text-black hover:text-red-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
+              }`}
+            >
+              {isMobile && (
+                <svg
+                  className="w-5 h-5 mr-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+              )}
+              LOGOUT
+            </button>
+          </div>
         </li>
       </>
     );
@@ -125,18 +149,11 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
         }`}
         style={{ transitionDelay: !isMobile ? "0.3s" : "0s" }}
       >
-        <Link
-          href="/login"
-          className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
-            isMobile
-              ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
-              : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
-          }`}
-          onClick={() => onMobileMenuClose && onMobileMenuClose()}
-        >
-          {isMobile && (
+        <div className="flex items-center">
+          {/* Login Icon - Left of LOGIN text */}
+          <div className="mr-3 transition-all duration-300 hover:scale-105">
             <svg
-              className="w-5 h-5 mr-3"
+              className="w-5 h-5 text-black hover:text-blue-600 transition-colors duration-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -145,12 +162,37 @@ export function AuthNav({ isMobile = false, onMobileMenuClose }: AuthNavProps) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
               />
             </svg>
-          )}
-          LOGIN
-        </Link>
+          </div>
+          <Link
+            href="/login"
+            className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
+              isMobile
+                ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
+                : "text-black hover:text-blue-600 text-sm font-medium tracking-wider uppercase hover:scale-105"
+            }`}
+            onClick={() => onMobileMenuClose && onMobileMenuClose()}
+          >
+            {isMobile && (
+              <svg
+                className="w-5 h-5 mr-3"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+            )}
+            LOGIN
+          </Link>
+        </div>
       </li>
 
       {/* Signup link - Commented out since signup is available from login page */}
