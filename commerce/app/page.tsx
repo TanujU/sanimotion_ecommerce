@@ -122,7 +122,7 @@ export default async function HomePage() {
         {/* Service Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-16">
           {/* Card 1 - Order Prescription */}
-          <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
+          <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
             <div className="aspect-square overflow-hidden rounded-t-lg">
               <img
                 src="https://img.freepik.com/premium-photo/medical-prescription-delivery-box-with-medicine_690064-9803.jpg?semt=ais_hybrid&w=400&q=80"
@@ -138,7 +138,7 @@ export default async function HomePage() {
           </div>
 
           {/* Card 2 - Check Stock */}
-          <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
+          <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
             <div className="aspect-square overflow-hidden rounded-t-lg">
               <img
                 src="https://img.freepik.com/premium-photo/medical-pills-blister-packs-medicine-stock_690064-9804.jpg?semt=ais_hybrid&w=400&q=80"
@@ -154,7 +154,7 @@ export default async function HomePage() {
           </div>
 
           {/* Card 3 - Online Doctor */}
-          <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
+          <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
             <div className="aspect-square overflow-hidden rounded-t-lg">
               <img
                 src="https://img.freepik.com/premium-photo/medical-professional-with-stethoscope-white-coat_690064-9805.jpg?semt=ais_hybrid&w=400&q=80"
@@ -170,7 +170,7 @@ export default async function HomePage() {
           </div>
 
           {/* Card 4 - Health Essentials */}
-          <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
+          <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
             <div className="aspect-square overflow-hidden rounded-t-lg">
               <img
                 src="https://img.freepik.com/premium-photo/health-wellness-products-medical-supplies_690064-9806.jpg?semt=ais_hybrid&w=400&q=80"
@@ -207,7 +207,7 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-7xl mx-auto stagger-reveal">
             {/* Weight Loss */}
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-100">
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-100">
               <div className="aspect-square overflow-hidden rounded-t-lg">
                 <img
                   src="https://img.freepik.com/premium-photo/healthy-lifestyle-weight-loss-concept_690064-9807.jpg?semt=ais_hybrid&w=400&q=80"
@@ -221,7 +221,7 @@ export default async function HomePage() {
             </div>
 
             {/* Allergy */}
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-200">
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-200">
               <div className="aspect-square overflow-hidden rounded-t-lg">
                 <img
                   src="https://img.freepik.com/premium-photo/allergy-medication-antihistamine-concept_690064-9808.jpg?semt=ais_hybrid&w=400&q=80"
@@ -235,7 +235,7 @@ export default async function HomePage() {
             </div>
 
             {/* Medical Devices */}
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-300">
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-300">
               <div className="aspect-square overflow-hidden rounded-t-lg">
                 <img
                   src="https://img.freepik.com/premium-photo/medical-devices-equipment-healthcare_690064-9809.jpg?semt=ais_hybrid&w=400&q=80"
@@ -249,7 +249,7 @@ export default async function HomePage() {
             </div>
 
             {/* Vitamins */}
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-400">
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-400">
               <div className="aspect-square overflow-hidden rounded-t-lg">
                 <img
                   src="https://img.freepik.com/premium-photo/vitamins-supplements-health-wellness_690064-9810.jpg?semt=ais_hybrid&w=400&q=80"
@@ -263,7 +263,7 @@ export default async function HomePage() {
             </div>
 
             {/* Women's Health */}
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-500">
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-500">
               <div className="aspect-square overflow-hidden rounded-t-lg">
                 <img
                   src="https://img.freepik.com/premium-photo/womens-health-wellness-medical-care_690064-9811.jpg?semt=ais_hybrid&w=400&q=80"
@@ -277,7 +277,7 @@ export default async function HomePage() {
             </div>
 
             {/* Men's Health */}
-            <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-600">
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-600">
               <div className="aspect-square overflow-hidden rounded-t-lg">
                 <img
                   src="https://img.freepik.com/premium-photo/mens-health-wellness-medical-care_690064-9812.jpg?semt=ais_hybrid&w=400&q=80"

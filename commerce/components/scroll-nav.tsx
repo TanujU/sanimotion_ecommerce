@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useAuth } from "../lib/auth-context";
 import { useCart } from "./cart/cart-context";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 // Type-safe components for React 19 compatibility
 const SafeLink = ({
@@ -26,8 +25,8 @@ const SafeLink = ({
   );
 };
 
-// Search Icon Component
-function SearchIcon() {
+// Search Icon Component - Exportable
+export function SearchIcon() {
   return (
     <SafeLink
       href="/search"
@@ -51,8 +50,8 @@ function SearchIcon() {
   );
 }
 
-// Hamburger Menu Icon Component
-function HamburgerIcon() {
+// Hamburger Menu Icon Component - Exportable
+export function HamburgerIcon() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const categories = [
@@ -113,8 +112,8 @@ function HamburgerIcon() {
   );
 }
 
-// Cart Icon Component - Same as hero section
-function CartIcon() {
+// Cart Icon Component - Exportable
+export function CartIcon() {
   const { cart } = useCart();
   const cartQuantity = cart?.totalQuantity || 0;
 
@@ -127,22 +126,28 @@ function CartIcon() {
           (cartButton as HTMLElement).click();
         }
       }}
-      className="relative flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 bg-white text-black transition-colors hover:bg-neutral-50 hover:scale-105"
+      className="text-black hover:text-gray-600 transition-all duration-300 hover:scale-105 p-2"
       aria-label="Shopping cart"
     >
-      <ShoppingCartIcon className="h-4 transition-all ease-in-out hover:scale-110" />
-
-      {cartQuantity > 0 && (
-        <div className="absolute right-0 top-0 -mr-2 -mt-2 h-4 w-4 rounded-sm bg-blue-600 text-[11px] font-medium text-white">
-          {cartQuantity}
-        </div>
-      )}
+      <svg
+        className="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5zM18.75 20.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+        />
+      </svg>
     </button>
   );
 }
 
-// Profile Icon Component
-function ProfileIcon() {
+// Profile Icon Component - Exportable
+export function ProfileIcon() {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -200,8 +205,8 @@ function ProfileIcon() {
   );
 }
 
-// Logout Icon Component
-function LogoutIcon() {
+// Logout Icon Component - Exportable
+export function LogoutIcon() {
   const { user, loading, signOut } = useAuth();
 
   if (loading || !user) {
@@ -251,7 +256,7 @@ export function ScrollNav({ heroRef }: ScrollNavProps) {
       const threshold = heroHeight * 0.9; // Start transition at 90% of hero height
 
       const shouldBeScrolled = scrollY > threshold;
-      const shouldBeVisible = scrollY > heroHeight * 0.8; // Start showing at 80% of hero height
+      const shouldBeVisible = scrollY > heroHeight * 0.4; // Start showing at 70% of hero height for immediate transition
 
       setIsScrolled(shouldBeScrolled);
       setIsVisible(shouldBeVisible);
@@ -283,7 +288,7 @@ export function ScrollNav({ heroRef }: ScrollNavProps) {
         </div>
 
         {/* Vertical Navigation Icons */}
-        <div className="flex-1 flex flex-col items-center justify-start space-y-6 pt-4">
+        <div className="flex-1 flex flex-col items-center justify-start space-y-4 pt-4">
           <div className="transition-all duration-300 hover:scale-105">
             <SearchIcon />
           </div>
