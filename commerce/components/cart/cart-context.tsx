@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
 import type {
   Cart,
   CartItem,
   Product,
-  ProductVariant
-} from 'lib/shopify/types';
+  ProductVariant,
+} from "lib/shopify/types";
 import React, {
   createContext,
   useContext,
   useMemo,
   useState,
-  useEffect
-} from 'react';
+  useEffect,
+} from "react";
 
-type UpdateType = 'plus' | 'minus' | 'delete';
+type UpdateType = "plus" | "minus" | "delete";
 
 type CartAction =
   | {
-      type: 'UPDATE_ITEM';
+      type: "UPDATE_ITEM";
       payload: { merchandiseId: string; updateType: UpdateType };
     }
   | {
-      type: 'ADD_ITEM';
+      type: "ADD_ITEM";
       payload: { variant: ProductVariant; product: Product };
     }
   | {
-      type: 'SET_CART';
+      type: "SET_CART";
       payload: Cart;
     };
 
@@ -47,10 +47,10 @@ function updateCartItem(
   item: CartItem,
   updateType: UpdateType
 ): CartItem | null {
-  if (updateType === 'delete') return null;
+  if (updateType === "delete") return null;
 
   const newQuantity =
-    updateType === 'plus' ? item.quantity + 1 : item.quantity - 1;
+    updateType === "plus" ? item.quantity + 1 : item.quantity - 1;
   if (newQuantity === 0) return null;
 
   const singleItemAmount = Number(item.cost.totalAmount.amount) / item.quantity;
@@ -66,9 +66,9 @@ function updateCartItem(
       ...item.cost,
       totalAmount: {
         ...item.cost.totalAmount,
-        amount: newTotalAmount
-      }
-    }
+        amount: newTotalAmount,
+      },
+    },
   };
 }
 
@@ -86,8 +86,8 @@ function createOrUpdateCartItem(
     cost: {
       totalAmount: {
         amount: totalAmount,
-        currencyCode: variant.price.currencyCode
-      }
+        currencyCode: variant.price.currencyCode,
+      },
     },
     merchandise: {
       id: variant.id,
@@ -97,43 +97,43 @@ function createOrUpdateCartItem(
         id: product.id,
         handle: product.handle,
         title: product.title,
-        featuredImage: product.featuredImage
-      }
-    }
+        featuredImage: product.featuredImage,
+      },
+    },
   };
 }
 
 function updateCartTotals(
   lines: CartItem[]
-): Pick<Cart, 'totalQuantity' | 'cost'> {
+): Pick<Cart, "totalQuantity" | "cost"> {
   const totalQuantity = lines.reduce((sum, item) => sum + item.quantity, 0);
   const totalAmount = lines.reduce(
     (sum, item) => sum + Number(item.cost.totalAmount.amount),
     0
   );
-  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? 'EUR';
+  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? "EUR";
 
   return {
     totalQuantity,
     cost: {
       subtotalAmount: { amount: totalAmount.toString(), currencyCode },
       totalAmount: { amount: totalAmount.toString(), currencyCode },
-      totalTaxAmount: { amount: '0', currencyCode }
-    }
+      totalTaxAmount: { amount: "0", currencyCode },
+    },
   };
 }
 
 function createEmptyCart(): Cart {
   return {
     id: undefined,
-    checkoutUrl: '',
+    checkoutUrl: "",
     totalQuantity: 0,
     lines: [],
     cost: {
-      subtotalAmount: { amount: '0', currencyCode: 'EUR' },
-      totalAmount: { amount: '0', currencyCode: 'EUR' },
-      totalTaxAmount: { amount: '0', currencyCode: 'EUR' }
-    }
+      subtotalAmount: { amount: "0", currencyCode: "EUR" },
+      totalAmount: { amount: "0", currencyCode: "EUR" },
+      totalTaxAmount: { amount: "0", currencyCode: "EUR" },
+    },
   };
 }
 
@@ -141,7 +141,7 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
   const currentCart = state || createEmptyCart();
 
   switch (action.type) {
-    case 'UPDATE_ITEM': {
+    case "UPDATE_ITEM": {
       const { merchandiseId, updateType } = action.payload;
       const updatedLines = currentCart.lines
         .map((item) =>
@@ -158,18 +158,18 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
           totalQuantity: 0,
           cost: {
             ...currentCart.cost,
-            totalAmount: { ...currentCart.cost.totalAmount, amount: '0' }
-          }
+            totalAmount: { ...currentCart.cost.totalAmount, amount: "0" },
+          },
         };
       }
 
       return {
         ...currentCart,
         ...updateCartTotals(updatedLines),
-        lines: updatedLines
+        lines: updatedLines,
       };
     }
-    case 'ADD_ITEM': {
+    case "ADD_ITEM": {
       const { variant, product } = action.payload;
       const existingItem = currentCart.lines.find(
         (item) => item.merchandise.id === variant.id
@@ -189,10 +189,10 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
       return {
         ...currentCart,
         ...updateCartTotals(updatedLines),
-        lines: updatedLines
+        lines: updatedLines,
       };
     }
-    case 'SET_CART': {
+    case "SET_CART": {
       return action.payload;
     }
     default:
@@ -202,7 +202,7 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
 
 export function CartProvider({
   children,
-  cartPromise
+  cartPromise,
 }: {
   children: React.ReactNode;
   cartPromise?: Promise<Cart | undefined>;
@@ -212,82 +212,84 @@ export function CartProvider({
   useEffect(() => {
     try {
       // Try to load cart from localStorage first
-      const savedCart = localStorage.getItem('cart');
+      const savedCart = localStorage.getItem("cart");
       if (savedCart) {
         try {
           const parsedCart = JSON.parse(savedCart);
           setCartState(parsedCart);
           return;
         } catch (error) {
-          console.error('Error parsing saved cart:', error);
+          console.error("Error parsing saved cart:", error);
           // Clear invalid cart data
           try {
-            localStorage.removeItem('cart');
+            localStorage.removeItem("cart");
           } catch (e) {
-            console.warn('Error clearing invalid cart:', e);
+            console.warn("Error clearing invalid cart:", e);
           }
         }
       }
 
       // If no saved cart, load from promise
       if (cartPromise) {
-        cartPromise.then((initialCart) => {
-          try {
-            const cartToSet = initialCart || createEmptyCart();
-            setCartState(cartToSet);
-            // Save to localStorage
+        cartPromise
+          .then((initialCart) => {
             try {
-              localStorage.setItem('cart', JSON.stringify(cartToSet));
+              const cartToSet = initialCart || createEmptyCart();
+              setCartState(cartToSet);
+              // Save to localStorage
+              try {
+                localStorage.setItem("cart", JSON.stringify(cartToSet));
+              } catch (error) {
+                console.warn("Error saving cart to localStorage:", error);
+              }
             } catch (error) {
-              console.warn('Error saving cart to localStorage:', error);
+              console.error("Error setting initial cart:", error);
+              setCartState(createEmptyCart());
             }
-          } catch (error) {
-            console.error('Error setting initial cart:', error);
+          })
+          .catch((error) => {
+            console.error("Error loading cart from promise:", error);
             setCartState(createEmptyCart());
-          }
-        }).catch((error) => {
-          console.error('Error loading cart from promise:', error);
-          setCartState(createEmptyCart());
-        });
+          });
       } else {
         // If no cartPromise provided, create empty cart
         setCartState(createEmptyCart());
       }
     } catch (error) {
-      console.error('Error in cart initialization:', error);
+      console.error("Error in cart initialization:", error);
       setCartState(createEmptyCart());
     }
   }, [cartPromise]);
 
   const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
-    setCartState(prevCart => {
+    setCartState((prevCart) => {
       if (!prevCart) return prevCart;
       const newCart = cartReducer(prevCart, {
-        type: 'UPDATE_ITEM',
-        payload: { merchandiseId, updateType }
+        type: "UPDATE_ITEM",
+        payload: { merchandiseId, updateType },
       });
       // Save to localStorage
       try {
-        localStorage.setItem('cart', JSON.stringify(newCart));
+        localStorage.setItem("cart", JSON.stringify(newCart));
       } catch (error) {
-        console.warn('Error saving cart to localStorage:', error);
+        console.warn("Error saving cart to localStorage:", error);
       }
       return newCart;
     });
   };
 
   const addCartItem = (variant: ProductVariant, product: Product) => {
-    setCartState(prevCart => {
+    setCartState((prevCart) => {
       if (!prevCart) return prevCart;
       const newCart = cartReducer(prevCart, {
-        type: 'ADD_ITEM',
-        payload: { variant, product }
+        type: "ADD_ITEM",
+        payload: { variant, product },
       });
       // Save to localStorage
       try {
-        localStorage.setItem('cart', JSON.stringify(newCart));
+        localStorage.setItem("cart", JSON.stringify(newCart));
       } catch (error) {
-        console.warn('Error saving cart to localStorage:', error);
+        console.warn("Error saving cart to localStorage:", error);
       }
       return newCart;
     });
@@ -297,9 +299,9 @@ export function CartProvider({
     setCartState(newCart);
     // Save to localStorage
     try {
-      localStorage.setItem('cart', JSON.stringify(newCart));
+      localStorage.setItem("cart", JSON.stringify(newCart));
     } catch (error) {
-      console.warn('Error saving cart to localStorage:', error);
+      console.warn("Error saving cart to localStorage:", error);
     }
   };
 
@@ -308,22 +310,18 @@ export function CartProvider({
       cart,
       updateCartItem,
       addCartItem,
-      setCart
+      setCart,
     }),
     [cart]
   );
 
-  return (
-    <CartContext.Provider value={value}>
-      {children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart() {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
 
   return context;

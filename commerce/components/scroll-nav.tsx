@@ -26,7 +26,6 @@ const SafeLink = ({
   );
 };
 
-
 // Search Icon Component
 function SearchIcon() {
   return (
@@ -114,8 +113,6 @@ function HamburgerIcon() {
   );
 }
 
-
-
 // Cart Icon Component - Same as hero section
 function CartIcon() {
   const { cart } = useCart();
@@ -134,7 +131,7 @@ function CartIcon() {
       aria-label="Shopping cart"
     >
       <ShoppingCartIcon className="h-4 transition-all ease-in-out hover:scale-110" />
-      
+
       {cartQuantity > 0 && (
         <div className="absolute right-0 top-0 -mr-2 -mt-2 h-4 w-4 rounded-sm bg-blue-600 text-[11px] font-medium text-white">
           {cartQuantity}
@@ -285,24 +282,24 @@ export function ScrollNav({ heroRef }: ScrollNavProps) {
           </SafeLink>
         </div>
 
-               {/* Vertical Navigation Icons */}
-               <div className="flex-1 flex flex-col items-center justify-start space-y-6 pt-4">
-                 <div className="transition-all duration-300 hover:scale-105">
-                   <SearchIcon />
-                 </div>
-                 <div className="transition-all duration-300 hover:scale-105">
-                   <HamburgerIcon />
-                 </div>
-                 <div className="transition-all duration-300 hover:scale-105">
-                   <ProfileIcon />
-                 </div>
-                 <div className="transition-all duration-300 hover:scale-105">
-                   <CartIcon />
-                 </div>
-                 <div className="transition-all duration-300 hover:scale-105">
-                   <LogoutIcon />
-                 </div>
-               </div>
+        {/* Vertical Navigation Icons */}
+        <div className="flex-1 flex flex-col items-center justify-start space-y-6 pt-4">
+          <div className="transition-all duration-300 hover:scale-105">
+            <SearchIcon />
+          </div>
+          <div className="transition-all duration-300 hover:scale-105">
+            <HamburgerIcon />
+          </div>
+          <div className="transition-all duration-300 hover:scale-105">
+            <ProfileIcon />
+          </div>
+          <div className="transition-all duration-300 hover:scale-105">
+            <CartIcon />
+          </div>
+          <div className="transition-all duration-300 hover:scale-105">
+            <LogoutIcon />
+          </div>
+        </div>
       </div>
     </div>
   );
