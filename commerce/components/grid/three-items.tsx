@@ -20,7 +20,7 @@ function ThreeItemGridItem({
         prefetch={true}
       >
         <GridTileImage
-          src={item.featuredImage.url}
+          src={item.featuredImage?.url}
           sizes={isFirst ? "(min-width: 768px) 16vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
           priority={priority}
           alt={item.title}
@@ -28,7 +28,8 @@ function ThreeItemGridItem({
             position: 'bottom',
             title: item.title as string,
             amount: item.priceRange.maxVariantPrice.amount,
-            currencyCode: item.priceRange.maxVariantPrice.currencyCode
+            currencyCode: item.priceRange.maxVariantPrice.currencyCode,
+            dosage: item.dosage
           }}
         />
       </Link>

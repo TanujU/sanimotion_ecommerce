@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import Label from '../label';
+import ImageNotAvailable from '../icons/image-not-available';
 
 export function GridTileImage({
   isInteractive = true,
@@ -19,6 +20,7 @@ export function GridTileImage({
     title: string;
     amount: string;
     currencyCode: string;
+    dosage?: string;
     position?: 'bottom' | 'center';
   };
   src?: string;
@@ -45,12 +47,20 @@ export function GridTileImage({
           sizes={sizes || "(min-width: 768px) 66vw, 100vw"}
           {...props}
         />
-      ) : null}
+      ) : (
+        <div className="flex items-center justify-center w-full h-full">
+          <ImageNotAvailable 
+            className="group" 
+            size={200}
+          />
+        </div>
+      )}
       {label ? (
         <Label
           title={label.title}
           amount={label.amount}
           currencyCode={label.currencyCode}
+          dosage={label.dosage}
           position={label.position}
         />
       ) : null}

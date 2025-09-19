@@ -58,15 +58,22 @@ import {
   ShopifyUpdateCartOperation
 } from './types';
 
-// Use mock data instead of real Shopify API
+// Use Supabase products and mock data for other functionality
 import {
-  mockProducts,
   mockCollections,
   getMockCart,
   addItemToMockCart,
   removeItemFromMockCart,
   updateItemQuantityInMockCart
 } from '../mock-data';
+
+// Import Supabase products service
+import { 
+  getProductsFromSupabase, 
+  getProductByHandleFromSupabase,
+  searchProductsFromSupabase,
+  convertSupabaseProductToShopify 
+} from '../supabase-products';
 
 const domain = 'https://mock-store.myshopify.com';
 const endpoint = `${domain}${SHOPIFY_GRAPHQL_API_ENDPOINT}`;
@@ -458,90 +465,36 @@ export async function getPages(): Promise<Page[]> {
 }
 
 export async function getProduct(handle: string): Promise<Product | undefined> {
-  // Return mock product instead of calling Shopify API
-  const mockProduct = mockProducts.find(product => product.handle === handle);
-  if (!mockProduct) return undefined;
+  try {
+    // Get product from Supabase by handle
+    const supabaseProduct = await getProductByHandleFromSupabase(handle);
+    if (!supabaseProduct) return undefined;
 
-  return {
-    id: mockProduct.id,
-    handle: mockProduct.handle,
-    availableForSale: true,
-    title: mockProduct.title,
-    description: mockProduct.description,
-    descriptionHtml: mockProduct.description,
-    options: [],
-    priceRange: {
-      maxVariantPrice: mockProduct.price,
-      minVariantPrice: mockProduct.price
-    },
-    variants: mockProduct.variants.map(variant => ({
-      id: variant.id,
-      title: variant.title,
-      availableForSale: true,
-      selectedOptions: [],
-      price: variant.price
-    })),
-    featuredImage: mockProduct.images[0] ? {
-      ...mockProduct.images[0],
-      width: 800,
-      height: 800
-    } : null,
-    images: mockProduct.images.map(img => ({
-      ...img,
-      width: 800,
-      height: 800
-    })),
-    seo: {
-      title: mockProduct.title,
-      description: mockProduct.description
-    },
-    tags: mockProduct.tags,
-    updatedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString()
-  } as unknown as Product;
+    // Convert to Shopify format
+    return convertSupabaseProductToShopify(supabaseProduct) as unknown as Product;
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    return undefined;
+  }
 }
 
 export async function getProductRecommendations(
   productId: string
 ): Promise<Product[]> {
-  // Return mock product recommendations instead of calling Shopify API
-  return mockProducts.slice(0, 3).map(product => ({
-    id: product.id,
-    handle: product.handle,
-    availableForSale: true,
-    title: product.title,
-    description: product.description,
-    descriptionHtml: product.description,
-    options: [],
-    priceRange: {
-      maxVariantPrice: product.price,
-      minVariantPrice: product.price
-    },
-    variants: product.variants.map(variant => ({
-      id: variant.id,
-      title: variant.title,
-      availableForSale: true,
-      selectedOptions: [],
-      price: variant.price
-    })),
-    featuredImage: product.images[0] ? {
-      ...product.images[0],
-      width: 800,
-      height: 800
-    } : null,
-    images: product.images.map(img => ({
-      ...img,
-      width: 800,
-      height: 800
-    })),
-    seo: {
-      title: product.title,
-      description: product.description
-    },
-    tags: product.tags,
-    updatedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString()
-  })) as unknown as Product[];
+  try {
+    // Get all products from Supabase and return first 3 as recommendations
+    const supabaseProducts = await getProductsFromSupabase();
+    
+    // Filter out the current product and take first 3
+    const recommendations = supabaseProducts
+      .filter(product => product.id !== productId)
+      .slice(0, 3);
+
+    return recommendations.map(convertSupabaseProductToShopify) as unknown as Product[];
+  } catch (error) {
+    console.error('Error fetching product recommendations:', error);
+    return [];
+  }
 }
 
 export async function getProducts({
@@ -553,73 +506,46 @@ export async function getProducts({
   reverse?: boolean;
   sortKey?: string;
 }): Promise<Product[]> {
-  // Filter mock products based on search query
-  let filteredProducts = mockProducts;
-  
-  if (query && query.trim()) {
-    const searchTerm = query.toLowerCase().trim();
-    filteredProducts = mockProducts.filter(product => 
-      product.title.toLowerCase().includes(searchTerm) ||
-      product.description.toLowerCase().includes(searchTerm) ||
-      product.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-    );
-  }
+  try {
+    // Get products from Supabase
+    let supabaseProducts;
+    
+    if (query && query.trim()) {
+      // Search products if query is provided
+      supabaseProducts = await searchProductsFromSupabase(query);
+    } else {
+      // Get all products
+      supabaseProducts = await getProductsFromSupabase();
+    }
 
-  // Apply sorting if specified
-  if (sortKey) {
-    filteredProducts.sort((a, b) => {
-      switch (sortKey) {
-        case 'TITLE':
-          return reverse ? b.title.localeCompare(a.title) : a.title.localeCompare(b.title);
-        case 'PRICE':
-          const priceA = parseFloat(a.price.amount);
-          const priceB = parseFloat(b.price.amount);
-          return reverse ? priceB - priceA : priceA - priceB;
-        case 'CREATED_AT':
-          return reverse ? 1 : -1; // Mock products don't have creation dates
-        default:
-          return 0;
-      }
-    });
-  }
+    // Convert Supabase products to Shopify format
+    let products = supabaseProducts.map(convertSupabaseProductToShopify);
 
-  return filteredProducts.map(product => ({
-    id: product.id,
-    handle: product.handle,
-    availableForSale: true,
-    title: product.title,
-    description: product.description,
-    descriptionHtml: product.description,
-    options: [],
-    priceRange: {
-      maxVariantPrice: product.price,
-      minVariantPrice: product.price
-    },
-    variants: product.variants.map(variant => ({
-      id: variant.id,
-      title: variant.title,
-      availableForSale: true,
-      selectedOptions: [],
-      price: variant.price
-    })),
-    featuredImage: product.images[0] ? {
-      ...product.images[0],
-      width: 800,
-      height: 800
-    } : null,
-    images: product.images.map(img => ({
-      ...img,
-      width: 800,
-      height: 800
-    })),
-    seo: {
-      title: product.title,
-      description: product.description
-    },
-    tags: product.tags,
-    updatedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString()
-  })) as unknown as Product[];
+    // Apply sorting if specified
+    if (sortKey) {
+      products.sort((a, b) => {
+        switch (sortKey) {
+          case 'TITLE':
+            return reverse ? b.title.localeCompare(a.title) : a.title.localeCompare(b.title);
+          case 'PRICE':
+            const priceA = parseFloat(a.priceRange.maxVariantPrice.amount);
+            const priceB = parseFloat(b.priceRange.maxVariantPrice.amount);
+            return reverse ? priceB - priceA : priceA - priceB;
+          case 'CREATED_AT':
+            return reverse ? 
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime() :
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          default:
+            return 0;
+        }
+      });
+    }
+
+    return products as unknown as Product[];
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return [];
+  }
 }
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.

@@ -39,6 +39,12 @@ export function ProductDescription({ product }: { product: Product }) {
       {/* Product Title */}
       <div className="mb-4">
         <h1 className="text-3xl font-medium text-black">{product.title}</h1>
+        {/* Display dosage if available */}
+        {product.dosage && (
+          <p className="text-lg text-gray-600 mt-2 font-medium">
+            {product.dosage}
+          </p>
+        )}
       </div>
 
       {/* Pricing Section */}
