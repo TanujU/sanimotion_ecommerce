@@ -205,6 +205,32 @@ export function ProfileIcon() {
   );
 }
 
+// Sign In Icon Component - Exportable
+export function SignInIcon() {
+  return (
+    <SafeLink
+      href="/login"
+      className="text-black hover:text-blue-600 transition-all duration-300 hover:scale-105 p-2"
+      aria-label="Sign In"
+    >
+      <svg
+        className="w-5 h-5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+        />
+      </svg>
+    </SafeLink>
+  );
+}
+
 // Logout Icon Component - Exportable
 export function LogoutIcon() {
   const { user, loading, signOut } = useAuth();
@@ -238,6 +264,40 @@ export function LogoutIcon() {
   );
 }
 
+// Conditional Auth Icons Component
+function AuthIcons() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-11 w-11">
+        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (user) {
+    // User is logged in - show Profile and Logout icons
+    return (
+      <>
+        <div className="transition-all duration-300 hover:scale-105">
+          <ProfileIcon />
+        </div>
+        <div className="transition-all duration-300 hover:scale-105">
+          <LogoutIcon />
+        </div>
+      </>
+    );
+  } else {
+    // User is not logged in - show only Sign In icon
+    return (
+      <div className="transition-all duration-300 hover:scale-105">
+        <SignInIcon />
+      </div>
+    );
+  }
+}
+
 interface ScrollNavProps {
   heroRef: React.RefObject<HTMLDivElement | null>;
 }
@@ -245,6 +305,8 @@ interface ScrollNavProps {
 export function ScrollNav({ heroRef }: ScrollNavProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [opacity, setOpacity] = useState(0);
+  const [translateX, setTranslateX] = useState(-100);
   const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -253,13 +315,29 @@ export function ScrollNav({ heroRef }: ScrollNavProps) {
 
       const heroHeight = heroRef.current.offsetHeight;
       const scrollY = window.scrollY;
-      const threshold = heroHeight * 0.9; // Start transition at 90% of hero height
 
-      const shouldBeScrolled = scrollY > threshold;
-      const shouldBeVisible = scrollY > heroHeight * 0.4; // Start showing at 70% of hero height for immediate transition
+      // Start the transition earlier for smoother effect
+      const startTransition = heroHeight * 0.3; // Start at 30% of hero height
+      const endTransition = heroHeight * 0.7; // Fully visible at 70% of hero height
+
+      // Calculate progress (0 to 1)
+      const progress = Math.min(
+        Math.max(
+          (scrollY - startTransition) / (endTransition - startTransition),
+          0
+        ),
+        1
+      );
+
+      const shouldBeScrolled = scrollY > heroHeight * 0.8;
+      const shouldBeVisible = scrollY > startTransition;
 
       setIsScrolled(shouldBeScrolled);
       setIsVisible(shouldBeVisible);
+
+      // Smooth opacity and transform transitions
+      setOpacity(progress);
+      setTranslateX(-100 + progress * 100); // Slide in from left
     };
 
     // Initial check
@@ -269,12 +347,36 @@ export function ScrollNav({ heroRef }: ScrollNavProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [heroRef]);
 
-  if (!isVisible) return null;
+  // Don't render on mobile devices
+  const [isMobile, setIsMobile] = useState(false);
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
+
+  // Don't render on mobile
+  if (isMobile) return null;
+
+  // Always render but with conditional visibility on desktop
   return (
     <div
       ref={navRef}
-      className={`fixed left-0 top-0 h-full z-50 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] w-20`}
+      className={`fixed left-0 top-0 h-full z-50 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] w-20 ${
+        isVisible ? "pointer-events-auto" : "pointer-events-none"
+      }`}
+      style={{
+        opacity: opacity,
+        transform: `translateX(${translateX}%)`,
+      }}
     >
       <div className="flex flex-col h-full">
         {/* Brand Logo */}
@@ -296,14 +398,11 @@ export function ScrollNav({ heroRef }: ScrollNavProps) {
             <HamburgerIcon />
           </div>
           <div className="transition-all duration-300 hover:scale-105">
-            <ProfileIcon />
-          </div>
-          <div className="transition-all duration-300 hover:scale-105">
             <CartIcon />
           </div>
-          <div className="transition-all duration-300 hover:scale-105">
-            <LogoutIcon />
-          </div>
+
+          {/* Conditional Auth Icons */}
+          <AuthIcons />
         </div>
       </div>
     </div>

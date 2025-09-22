@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import ImageNotAvailable from "./icons/image-not-available";
 
 interface BestsellersCarouselProps {
   products: Array<{
@@ -70,11 +71,18 @@ export function BestsellersCarousel({ products }: BestsellersCarouselProps) {
               </button>
             </div>
             <div className="h-56 overflow-hidden rounded-t-lg bg-gray-50 flex items-center justify-center p-4">
-              <img
-                src={product.image}
-                alt={product.alt}
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
-              />
+              {product.image ? (
+                <img
+                  src={product.image}
+                  alt={product.alt}
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <ImageNotAvailable 
+                  className="group" 
+                  size={180}
+                />
+              )}
             </div>
             <div className="p-4 flex flex-col h-40 relative z-20">
               <div className="flex-grow">

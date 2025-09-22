@@ -5,11 +5,13 @@ const Label = ({
   title,
   amount,
   currencyCode,
+  dosage,
   position = 'bottom'
 }: {
   title: string;
   amount: string;
   currencyCode: string;
+  dosage?: string;
   position?: 'bottom' | 'center';
 }) => {
   return (
@@ -19,7 +21,12 @@ const Label = ({
       })}
     >
       <div className="flex items-center rounded-full border bg-white/70 p-1 text-xs font-semibold text-black backdrop-blur-md">
-        <h3 className="mr-4 line-clamp-2 grow pl-2 leading-none tracking-tight">{title}</h3>
+        <div className="mr-4 grow pl-2">
+          <h3 className="line-clamp-2 leading-none tracking-tight">{title}</h3>
+          {dosage && (
+            <p className="text-xs text-gray-600 mt-1 font-normal">{dosage}</p>
+          )}
+        </div>
         <Price
           className="flex-none rounded-full bg-blue-600 p-2 text-white"
           amount={amount}

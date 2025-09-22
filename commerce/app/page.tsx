@@ -51,49 +51,15 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const products = await getProducts({});
 
-  // Bestsellers data with 5 products
-  const bestsellersData = [
-    {
-      id: "1",
-      title: "Aqualyx",
-      price: "$89.99",
-      sizes: ["5ml", "10ml"],
-      image: "/images/aqualyx.jpg",
-      alt: "Aqualyx - Fat Dissolving Treatment",
-    },
-    {
-      id: "2",
-      title: "Juvederm",
-      price: "$299.99",
-      sizes: ["0.5ml", "1ml"],
-      image: "/images/juvederm.jpg",
-      alt: "Juvederm - Dermal Filler",
-    },
-    {
-      id: "3",
-      title: "Profhilo",
-      price: "$199.99",
-      sizes: ["2ml", "4ml"],
-      image: "/images/profhilo.jpg",
-      alt: "Profhilo - Skin Booster",
-    },
-    {
-      id: "4",
-      title: "Restylane",
-      price: "$249.99",
-      sizes: ["0.5ml", "1ml"],
-      image: "/images/restylane.jpg",
-      alt: "Restylane - Hyaluronic Acid Filler",
-    },
-    {
-      id: "5",
-      title: "Belotero",
-      price: "$179.99",
-      sizes: ["0.5ml", "1ml"],
-      image: "/images/belotero.jpg",
-      alt: "Belotero - Dermal Filler",
-    },
-  ];
+  // Get first 5 products as bestsellers from Supabase database
+  const bestsellersData = products.slice(0, 5).map(product => ({
+    id: product.id,
+    title: product.title,
+    price: `€${product.priceRange.maxVariantPrice.amount}`,
+    sizes: product.dosage ? [product.dosage] : [],
+    image: product.featuredImage?.url || '',
+    alt: product.title
+  }));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">

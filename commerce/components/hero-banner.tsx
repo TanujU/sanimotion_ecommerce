@@ -6,7 +6,14 @@ import { useState, useRef, useEffect } from "react";
 import { useCart } from "./cart/cart-context";
 import CartModal from "./cart/modal";
 import { AuthNav } from "./auth-nav";
-import { ScrollNav, SearchIcon, CartIcon, ProfileIcon, LogoutIcon } from "./scroll-nav";
+import {
+  ScrollNav,
+  SearchIcon,
+  CartIcon,
+  ProfileIcon,
+  LogoutIcon,
+  SignInIcon,
+} from "./scroll-nav";
 
 // Type-safe components for React 19 compatibility
 const SafeImage = ({
@@ -67,9 +74,11 @@ function CartLink({ isMobile = false }: { isMobile?: boolean }) {
   return (
     <div className="flex items-center">
       {/* Simple Cart Icon - Left of CART text */}
-      <div className={`${isMobile ? 'mr-3' : 'mr-3'} transition-all duration-300 hover:scale-105`}>
+      <div
+        className={`${isMobile ? "mr-3" : "mr-3"} transition-all duration-300 hover:scale-105`}
+      >
         <svg
-          className={`${isMobile ? 'w-5 h-5' : 'w-5 h-5'} ${isMobile ? 'text-gray-700' : 'text-black'} transition-colors duration-300`}
+          className={`${isMobile ? "w-5 h-5" : "w-5 h-5"} ${isMobile ? "text-gray-700" : "text-black"} transition-colors duration-300`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -90,9 +99,10 @@ function CartLink({ isMobile = false }: { isMobile?: boolean }) {
             (cartButton as HTMLElement).click();
           }
         }}
-        className={`${isMobile 
-          ? 'text-gray-700 hover:font-bold text-base font-medium' 
-          : 'text-black hover:font-bold text-sm font-medium tracking-wider uppercase'
+        className={`${
+          isMobile
+            ? "text-gray-700 hover:font-bold text-base font-medium"
+            : "text-black hover:font-bold text-sm font-medium tracking-wider uppercase"
         } transition-all duration-300 cursor-pointer`}
       >
         CART
@@ -273,9 +283,9 @@ export function HeroBanner({
       const currentScrollY = window.scrollY;
       const heroHeight = heroRef.current?.offsetHeight || 0;
       const isInHeroSection = currentScrollY < heroHeight - 50;
-      const shouldShowScrollNav = currentScrollY > heroHeight * 0.7;
+      const shouldShowScrollNav = currentScrollY > heroHeight * 0.3;
 
-      // Update scroll nav visibility
+      // Update scroll nav visibility with smooth transition
       setIsScrollNavVisible(shouldShowScrollNav);
 
       if (isMobile) return;
@@ -313,128 +323,130 @@ export function HeroBanner({
     <>
       {/* Scroll-based Navigation */}
       <ScrollNav heroRef={heroRef} />
-      
+
       {/* Global Cart Modal - rendered once */}
       <div className="hidden">
         <CartModal />
       </div>
-      
+
       <div
         ref={heroRef}
         className={`relative min-h-[100vh] flex items-center overflow-hidden mt-0 pt-0 ${className}`}
       >
-      {/* Background Images - Slideshow */}
-      <div className="absolute inset-0 z-0">
-        {heroSlides.map((slide, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <SafeImage
-              src={slide.imageUrl}
-              alt={slide.imageAlt}
-              fill
-              className="object-cover object-center"
-              priority={index === 0}
-              sizes="100vw"
-            />
-          </div>
-        ))}
-        {/* Overlay */}
-        <div className="absolute inset-0 hero-banner-overlay"></div>
-      </div>
-
-      {/* Mobile Menu Button - Always visible on mobile */}
-      {isMobile && (
-        <button
-          className={`fixed z-30 lg:hidden bg-white/95 backdrop-blur-md p-4 rounded-full shadow-2xl border border-white/30 transform-gpu transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 ${
-            isMobileMenuOpen
-              ? "top-16 left-64 rotate-180"
-              : "top-20 left-4 rotate-0"
-          }`}
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle mobile menu"
-          aria-expanded={isMobileMenuOpen}
-        >
-          <div className="flex flex-col space-y-1.5">
+        {/* Background Images - Slideshow */}
+        <div className="absolute inset-0 z-0">
+          {heroSlides.map((slide, index) => (
             <div
-              className={`w-6 h-0.5 bg-gray-800 transform-gpu transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                isMobileMenuOpen
-                  ? "rotate-45 translate-y-2"
-                  : "rotate-0 translate-y-0"
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                index === currentSlide ? "opacity-100" : "opacity-0"
               }`}
-            ></div>
-            <div
-              className={`w-6 h-0.5 bg-gray-800 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                isMobileMenuOpen ? "opacity-0 scale-0" : "opacity-100 scale-100"
-              }`}
-            ></div>
-            <div
-              className={`w-6 h-0.5 bg-gray-800 transform-gpu transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                isMobileMenuOpen
-                  ? "-rotate-45 -translate-y-2"
-                  : "rotate-0 translate-y-0"
-              }`}
-            ></div>
-          </div>
-        </button>
-      )}
-
-      {/* Mobile Menu Overlay */}
-      {isMobile && (
-        <div
-          className={`fixed inset-0 z-10 lg:hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-            isMobileMenuOpen
-              ? "bg-black/40 backdrop-blur-sm opacity-100 pointer-events-auto"
-              : "bg-transparent backdrop-blur-none opacity-0 pointer-events-none"
-          }`}
-          onClick={() => setIsMobileMenuOpen(false)}
-        ></div>
-      )}
-
-      {/* Left Sidebar Navigation */}
-      <div
-        className={`absolute left-0 top-0 h-screen flex flex-col transform-gpu will-change-[width,transform,opacity] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isMobile
-            ? `w-80 ${isMobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"} bg-white/95 backdrop-blur-xl border-r border-white/40 shadow-2xl z-20`
-            : `hidden lg:flex ${
-                !isLoaded
-                  ? "w-0 opacity-0 -translate-x-full"
-                  : isInitialAnimation
-                    ? "w-0 opacity-0 -translate-x-full"
-                    : isScrollNavVisible
-                      ? "w-0 opacity-0 -translate-x-full"
-                      : isMinimized
-                        ? "w-20 opacity-100 translate-x-0"
-                        : "w-80 opacity-100 translate-x-0"
-              } bg-white/50 backdrop-blur-xl border-r border-white/30 shadow-xl z-20`
-        }`}
-      >
-        {/* Brand Logo */}
-        <div
-          className={`px-10 pt-16 pb-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
-            isMobile
-              ? "opacity-100 border-b border-gray-100/50 transform translate-y-0"
-              : !isLoaded || isInitialAnimation || !showNavItems
-                ? "opacity-0 transform -translate-x-8"
-                : isMinimized
-                  ? "opacity-0 transform -translate-y-4"
-                  : "opacity-100 transform translate-x-0"
-          }`}
-        >
-          <h1
-            className={`font-bold text-black tracking-wider transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 ${
-              isMobile ? "text-2xl" : "text-3xl"
-            }`}
-          >
-            FREYARU
-          </h1>
+            >
+              <SafeImage
+                src={slide.imageUrl}
+                alt={slide.imageAlt}
+                fill
+                className="object-cover object-center"
+                priority={index === 0}
+                sizes="100vw"
+              />
+            </div>
+          ))}
+          {/* Overlay */}
+          <div className="absolute inset-0 hero-banner-overlay"></div>
         </div>
 
-        {/* Hamburger Icon - Desktop */}
-        {/* {!isMobile && (
+        {/* Mobile Menu Button - Always visible on mobile */}
+        {isMobile && (
+          <button
+            className={`fixed z-30 lg:hidden bg-white/95 backdrop-blur-md p-4 rounded-full shadow-2xl border border-white/30 transform-gpu transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 ${
+              isMobileMenuOpen
+                ? "top-16 left-64 rotate-180"
+                : "top-20 left-4 rotate-0"
+            }`}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
+          >
+            <div className="flex flex-col space-y-1.5">
+              <div
+                className={`w-6 h-0.5 bg-gray-800 transform-gpu transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  isMobileMenuOpen
+                    ? "rotate-45 translate-y-2"
+                    : "rotate-0 translate-y-0"
+                }`}
+              ></div>
+              <div
+                className={`w-6 h-0.5 bg-gray-800 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  isMobileMenuOpen
+                    ? "opacity-0 scale-0"
+                    : "opacity-100 scale-100"
+                }`}
+              ></div>
+              <div
+                className={`w-6 h-0.5 bg-gray-800 transform-gpu transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  isMobileMenuOpen
+                    ? "-rotate-45 -translate-y-2"
+                    : "rotate-0 translate-y-0"
+                }`}
+              ></div>
+            </div>
+          </button>
+        )}
+
+        {/* Mobile Menu Overlay */}
+        {isMobile && (
+          <div
+            className={`fixed inset-0 z-10 lg:hidden transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              isMobileMenuOpen
+                ? "bg-black/40 backdrop-blur-sm opacity-100 pointer-events-auto"
+                : "bg-transparent backdrop-blur-none opacity-0 pointer-events-none"
+            }`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          ></div>
+        )}
+
+        {/* Left Sidebar Navigation */}
+        <div
+          className={`absolute left-0 top-0 h-screen flex flex-col transform-gpu will-change-[width,transform,opacity] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            isMobile
+              ? `w-80 ${isMobileMenuOpen ? "translate-x-0 opacity-100 pointer-events-auto" : "-translate-x-full opacity-0 pointer-events-none"} bg-white/95 backdrop-blur-xl border-r border-white/40 shadow-2xl z-20`
+              : `hidden lg:flex ${
+                  !isLoaded
+                    ? "w-0 opacity-0 -translate-x-full"
+                    : isInitialAnimation
+                      ? "w-0 opacity-0 -translate-x-full"
+                      : isScrollNavVisible
+                        ? "w-0 opacity-0 -translate-x-full pointer-events-none"
+                        : isMinimized
+                          ? "w-20 opacity-100 translate-x-0"
+                          : "w-80 opacity-100 translate-x-0"
+                } bg-white/50 backdrop-blur-xl border-r border-white/30 shadow-xl z-20`
+          }`}
+        >
+          {/* Brand Logo */}
+          <div
+            className={`px-10 pt-16 pb-10 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
+              isMobile
+                ? "opacity-100 border-b border-gray-100/50 transform translate-y-0"
+                : !isLoaded || isInitialAnimation || !showNavItems
+                  ? "opacity-0 transform -translate-x-8"
+                  : isMinimized
+                    ? "opacity-0 transform -translate-y-4"
+                    : "opacity-100 transform translate-x-0"
+            }`}
+          >
+            <h1
+              className={`font-bold text-black tracking-wider transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 ${
+                isMobile ? "text-2xl" : "text-3xl"
+              }`}
+            >
+              FREYARU
+            </h1>
+          </div>
+
+          {/* Hamburger Icon - Desktop */}
+          {/* {!isMobile && (
           <div
             className={`px-6 py-4 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
               !isLoaded || isInitialAnimation || !showNavItems
@@ -471,40 +483,147 @@ export function HeroBanner({
           </div>
         )} */}
 
-        {/* Navigation Links */}
-        <nav
-          className={`px-6 flex-1 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
-            isMobile
-              ? "opacity-100 transform translate-y-0"
-              : !isLoaded || isInitialAnimation || !showNavItems
-                ? "opacity-0 transform -translate-y-4"
-                : isMinimized
+          {/* Navigation Links */}
+          <nav
+            className={`px-6 flex-1 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[opacity,transform] ${
+              isMobile
+                ? "opacity-100 transform translate-y-0"
+                : !isLoaded || isInitialAnimation || !showNavItems
                   ? "opacity-0 transform -translate-y-4"
-                  : "opacity-100 transform translate-y-0"
-          }`}
-        >
-          <ul className={`${isMobile ? "space-y-1" : "space-y-8"}`}>
-            <li
-              className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
-              style={{ transitionDelay: showNavItems ? "0.1s" : "0s" }}
-            >
-              <div className="flex items-center">
-                {/* Search Icon - Left of SEARCH text */}
-                {!isMobile && (
-                  <div className="mr-3 transition-all duration-300 hover:scale-105">
-                    <SearchIcon />
-                  </div>
-                )}
-                <SafeLink
-                  href="/search"
-                  className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
-                    isMobile
-                      ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
-                      : "text-black hover:font-bold text-sm font-medium tracking-wider uppercase hover:scale-105"
-                  }`}
-                  onClick={() => isMobile && setIsMobileMenuOpen(false)}
+                  : isMinimized
+                    ? "opacity-0 transform -translate-y-4"
+                    : "opacity-100 transform translate-y-0"
+            }`}
+          >
+            <ul className={`${isMobile ? "space-y-1" : "space-y-8"}`}>
+              <li
+                className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${
+                  isMobile
+                    ? "opacity-100 translate-x-0"
+                    : !showNavItems
+                      ? "opacity-0 -translate-x-8"
+                      : "opacity-100 translate-x-0"
+                }`}
+                style={{
+                  transitionDelay: isMobile
+                    ? "0s"
+                    : showNavItems
+                      ? "0.1s"
+                      : "0s",
+                }}
+              >
+                <div className="flex items-center">
+                  {/* Search Icon - Left of SEARCH text */}
+                  {!isMobile && (
+                    <div className="mr-3 transition-all duration-300 hover:scale-105">
+                      <SearchIcon />
+                    </div>
+                  )}
+                  <SafeLink
+                    href="/search"
+                    className={`transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group ${
+                      isMobile
+                        ? "flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium hover:shadow-lg hover:scale-105"
+                        : "text-black hover:font-bold text-sm font-medium tracking-wider uppercase hover:scale-105"
+                    }`}
+                    onClick={() => isMobile && setIsMobileMenuOpen(false)}
+                  >
+                    {isMobile && (
+                      <svg
+                        className="w-5 h-5 mr-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    )}
+                    SEARCH
+                  </SafeLink>
+                </div>
+              </li>
+              {!isMobile && (
+                <>
+                  <li
+                    className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 -mt-6 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
+                    style={{ transitionDelay: showNavItems ? "0.2s" : "0s" }}
+                  >
+                    <div className="flex items-center">
+                      {/* Hamburger Icon - Left of CATEGORIES text */}
+                      <div className="mr-3 transition-all duration-300 hover:scale-105">
+                        <svg
+                          className="w-5 h-5 text-black transition-colors duration-300"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M4 6h16M4 12h16M4 18h16"
+                          />
+                        </svg>
+                      </div>
+                      <button
+                        className="text-black hover:font-bold text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 cursor-pointer"
+                        onClick={() =>
+                          setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
+                        }
+                      >
+                        CATEGORIES
+                        <svg
+                          className={`inline-block ml-1 w-3 h-3 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </li>
+
+                  {/* Categories List - Shows inline when clicked */}
+                  {isCategoriesDropdownOpen && (
+                    <li className="w-full">
+                      <div className="mt-4 space-y-2">
+                        {categories.map((category, index) => (
+                          <SafeLink
+                            key={category.title}
+                            href={category.path}
+                            className="block px-6 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-lg transition-all duration-200 hover:translate-x-2"
+                            style={{ animationDelay: `${index * 50}ms` }}
+                          >
+                            {category.title}
+                          </SafeLink>
+                        ))}
+                      </div>
+                    </li>
+                  )}
+                </>
+              )}
+              {isMobile && (
+                <li
+                  className="transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 opacity-100 translate-x-0"
+                  style={{ transitionDelay: "0.2s" }}
                 >
-                  {isMobile && (
+                  <button
+                    className="flex items-center px-6 py-4 text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105 w-full"
+                    onClick={() =>
+                      setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
+                    }
+                  >
                     <svg
                       className="w-5 h-5 mr-3"
                       fill="none"
@@ -515,241 +634,158 @@ export function HeroBanner({
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        d="M4 6h4v4H4V6zm6 0h4v4h-4V6zm6 0h4v4h-4V6zM4 12h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"
                       />
                     </svg>
-                  )}
-                  SEARCH
-                </SafeLink>
-              </div>
-            </li>
-            {!isMobile && (
-              <>
-                <li
-                  className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 -mt-6 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
-                  style={{ transitionDelay: showNavItems ? "0.2s" : "0s" }}
-                >
-                  <div className="flex items-center">
-                    {/* Hamburger Icon - Left of CATEGORIES text */}
-                    <div className="mr-3 transition-all duration-300 hover:scale-105">
-                      <svg
-                        className="w-5 h-5 text-black transition-colors duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M4 6h16M4 12h16M4 18h16"
-                        />
-                      </svg>
-                    </div>
-                    <button
-                      className="text-black hover:font-bold text-sm font-medium tracking-wider uppercase transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 cursor-pointer"
-                      onClick={() =>
-                        setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
-                      }
+                    CATEGORIES
+                    <svg
+                      className={`ml-auto w-4 h-4 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      CATEGORIES
-                      <svg
-                        className={`inline-block ml-1 w-3 h-3 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </li>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
 
-                {/* Categories List - Shows inline when clicked */}
-                {isCategoriesDropdownOpen && (
-                  <li className="w-full">
-                    <div className="mt-4 space-y-2">
+                  {/* Mobile Categories List - Shows inline when clicked */}
+                  {isCategoriesDropdownOpen && (
+                    <div className="ml-8 mt-2 space-y-2">
                       {categories.map((category, index) => (
                         <SafeLink
                           key={category.title}
                           href={category.path}
-                          className="block px-6 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-lg transition-all duration-200 hover:translate-x-2"
+                          className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-lg transition-all duration-200"
+                          onClick={() => setIsMobileMenuOpen(false)}
                           style={{ animationDelay: `${index * 50}ms` }}
                         >
                           {category.title}
                         </SafeLink>
                       ))}
                     </div>
-                  </li>
-                )}
-              </>
-            )}
-            {isMobile && (
+                  )}
+                </li>
+              )}
               <li
-                className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
-                style={{ transitionDelay: showNavItems ? "0.2s" : "0s" }}
+                className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${
+                  isMobile
+                    ? "opacity-100 translate-x-0"
+                    : !showNavItems
+                      ? "opacity-0 -translate-x-8"
+                      : "opacity-100 translate-x-0"
+                }`}
+                style={{
+                  transitionDelay: isMobile
+                    ? "0.3s"
+                    : showNavItems
+                      ? "0.3s"
+                      : "0s",
+                }}
               >
-                <button
-                  className="flex items-center px-6 py-4 text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105 w-full"
-                  onClick={() =>
-                    setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
-                  }
-                >
-                  <svg
-                    className="w-5 h-5 mr-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h4v4H4V6zm6 0h4v4h-4V6zm6 0h4v4h-4V6zM4 12h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"
-                    />
-                  </svg>
-                  CATEGORIES
-                  <svg
-                    className={`ml-auto w-4 h-4 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-
-                {/* Mobile Categories List - Shows inline when clicked */}
-                {isCategoriesDropdownOpen && (
-                  <div className="ml-8 mt-2 space-y-2">
-                    {categories.map((category, index) => (
-                      <SafeLink
-                        key={category.title}
-                        href={category.path}
-                        className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-lg transition-all duration-200"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        style={{ animationDelay: `${index * 50}ms` }}
-                      >
-                        {category.title}
-                      </SafeLink>
-                    ))}
+                {isMobile ? (
+                  <div className="flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105">
+                    <CartLink isMobile={true} />
+                  </div>
+                ) : (
+                  <div className="transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105">
+                    <CartLink isMobile={false} />
                   </div>
                 )}
               </li>
-            )}
-            <li
-              className={`transform transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-2 ${!showNavItems ? "opacity-0 -translate-x-8" : "opacity-100 translate-x-0"}`}
-              style={{ transitionDelay: showNavItems ? "0.3s" : "0s" }}
-            >
-              {isMobile ? (
-                <div className="flex items-center px-6 py-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl text-base font-medium cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-lg hover:scale-105">
-                  <CartLink isMobile={true} />
-                </div>
-              ) : (
-                <div className="transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105">
-                  <CartLink isMobile={false} />
-                </div>
-              )}
-            </li>
-            <AuthNav 
-              isMobile={isMobile} 
-              onMobileMenuClose={() => setIsMobileMenuOpen(false)} 
-            />
-          </ul>
-        </nav>
-      </div>
+              <AuthNav
+                isMobile={isMobile}
+                onMobileMenuClose={() => setIsMobileMenuOpen(false)}
+              />
+            </ul>
+          </nav>
+        </div>
 
-      {/* Content */}
-      <div
-        className={`relative z-10 w-full transform-gpu will-change-[margin] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isMobile
-            ? "ml-0"
-            : isInitialAnimation
-              ? "lg:ml-0"
-              : isScrollNavVisible
-                ? "lg:ml-20"
-                : isMinimized
+        {/* Content */}
+        <div
+          className={`relative z-10 w-full transform-gpu will-change-[margin] transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            isMobile
+              ? "ml-0"
+              : isInitialAnimation
+                ? "lg:ml-0"
+                : isScrollNavVisible
                   ? "lg:ml-20"
-                  : "lg:ml-80"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Text Content - Slideshow */}
-            <div
-              className={`text-white space-y-6 transition-all duration-1000 ease-in-out ${
-                isTransitioning
-                  ? "transform scale-105 opacity-90"
-                  : "transform scale-100 opacity-100"
-              }`}
-            >
-              <div className="space-y-2">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight hero-text-shadow transition-all duration-1000 ease-in-out">
-                  {heroSlides[currentSlide]?.title || title}
-                </h1>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-gray-200 hero-text-shadow transition-all duration-1000 ease-in-out">
-                  {heroSlides[currentSlide]?.subtitle || subtitle}
-                </h2>
-              </div>
+                  : isMinimized
+                    ? "lg:ml-20"
+                    : "lg:ml-80"
+          }`}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Text Content - Slideshow */}
+              <div
+                className={`text-white space-y-6 transition-all duration-1000 ease-in-out ${
+                  isTransitioning
+                    ? "transform scale-105 opacity-90"
+                    : "transform scale-100 opacity-100"
+                }`}
+              >
+                <div className="space-y-2">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light tracking-tight hero-text-shadow transition-all duration-1000 ease-in-out">
+                    {heroSlides[currentSlide]?.title || title}
+                  </h1>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-gray-200 hero-text-shadow transition-all duration-1000 ease-in-out">
+                    {heroSlides[currentSlide]?.subtitle || subtitle}
+                  </h2>
+                </div>
 
-              <p className="text-lg sm:text-xl text-gray-100 max-w-lg leading-relaxed hero-text-shadow transition-all duration-1000 ease-in-out">
-                {heroSlides[currentSlide]?.description || description}
-              </p>
+                <p className="text-lg sm:text-xl text-gray-100 max-w-lg leading-relaxed hero-text-shadow transition-all duration-1000 ease-in-out">
+                  {heroSlides[currentSlide]?.description || description}
+                </p>
 
-              <div className="pt-4">
-                <SafeLink
-                  href={buttonLink}
-                  className="inline-flex items-center px-8 py-4 text-lg font-medium text-black bg-white hover:bg-gray-100 hero-button-hover shadow-lg"
-                >
-                  {buttonText}
-                  <svg
-                    className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                <div className="pt-4">
+                  <SafeLink
+                    href={buttonLink}
+                    className="inline-flex items-center px-8 py-4 text-lg font-medium text-black bg-white hover:bg-gray-100 hero-button-hover shadow-lg"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    {buttonText}
+                    <svg
+                      className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </SafeLink>
+                </div>
+
+                {/* Slide Indicators */}
+                <div className="flex space-x-3 pt-6">
+                  {heroSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        index === currentSlide
+                          ? "bg-white scale-125"
+                          : "bg-white/50 hover:bg-white/75"
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
                     />
-                  </svg>
-                </SafeLink>
+                  ))}
+                </div>
               </div>
 
-              {/* Slide Indicators */}
-              <div className="flex space-x-3 pt-6">
-                {heroSlides.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      index === currentSlide
-                        ? "bg-white scale-125"
-                        : "bg-white/50 hover:bg-white/75"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
-              </div>
+              {/* Image Content - Medical equipment showcase */}
             </div>
-
-            {/* Image Content - Medical equipment showcase */}
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 }

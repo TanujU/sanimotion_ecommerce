@@ -4,6 +4,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { GridTileImage } from 'components/grid/tile';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
 import Image from 'next/image';
+import ImageNotAvailable from 'components/icons/image-not-available';
 
 export function Gallery({ images }: { images: { src: string; altText: string }[] }) {
   const { state, updateImage } = useProduct();
@@ -19,7 +20,7 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
   return (
     <form>
       <div className="relative aspect-square h-full max-h-[400px] w-full overflow-hidden">
-        {images[imageIndex] && (
+        {images[imageIndex]?.src ? (
           <Image
             className="h-full w-full object-contain"
             fill
@@ -28,6 +29,13 @@ export function Gallery({ images }: { images: { src: string; altText: string }[]
             src={images[imageIndex]?.src as string}
             priority={true}
           />
+        ) : (
+          <div className="h-full w-full flex items-center justify-center bg-gray-50">
+            <ImageNotAvailable 
+              className="group" 
+              size={300}
+            />
+          </div>
         )}
 
         {images.length > 1 ? (

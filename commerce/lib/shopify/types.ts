@@ -71,6 +71,7 @@ export type Page = {
 export type Product = Omit<ShopifyProduct, 'variants' | 'images'> & {
   variants: ProductVariant[];
   images: Image[];
+  dosage?: string; // Add dosage field for Supabase products
 };
 
 export type ProductOption = {
