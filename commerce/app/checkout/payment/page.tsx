@@ -1,37 +1,41 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ChevronLeftIcon, CreditCardIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { useState } from "react";
+import {
+  ChevronLeftIcon,
+  CreditCardIcon,
+  LockClosedIcon,
+} from "@heroicons/react/24/outline";
 
 export default function PaymentPage() {
-  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState("card");
   const [cardData, setCardData] = useState({
-    number: '',
-    name: '',
-    expiry: '',
-    cvc: ''
+    number: "",
+    name: "",
+    expiry: "",
+    cvc: "",
   });
 
   const handleCardChange = (field: string, value: string) => {
-    setCardData(prev => ({ ...prev, [field]: value }));
+    setCardData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle payment submission
-    window.location.href = '/checkout-success';
+    window.location.href = "/checkout-success";
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white text-gray-900 lg:pl-20">
       <div className="mx-auto max-w-7xl px-4 py-8">
         {/* Breadcrumb */}
         <div className="mb-8">
           <div className="flex items-center space-x-2 text-sm text-gray-600">
             <span className="text-blue-600">Information</span>
-            <span className="text-gray-400">{'>'}</span>
+            <span className="text-gray-400">{">"}</span>
             <span className="text-blue-600">Versand</span>
-            <span className="text-gray-400">{'>'}</span>
+            <span className="text-gray-400">{">"}</span>
             <span className="text-blue-600">Zahlung</span>
           </div>
         </div>
@@ -54,7 +58,9 @@ export default function PaymentPage() {
                 <div className="flex justify-between items-center py-2 border-b border-gray-100">
                   <div>
                     <p className="text-sm text-gray-600">Versenden an</p>
-                    <p className="font-medium">Musterstraße 123, 80331 München, Deutschland</p>
+                    <p className="font-medium">
+                      Musterstraße 123, 80331 München, Deutschland
+                    </p>
                   </div>
                   <button className="text-blue-600 text-sm hover:underline">
                     Ändern
@@ -75,14 +81,18 @@ export default function PaymentPage() {
             {/* Payment Section */}
             <div className="bg-white rounded-lg p-6 border border-gray-200">
               <h2 className="text-xl font-semibold mb-2">Zahlung</h2>
-              <p className="text-sm text-gray-600 mb-6">Alle Transaktionen sind sicher und verschlüsselt.</p>
-              
+              <p className="text-sm text-gray-600 mb-6">
+                Alle Transaktionen sind sicher und verschlüsselt.
+              </p>
+
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-gray-300">
                     <CreditCardIcon className="h-8 w-8 text-gray-400" />
                   </div>
-                  <p className="text-gray-600 font-medium">Dieser Shop kann derzeit keine Zahlungen akzeptieren.</p>
+                  <p className="text-gray-600 font-medium">
+                    Dieser Shop kann derzeit keine Zahlungen akzeptieren.
+                  </p>
                 </div>
               </div>
             </div>
@@ -109,7 +119,7 @@ export default function PaymentPage() {
           <div className="lg:col-span-2">
             <div className="bg-gray-50 rounded-lg p-6 sticky top-8 border border-gray-200">
               <h2 className="text-xl font-semibold mb-4">Bestellübersicht</h2>
-              
+
               {/* Sample Product */}
               <div className="flex items-center space-x-4 mb-4">
                 <div className="relative">

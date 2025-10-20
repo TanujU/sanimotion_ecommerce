@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../lib/auth-context";
-import { useToast, ToastContainer } from "../../components/ui/toast-notifications";
+import {
+  useToast,
+  ToastContainer,
+} from "../../components/ui/toast-notifications";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -44,7 +47,10 @@ export default function SignupPage() {
 
     // Validate password confirmation
     if (formData.password !== formData.confirmPassword) {
-      showError("Password Mismatch", "Passwords do not match. Please make sure both password fields are identical.");
+      showError(
+        "Password Mismatch",
+        "Passwords do not match. Please make sure both password fields are identical."
+      );
       setError("Passwords do not match");
       setIsLoading(false);
       return;
@@ -61,28 +67,37 @@ export default function SignupPage() {
       if (error) {
         // Handle different types of errors
         let errorMessage = "Failed to create account";
-        
+
         if (error.message) {
           errorMessage = error.message;
-        } else if (typeof error === 'string') {
+        } else if (typeof error === "string") {
           errorMessage = error;
         } else if (error.details) {
           errorMessage = error.details;
         } else if (error.hint) {
           errorMessage = error.hint;
         }
-        
+
         if (errorMessage.includes("User already registered")) {
-          showError("Account Exists", "An account with this email already exists. Please sign in instead.");
+          showError(
+            "Account Exists",
+            "An account with this email already exists. Please sign in instead."
+          );
         } else if (errorMessage.includes("Password should be at least")) {
-          showError("Weak Password", "Please choose a stronger password with at least 6 characters.");
+          showError(
+            "Weak Password",
+            "Please choose a stronger password with at least 6 characters."
+          );
         } else {
           showError("Sign Up Failed", errorMessage);
         }
-        
+
         setError(errorMessage);
       } else {
-        showSuccess("Account Created!", "Please check your email and click the verification link to activate your account.");
+        showSuccess(
+          "Account Created!",
+          "Please check your email and click the verification link to activate your account."
+        );
         // Redirect to home page after successful signup
         setTimeout(() => {
           router.push("/");
@@ -90,7 +105,10 @@ export default function SignupPage() {
       }
     } catch (err) {
       console.error("Signup error:", err);
-      showError("Sign Up Failed", "An unexpected error occurred. Please try again.");
+      showError(
+        "Sign Up Failed",
+        "An unexpected error occurred. Please try again."
+      );
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -98,7 +116,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 lg:pl-20 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-50 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
@@ -301,7 +319,7 @@ export default function SignupPage() {
           </p>
         </div>
       </div>
-      
+
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>

@@ -8,7 +8,7 @@ export default function Footer() {
   const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : "");
 
   return (
-    <footer className="text-sm bg-gray-100 text-gray-600">
+    <footer className="text-sm bg-gray-100 text-gray-600 lg:pl-20 relative z-10">
       <div className="py-12">
         <div className="mx-auto w-full max-w-7xl px-4 md:px-4 min-[1320px]:px-0">
           {/* Three Column Layout */}

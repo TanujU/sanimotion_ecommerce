@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../lib/auth-context";
-import { useToast, ToastContainer } from "../../components/ui/toast-notifications";
+import {
+  useToast,
+  ToastContainer,
+} from "../../components/ui/toast-notifications";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -24,12 +27,15 @@ export default function LoginPage() {
     if (user) {
       router.push("/");
     }
-    
+
     // Check for success message from password reset
     const urlParams = new URLSearchParams(window.location.search);
-    const message = urlParams.get('message');
-    if (message === 'password_reset_success') {
-      showSuccess("Password Reset Successful", "Your password has been reset. Please sign in with your new password.");
+    const message = urlParams.get("message");
+    if (message === "password_reset_success") {
+      showSuccess(
+        "Password Reset Successful",
+        "Your password has been reset. Please sign in with your new password."
+      );
       // Clean up the URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
@@ -40,9 +46,25 @@ export default function LoginPage() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          <svg className="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          <svg
+            className="animate-spin h-8 w-8 text-blue-600"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
           </svg>
           <span className="text-gray-600">Loading...</span>
         </div>
@@ -68,14 +90,25 @@ export default function LoginPage() {
 
       if (result.error) {
         const errorMessage = result.error.message || result.error;
-        
-        if (errorMessage.includes("Invalid login credentials") || errorMessage.includes("Invalid email or password")) {
-          showError("Sign In Failed", "Invalid email or password. Please check your credentials and try again.");
+
+        if (
+          errorMessage.includes("Invalid login credentials") ||
+          errorMessage.includes("Invalid email or password")
+        ) {
+          showError(
+            "Sign In Failed",
+            "Invalid email or password. Please check your credentials and try again."
+          );
         } else if (errorMessage.includes("Email not confirmed")) {
-          showError("Email Not Verified", "Please check your email and click the verification link before signing in.");
+          showError(
+            "Email Not Verified",
+            "Please check your email and click the verification link before signing in."
+          );
         } else if (errorMessage.includes("Too many login attempts")) {
           showError("Too Many Attempts", errorMessage);
-        } else if (errorMessage.includes("Please enter a valid email address")) {
+        } else if (
+          errorMessage.includes("Please enter a valid email address")
+        ) {
           showError("Invalid Email", "Please enter a valid email address.");
         } else if (errorMessage.includes("Password is required")) {
           showError("Password Required", "Please enter your password.");
@@ -90,12 +123,18 @@ export default function LoginPage() {
           router.push("/");
         }, 1500);
       } else {
-        showError("Sign In Failed", "An unexpected error occurred. Please try again.");
+        showError(
+          "Sign In Failed",
+          "An unexpected error occurred. Please try again."
+        );
         setError("An unexpected error occurred. Please try again.");
       }
     } catch (err) {
       console.error("Login error:", err);
-      showError("Sign In Failed", "An unexpected error occurred. Please try again.");
+      showError(
+        "Sign In Failed",
+        "An unexpected error occurred. Please try again."
+      );
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -103,7 +142,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 lg:pl-20 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-50 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
@@ -257,7 +296,7 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-      
+
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>

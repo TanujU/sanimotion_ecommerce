@@ -370,7 +370,7 @@ export function ScrollNav({ heroRef }: ScrollNavProps) {
   return (
     <div
       ref={navRef}
-      className={`fixed left-0 top-0 h-full z-50 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] w-20 ${
+      className={`fixed left-0 top-0 h-full z-40 transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] w-20 ${
         isVisible ? "pointer-events-auto" : "pointer-events-none"
       }`}
       style={{

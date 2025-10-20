@@ -52,13 +52,13 @@ export default async function HomePage() {
   const products = await getProducts({});
 
   // Get first 5 products as bestsellers from Supabase database
-  const bestsellersData = products.slice(0, 5).map(product => ({
+  const bestsellersData = products.slice(0, 5).map((product) => ({
     id: product.id,
     title: product.title,
     price: `€${product.priceRange.maxVariantPrice.amount}`,
     sizes: product.dosage ? [product.dosage] : [],
-    image: product.featuredImage?.url || '',
-    alt: product.title
+    image: product.featuredImage?.url || "",
+    alt: product.title,
   }));
 
   return (
@@ -77,90 +77,93 @@ export default async function HomePage() {
         className="scroll-reveal"
       />
 
-      {/* Featured Products Section with Enhanced Animations */}
-      <div className="mx-auto max-w-7xl px-4 py-16 pt-24 sm:px-6 lg:px-8">
-        <div className="text-center mb-16 scroll-reveal">
-          <h2 className="text-3xl font-weight-light tracking-tight text-gray-900 sm:text-4xl">
-            What are you looking for today?
-          </h2>
-        </div>
-
-        {/* Service Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-16">
-          {/* Card 1 - Order Prescription */}
-          <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
-            <div className="aspect-square overflow-hidden rounded-t-lg">
-              <img
-                src="https://img.freepik.com/premium-photo/medical-prescription-delivery-box-with-medicine_690064-9803.jpg?semt=ais_hybrid&w=400&q=80"
-                alt="Medical prescription delivery"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div className="p-6">
-              <p className="text-gray-800 font-medium text-center">
-                Order your medical prescription, with free delivery
-              </p>
-            </div>
-          </div>
-
-          {/* Card 2 - Check Stock */}
-          <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
-            <div className="aspect-square overflow-hidden rounded-t-lg">
-              <img
-                src="https://img.freepik.com/premium-photo/medical-pills-blister-packs-medicine-stock_690064-9804.jpg?semt=ais_hybrid&w=400&q=80"
-                alt="Medical pills and medicine stock"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div className="p-6">
-              <p className="text-gray-800 font-medium text-center">
-                Check your medicine is in stock
-              </p>
-            </div>
-          </div>
-
-          {/* Card 3 - Online Doctor */}
-          <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
-            <div className="aspect-square overflow-hidden rounded-t-lg">
-              <img
-                src="https://img.freepik.com/premium-photo/medical-professional-with-stethoscope-white-coat_690064-9805.jpg?semt=ais_hybrid&w=400&q=80"
-                alt="Medical professional consultation"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div className="p-6">
-              <p className="text-gray-800 font-medium text-center">
-                Explore Online Doctor support
-              </p>
-            </div>
-          </div>
-
-          {/* Card 4 - Health Essentials */}
-          <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
-            <div className="aspect-square overflow-hidden rounded-t-lg">
-              <img
-                src="https://img.freepik.com/premium-photo/health-wellness-products-medical-supplies_690064-9806.jpg?semt=ais_hybrid&w=400&q=80"
-                alt="Health and wellness products"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div className="p-6">
-              <p className="text-gray-800 font-medium text-center">
-                Shop health and wellness essentials
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bestsellers Section */}
-        <div className="mb-16">
-          <div className="text-left mb-12 scroll-reveal">
-            <h2 className="text-3xl font-light tracking-wide text-gray-900 sm:text-4xl">
-              Bestsellers
+      {/* Content wrapper with padding for scroll nav */}
+      <div className="lg:pl-20">
+        {/* Featured Products Section with Enhanced Animations */}
+        <div className="mx-auto max-w-7xl px-4 py-16 pt-24 sm:px-6 lg:px-8">
+          <div className="text-center mb-16 scroll-reveal">
+            <h2 className="text-3xl font-weight-light tracking-tight text-gray-900 sm:text-4xl">
+              What are you looking for today?
             </h2>
           </div>
 
-          <BestsellersCarousel products={bestsellersData} />
+          {/* Service Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-16">
+            {/* Card 1 - Order Prescription */}
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/medical-prescription-delivery-box-with-medicine_690064-9803.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Medical prescription delivery"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-6">
+                <p className="text-gray-800 font-medium text-center">
+                  Order your medical prescription, with free delivery
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2 - Check Stock */}
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/medical-pills-blister-packs-medicine-stock_690064-9804.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Medical pills and medicine stock"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-6">
+                <p className="text-gray-800 font-medium text-center">
+                  Check your medicine is in stock
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3 - Online Doctor */}
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/medical-professional-with-stethoscope-white-coat_690064-9805.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Medical professional consultation"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-6">
+                <p className="text-gray-800 font-medium text-center">
+                  Explore Online Doctor support
+                </p>
+              </div>
+            </div>
+
+            {/* Card 4 - Health Essentials */}
+            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
+              <div className="aspect-square overflow-hidden rounded-t-lg">
+                <img
+                  src="https://img.freepik.com/premium-photo/health-wellness-products-medical-supplies_690064-9806.jpg?semt=ais_hybrid&w=400&q=80"
+                  alt="Health and wellness products"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="p-6">
+                <p className="text-gray-800 font-medium text-center">
+                  Shop health and wellness essentials
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bestsellers Section */}
+          <div className="mb-16">
+            <div className="text-left mb-12 scroll-reveal">
+              <h2 className="text-3xl font-light tracking-wide text-gray-900 sm:text-4xl">
+                Bestsellers
+              </h2>
+            </div>
+
+            <BestsellersCarousel products={bestsellersData} />
+          </div>
         </div>
 
         {/* Shop by Category Section */}

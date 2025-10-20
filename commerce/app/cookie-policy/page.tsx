@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function CookiePolicyPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 py-12 lg:pl-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="bg-white shadow-lg rounded-lg p-8 mb-8">

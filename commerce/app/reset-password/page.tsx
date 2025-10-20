@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
-import { useToast, ToastContainer } from "../../components/ui/toast-notifications";
+import {
+  useToast,
+  ToastContainer,
+} from "../../components/ui/toast-notifications";
 import { validatePassword } from "../../lib/security/supabase-security";
 
 export default function ResetPasswordPage() {
@@ -29,13 +32,19 @@ export default function ResetPasswordPage() {
   const checkPasswordResetSession = async () => {
     try {
       // Check if we have a valid password reset session
-      const { data: { session }, error } = await supabase.auth.getSession();
-      
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+
       if (error) {
-        console.error('Session check error:', error);
-        showError("Invalid Link", "This password reset link is invalid or has expired. Please request a new one.");
+        console.error("Session check error:", error);
+        showError(
+          "Invalid Link",
+          "This password reset link is invalid or has expired. Please request a new one."
+        );
         setTimeout(() => {
-          router.push('/forgot-password');
+          router.push("/forgot-password");
         }, 3000);
         return;
       }
@@ -43,16 +52,22 @@ export default function ResetPasswordPage() {
       if (session) {
         setIsValidSession(true);
       } else {
-        showError("Invalid Link", "This password reset link is invalid or has expired. Please request a new one.");
+        showError(
+          "Invalid Link",
+          "This password reset link is invalid or has expired. Please request a new one."
+        );
         setTimeout(() => {
-          router.push('/forgot-password');
+          router.push("/forgot-password");
         }, 3000);
       }
     } catch (error) {
-      console.error('Session check error:', error);
-      showError("Invalid Link", "This password reset link is invalid or has expired. Please request a new one.");
+      console.error("Session check error:", error);
+      showError(
+        "Invalid Link",
+        "This password reset link is invalid or has expired. Please request a new one."
+      );
       setTimeout(() => {
-        router.push('/forgot-password');
+        router.push("/forgot-password");
       }, 3000);
     } finally {
       setIsCheckingSession(false);
@@ -75,7 +90,10 @@ export default function ResetPasswordPage() {
     try {
       // Validate passwords match
       if (formData.password !== formData.confirmPassword) {
-        showError("Password Mismatch", "Passwords do not match. Please try again.");
+        showError(
+          "Password Mismatch",
+          "Passwords do not match. Please try again."
+        );
         setError("Passwords do not match");
         return;
       }
@@ -83,36 +101,46 @@ export default function ResetPasswordPage() {
       // Validate password strength
       const passwordValidation = validatePassword(formData.password);
       if (!passwordValidation.isValid) {
-        showError("Weak Password", passwordValidation.errors.join(', '));
-        setError(passwordValidation.errors.join(', '));
+        showError("Weak Password", passwordValidation.errors.join(", "));
+        setError(passwordValidation.errors.join(", "));
         return;
       }
 
       // Update password using Supabase
       const { error } = await supabase.auth.updateUser({
-        password: formData.password
+        password: formData.password,
       });
 
       if (error) {
-        console.error('Password update error:', error);
-        showError("Reset Failed", error.message || "Failed to reset password. Please try again.");
-        setError(error.message || "Failed to reset password. Please try again.");
+        console.error("Password update error:", error);
+        showError(
+          "Reset Failed",
+          error.message || "Failed to reset password. Please try again."
+        );
+        setError(
+          error.message || "Failed to reset password. Please try again."
+        );
         return;
       }
 
       // Success
-      showSuccess("Password Reset", "Your password has been successfully reset. You can now sign in with your new password.");
-      
+      showSuccess(
+        "Password Reset",
+        "Your password has been successfully reset. You can now sign in with your new password."
+      );
+
       // Sign out the user and redirect to login
       await supabase.auth.signOut();
-      
-      setTimeout(() => {
-        router.push('/login?message=password_reset_success');
-      }, 2000);
 
+      setTimeout(() => {
+        router.push("/login?message=password_reset_success");
+      }, 2000);
     } catch (err) {
       console.error("Password reset error:", err);
-      showError("Reset Failed", "An unexpected error occurred. Please try again.");
+      showError(
+        "Reset Failed",
+        "An unexpected error occurred. Please try again."
+      );
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -122,7 +150,7 @@ export default function ResetPasswordPage() {
   // Show loading while checking session
   if (isCheckingSession) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 lg:pl-20 relative overflow-hidden">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
@@ -141,12 +169,22 @@ export default function ResetPasswordPage() {
   // Show error if session is invalid
   if (!isValidSession) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 lg:pl-20 relative overflow-hidden">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-              <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="h-6 w-6 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </div>
             <h2 className="text-2xl font-light text-gray-900 mb-4">
@@ -168,7 +206,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 lg:pl-20 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-50 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
@@ -239,7 +277,9 @@ export default function ResetPasswordPage() {
 
             {/* Password Requirements */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="text-sm font-medium text-blue-800 mb-2">Password Requirements:</h4>
+              <h4 className="text-sm font-medium text-blue-800 mb-2">
+                Password Requirements:
+              </h4>
               <ul className="text-xs text-blue-700 space-y-1">
                 <li>• At least 8 characters long</li>
                 <li>• Contains uppercase and lowercase letters</li>
@@ -300,7 +340,7 @@ export default function ResetPasswordPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>

@@ -88,7 +88,7 @@ export default async function RootLayout({
         <AuthProvider>
           <CartProvider cartPromise={cart}>
             <Navbar />
-            <main className="pt-0">
+            <main className="pt-0 relative z-10">
               {children}
               <SafeToaster closeButton />
               <WelcomeToast />

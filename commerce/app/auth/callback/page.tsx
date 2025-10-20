@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { supabase } from '../../../lib/supabase';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "../../../lib/supabase";
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -12,33 +12,33 @@ export default function AuthCallback() {
       try {
         // Get the session from the URL hash
         const { data, error } = await supabase.auth.getSession();
-        
+
         if (error) {
-          console.error('Auth callback error:', error);
-          router.push('/login?error=auth_callback_failed');
+          console.error("Auth callback error:", error);
+          router.push("/login?error=auth_callback_failed");
           return;
         }
 
         if (data.session) {
           // Check if this is a password reset session
           const urlParams = new URLSearchParams(window.location.search);
-          const type = urlParams.get('type');
-          
-          if (type === 'recovery') {
+          const type = urlParams.get("type");
+
+          if (type === "recovery") {
             // This is a password reset session, redirect to reset password page
-            router.push('/reset-password');
+            router.push("/reset-password");
           } else {
             // Regular authentication, redirect to home or intended page
-            const redirectTo = urlParams.get('redirectTo') || '/';
+            const redirectTo = urlParams.get("redirectTo") || "/";
             router.push(redirectTo);
           }
         } else {
           // No session, redirect to login
-          router.push('/login');
+          router.push("/login");
         }
       } catch (error) {
-        console.error('Auth callback error:', error);
-        router.push('/login?error=auth_callback_failed');
+        console.error("Auth callback error:", error);
+        router.push("/login?error=auth_callback_failed");
       }
     };
 
@@ -46,7 +46,7 @@ export default function AuthCallback() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 lg:pl-20">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>

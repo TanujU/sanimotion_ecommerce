@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { SupabaseAuthSecurity } from "../../lib/security/supabase-security";
-import { useToast, ToastContainer } from "../../components/ui/toast-notifications";
+import {
+  useToast,
+  ToastContainer,
+} from "../../components/ui/toast-notifications";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -27,15 +30,24 @@ export default function ForgotPasswordPage() {
       const result = await SupabaseAuthSecurity.securePasswordReset(email);
 
       if (result.success) {
-        showSuccess("Reset Email Sent", "Please check your email for password reset instructions.");
+        showSuccess(
+          "Reset Email Sent",
+          "Please check your email for password reset instructions."
+        );
         setIsSubmitted(true);
       } else {
-        const errorMessage = result.error || result.message || "Failed to send reset email";
+        const errorMessage =
+          result.error || result.message || "Failed to send reset email";
         if (errorMessage.includes("User not found")) {
-          showError("Email Not Found", "No account found with this email address. Please check your email or create a new account.");
+          showError(
+            "Email Not Found",
+            "No account found with this email address. Please check your email or create a new account."
+          );
         } else if (errorMessage.includes("Too many password reset attempts")) {
           showError("Too Many Attempts", errorMessage);
-        } else if (errorMessage.includes("Please enter a valid email address")) {
+        } else if (
+          errorMessage.includes("Please enter a valid email address")
+        ) {
           showError("Invalid Email", "Please enter a valid email address.");
         } else {
           showError("Reset Failed", errorMessage);
@@ -44,7 +56,10 @@ export default function ForgotPasswordPage() {
       }
     } catch (err) {
       console.error("Password reset error:", err);
-      showError("Reset Failed", "An unexpected error occurred. Please try again.");
+      showError(
+        "Reset Failed",
+        "An unexpected error occurred. Please try again."
+      );
       setError("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -53,7 +68,7 @@ export default function ForgotPasswordPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 lg:pl-20 relative overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-50 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
@@ -125,7 +140,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 lg:pl-20 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-50 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
@@ -228,7 +243,7 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </div>
