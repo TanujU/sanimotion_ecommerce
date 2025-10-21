@@ -29,7 +29,11 @@ export default function ProfilePage() {
   const { user, loading, signOut, updateUser } = useAuth();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    phone_number: string;
+    bio: string;
+  }>({
     name: "",
     phone_number: "",
     bio: "",
@@ -121,7 +125,7 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center lg:pl-20">
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
           <h2 className="text-xl font-bold text-gray-900 mb-4">
             🔍 Profile Page Debug
@@ -132,13 +136,13 @@ export default function ProfilePage() {
                 <strong>Loading:</strong> {loading ? "✅ true" : "❌ false"}
               </p>
               <p>
-                <strong>User:</strong> {user ? "✅ Present" : "❌ Not found"}
+                <strong>User:</strong> {"❌ Not found"}
               </p>
               <p>
-                <strong>User ID:</strong> {user?.id || "N/A"}
+                <strong>User ID:</strong> N/A
               </p>
               <p>
-                <strong>User Email:</strong> {user?.email || "N/A"}
+                <strong>User Email:</strong> N/A
               </p>
             </div>
 
