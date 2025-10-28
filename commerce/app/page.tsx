@@ -7,11 +7,9 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { ScrollAnimations } from "components/scroll-animations";
 //import AutoScrollCarousel from "components/auto-scroll-carousel";
-import { HeroBanner } from "components/hero-banner";
 //import { BestsellersCarousel } from "../components/bestsellers-carousel";
 import type { Metadata } from "next";
 import { BestsellersCarousel } from "../components/bestsellers-carousel";
-import { WelcomePopup } from "../components/welcome-popup";
 
 // Type-safe Link wrapper for React 19 compatibility
 const SafeLink = ({
@@ -65,22 +63,10 @@ export default async function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       <ScrollAnimations />
 
-      {/* Hero Banner Section */}
-      <HeroBanner
-        title="Sanimotion"
-        subtitle="Medical Excellence"
-        description="Premium medical equipment and healthcare supplies trusted by professionals worldwide. Discover our comprehensive range of medical devices, equipment, and supplies for hospitals, clinics, and medical practices."
-        imageUrl="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
-        imageAlt="Modern hospital room with advanced medical equipment and monitoring systems"
-        buttonText="Explore Medical Equipment"
-        buttonLink="/search"
-        className="scroll-reveal"
-      />
-
-      {/* Content wrapper with padding for scroll nav */}
-      <div className="lg:pl-20">
+      {/* Content wrapper */}
+      <div>
         {/* Featured Products Section with Enhanced Animations */}
-        <div className="mx-auto max-w-7xl px-4 py-16 pt-24 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-16 pt-8 sm:px-6 lg:px-8">
           <div className="text-center mb-16 scroll-reveal">
             <h2 className="text-3xl font-weight-light tracking-tight text-gray-900 sm:text-4xl">
               What are you looking for today?
@@ -372,9 +358,6 @@ export default async function HomePage() {
       </div>
 
       <Footer />
-
-      {/* Welcome Popup */}
-      <WelcomePopup />
     </div>
   );
 }

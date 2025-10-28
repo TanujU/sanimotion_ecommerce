@@ -20,10 +20,7 @@ export default function Search() {
   };
 
   return (
-    <Form
-      className="w-max-[550px] relative w-full lg:w-80 xl:w-full"
-      action={handleFormSubmit}
-    >
+    <Form className="relative w-full" action={handleFormSubmit}>
       <input
         key={searchParams?.get("q")}
         type="text"
@@ -43,7 +40,7 @@ export default function Search() {
 
 export function SearchSkeleton() {
   return (
-    <form className="w-max-[550px] relative w-full lg:w-80 xl:w-full">
+    <form className="relative w-full">
       <input
         placeholder="Nach Produkten suchen..."
         className="w-full rounded-lg border bg-white px-4 py-1 text-sm text-black "

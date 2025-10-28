@@ -216,7 +216,7 @@ export default function Footer() {
       <div className="border-t border-gray-200 py-4">
         <div className="mx-auto w-full max-w-7xl px-4 md:px-4 min-[1320px]:px-0">
           <p className="text-center text-gray-800">
-            &copy; {copyrightDate} Alle Rechte vorbehalten.
+            &copy; {copyrightDate} VITALORA. Alle Rechte vorbehalten.
           </p>
         </div>
       </div>

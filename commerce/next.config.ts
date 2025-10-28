@@ -3,6 +3,10 @@ export default {
     ppr: true,
     useCache: true
   },
+  env: {
+    SITE_NAME: 'VITALORA',
+    COMPANY_NAME: 'VITALORA'
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [

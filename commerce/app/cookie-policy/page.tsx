@@ -1,8 +1,36 @@
 "use client";
 
 import Link from "next/link";
+import { useState, useEffect } from "react";
+
+// Type-safe Link component for React 19 compatibility
+const SafeLink = ({
+  href,
+  className,
+  children,
+  ...props
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+  [key: string]: any;
+}) => {
+  const LinkComponent = Link as any;
+  return (
+    <LinkComponent href={href} className={className} {...props}>
+      {children}
+    </LinkComponent>
+  );
+};
 
 export default function CookiePolicyPage() {
+  const [lastUpdated, setLastUpdated] = useState("");
+
+  useEffect(() => {
+    // Set date on client side only to avoid hydration mismatch
+    setLastUpdated(new Date().toLocaleDateString());
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 lg:pl-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,10 +54,10 @@ export default function CookiePolicyPage() {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Cookie Policy
+                Cookie-Richtlinie
               </h1>
               <p className="text-gray-600">
-                Last updated: {new Date().toLocaleDateString()}
+                Zuletzt aktualisiert: {lastUpdated || "Lädt..."}
               </p>
             </div>
           </div>
@@ -39,49 +67,50 @@ export default function CookiePolicyPage() {
         <div className="bg-white shadow-lg rounded-lg p-8">
           <div className="prose prose-lg max-w-none">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              What Are Cookies?
+              Was sind Cookies?
             </h2>
             <p className="text-gray-700 mb-6">
-              Cookies are small text files that are placed on your computer or
-              mobile device when you visit our website. They are widely used to
-              make websites work more efficiently and to provide information to
-              website owners.
+              Cookies sind kleine Textdateien, die auf Ihrem Computer oder
+              Mobilgerät gespeichert werden, wenn Sie unsere Website besuchen.
+              Sie werden weit verbreitet verwendet, um Websites effizienter zu
+              machen und Informationen an Website-Betreiber zu liefern.
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              How We Use Cookies
+              Wie wir Cookies verwenden
             </h2>
             <p className="text-gray-700 mb-4">
-              Sanimotion uses cookies for several purposes to enhance your
-              experience on our medical equipment e-commerce platform:
+              Sanimotion verwendet Cookies für verschiedene Zwecke, um Ihre
+              Erfahrung auf unserer Medizintechnik-E-Commerce-Plattform zu
+              verbessern:
             </p>
 
             <div className="space-y-6">
               {/* Essential Cookies */}
               <div className="border-l-4 border-blue-500 pl-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  Essential Cookies
+                  Notwendige Cookies
                 </h3>
                 <p className="text-gray-700 mb-3">
-                  These cookies are necessary for the website to function
-                  properly and cannot be disabled.
+                  Diese Cookies sind für das ordnungsgemäße Funktionieren der
+                  Website erforderlich und können nicht deaktiviert werden.
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                   <li>
-                    <strong>Authentication:</strong> Remember your login status
-                    and session information
+                    <strong>Authentifizierung:</strong> Merken sich Ihren
+                    Anmeldestatus und Sitzungsinformationen
                   </li>
                   <li>
-                    <strong>Security:</strong> Protect against cross-site
-                    request forgery (CSRF) attacks
+                    <strong>Sicherheit:</strong> Schutz vor
+                    Cross-Site-Request-Forgery (CSRF) Angriffen
                   </li>
                   <li>
-                    <strong>Cart Management:</strong> Remember items in your
-                    shopping cart
+                    <strong>Warenkorb-Verwaltung:</strong> Merken sich Artikel
+                    in Ihrem Einkaufswagen
                   </li>
                   <li>
-                    <strong>Form Data:</strong> Preserve form data during
-                    checkout process
+                    <strong>Formulardaten:</strong> Bewahren Formulardaten
+                    während des Checkout-Prozesses auf
                   </li>
                 </ul>
               </div>
@@ -89,28 +118,28 @@ export default function CookiePolicyPage() {
               {/* Functional Cookies */}
               <div className="border-l-4 border-green-500 pl-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  Functional Cookies
+                  Funktionale Cookies
                 </h3>
                 <p className="text-gray-700 mb-3">
-                  These cookies enhance your experience by remembering your
-                  preferences and settings.
+                  Diese Cookies verbessern Ihre Erfahrung, indem sie Ihre
+                  Präferenzen und Einstellungen speichern.
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                   <li>
-                    <strong>Language Preferences:</strong> Remember your
-                    preferred language
+                    <strong>Spracheinstellungen:</strong> Merken sich Ihre
+                    bevorzugte Sprache
                   </li>
                   <li>
-                    <strong>Currency Settings:</strong> Display prices in your
-                    preferred currency
+                    <strong>Währungseinstellungen:</strong> Zeigen Preise in
+                    Ihrer bevorzugten Währung an
                   </li>
                   <li>
-                    <strong>User Preferences:</strong> Remember your display
-                    preferences and settings
+                    <strong>Benutzerpräferenzen:</strong> Merken sich Ihre
+                    Anzeige- Präferenzen und Einstellungen
                   </li>
                   <li>
-                    <strong>Welcome Messages:</strong> Control display of
-                    welcome popups and notifications
+                    <strong>Willkommensnachrichten:</strong> Steuern die Anzeige
+                    von Willkommens-Popups und Benachrichtigungen
                   </li>
                 </ul>
               </div>
@@ -118,28 +147,28 @@ export default function CookiePolicyPage() {
               {/* Analytics Cookies */}
               <div className="border-l-4 border-yellow-500 pl-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  Analytics Cookies
+                  Analyse-Cookies
                 </h3>
                 <p className="text-gray-700 mb-3">
-                  These cookies help us understand how visitors interact with
-                  our website.
+                  Diese Cookies helfen uns zu verstehen, wie Besucher mit
+                  unserer Website interagieren.
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                   <li>
-                    <strong>Page Views:</strong> Track which pages are most
-                    popular
+                    <strong>Seitenaufrufe:</strong> Verfolgen, welche Seiten am
+                    beliebtesten sind
                   </li>
                   <li>
-                    <strong>User Behavior:</strong> Understand how users
-                    navigate our site
+                    <strong>Benutzerverhalten:</strong> Verstehen, wie Benutzer
+                    unsere Website navigieren
                   </li>
                   <li>
-                    <strong>Performance:</strong> Monitor website performance
-                    and loading times
+                    <strong>Leistung:</strong> Überwachen der Website-Leistung
+                    und Ladezeiten
                   </li>
                   <li>
-                    <strong>Error Tracking:</strong> Identify and fix technical
-                    issues
+                    <strong>Fehlerverfolgung:</strong> Technische Probleme
+                    identifizieren und beheben
                   </li>
                 </ul>
               </div>
@@ -147,101 +176,105 @@ export default function CookiePolicyPage() {
               {/* Marketing Cookies */}
               <div className="border-l-4 border-purple-500 pl-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  Marketing Cookies
+                  Marketing-Cookies
                 </h3>
                 <p className="text-gray-700 mb-3">
-                  These cookies are used to deliver relevant advertisements and
-                  track marketing campaigns.
+                  Diese Cookies werden verwendet, um relevante Werbung zu
+                  liefern und Marketingkampagnen zu verfolgen.
                 </p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                   <li>
-                    <strong>Ad Targeting:</strong> Show relevant medical
-                    equipment advertisements
+                    <strong>Werbungszielung:</strong> Zeigen relevante
+                    Medizintechnik-Werbung an
                   </li>
                   <li>
-                    <strong>Campaign Tracking:</strong> Measure effectiveness of
-                    marketing campaigns
+                    <strong>Kampagnenverfolgung:</strong> Messen der Wirksamkeit
+                    von Marketingkampagnen
                   </li>
                   <li>
-                    <strong>Retargeting:</strong> Show ads to users who have
-                    visited our site
+                    <strong>Retargeting:</strong> Zeigen Werbung für Benutzer
+                    an, die unsere Website besucht haben
                   </li>
                   <li>
-                    <strong>Social Media:</strong> Enable sharing on social
-                    media platforms
+                    <strong>Soziale Medien:</strong> Ermöglichen das Teilen in
+                    sozialen Medien-Plattformen
                   </li>
                 </ul>
               </div>
             </div>
 
             <h2 className="text-2xl font-semibold text-gray-900 mb-4 mt-8">
-              Cookie Duration
+              Cookie-Dauer
             </h2>
             <div className="bg-gray-50 rounded-lg p-6 mb-6">
               <ul className="space-y-3 text-gray-700">
                 <li>
-                  <strong>Session Cookies:</strong> Deleted when you close your
-                  browser
+                  <strong>Sitzungs-Cookies:</strong> Werden gelöscht, wenn Sie
+                  Ihren Browser schließen
                 </li>
                 <li>
-                  <strong>Persistent Cookies:</strong> Remain on your device for
-                  a set period (typically 30 days to 2 years)
+                  <strong>Persistente Cookies:</strong> Bleiben für einen
+                  festgelegten Zeitraum auf Ihrem Gerät (typischerweise 30 Tage
+                  bis 2 Jahre)
                 </li>
                 <li>
-                  <strong>Authentication Cookies:</strong> Expire after 7 days
-                  of inactivity
+                  <strong>Authentifizierungs-Cookies:</strong> Laufen nach 7
+                  Tagen Inaktivität ab
                 </li>
                 <li>
-                  <strong>Preference Cookies:</strong> Last for 1 year
+                  <strong>Präferenz-Cookies:</strong> Halten 1 Jahr
                 </li>
               </ul>
             </div>
 
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              Managing Your Cookie Preferences
+              Ihre Cookie-Einstellungen verwalten
             </h2>
             <p className="text-gray-700 mb-4">
-              You have several options for managing cookies:
+              Sie haben mehrere Möglichkeiten, Cookies zu verwalten:
             </p>
 
             <div className="space-y-4">
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h4 className="font-semibold text-blue-900 mb-2">
-                  Browser Settings
+                  Browser-Einstellungen
                 </h4>
                 <p className="text-blue-800 text-sm">
-                  Most browsers allow you to control cookies through their
-                  settings. You can block all cookies, accept only first-party
-                  cookies, or delete existing cookies.
+                  Die meisten Browser ermöglichen es Ihnen, Cookies über ihre
+                  Einstellungen zu kontrollieren. Sie können alle Cookies
+                  blockieren, nur First-Party-Cookies akzeptieren oder
+                  bestehende Cookies löschen.
                 </p>
               </div>
 
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <h4 className="font-semibold text-green-900 mb-2">
-                  Cookie Consent Banner
+                  Cookie-Zustimmungs-Banner
                 </h4>
                 <p className="text-green-800 text-sm">
-                  When you first visit our site, you'll see a cookie consent
-                  banner where you can choose which types of cookies to accept.
+                  Wenn Sie unsere Website zum ersten Mal besuchen, sehen Sie ein
+                  Cookie-Zustimmungs-Banner, in dem Sie wählen können, welche
+                  Arten von Cookies Sie akzeptieren möchten.
                 </p>
               </div>
 
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <h4 className="font-semibold text-yellow-900 mb-2">
-                  Opt-Out Links
+                  Opt-Out-Links
                 </h4>
                 <p className="text-yellow-800 text-sm">
-                  For third-party cookies, you can often opt out directly
-                  through the service provider's website.
+                  Für Third-Party-Cookies können Sie sich oft direkt über die
+                  Website des Dienstanbieters abmelden.
                 </p>
               </div>
             </div>
 
             <h2 className="text-2xl font-semibold text-gray-900 mb-4 mt-8">
-              Third-Party Cookies
+              Third-Party-Cookies
             </h2>
             <p className="text-gray-700 mb-4">
-              We may use third-party services that set their own cookies:
+              Wir können Third-Party-Dienste verwenden, die ihre eigenen Cookies
+              setzen:
             </p>
 
             <div className="overflow-x-auto">
@@ -249,13 +282,13 @@ export default function CookiePolicyPage() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Service
+                      Dienst
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Purpose
+                      Zweck
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Privacy Policy
+                      Datenschutzrichtlinie
                     </th>
                   </tr>
                 </thead>
@@ -265,7 +298,7 @@ export default function CookiePolicyPage() {
                       Google Analytics
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700">
-                      Website analytics and performance monitoring
+                      Website-Analyse und Leistungsüberwachung
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <a
@@ -274,7 +307,7 @@ export default function CookiePolicyPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Google Privacy Policy
+                        Google Datenschutzrichtlinie
                       </a>
                     </td>
                   </tr>
@@ -283,7 +316,7 @@ export default function CookiePolicyPage() {
                       Supabase
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700">
-                      Authentication and database services
+                      Authentifizierung und Datenbankdienste
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <a
@@ -292,19 +325,21 @@ export default function CookiePolicyPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Supabase Privacy Policy
+                        Supabase Datenschutzrichtlinie
                       </a>
                     </td>
                   </tr>
                   <tr>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      Payment Processors
+                      Zahlungsabwickler
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-700">
-                      Secure payment processing
+                      Sichere Zahlungsabwicklung
                     </td>
                     <td className="px-6 py-4 text-sm">
-                      <span className="text-gray-500">Varies by processor</span>
+                      <span className="text-gray-500">
+                        Variiert je nach Anbieter
+                      </span>
                     </td>
                   </tr>
                 </tbody>
@@ -312,50 +347,51 @@ export default function CookiePolicyPage() {
             </div>
 
             <h2 className="text-2xl font-semibold text-gray-900 mb-4 mt-8">
-              Medical Data Privacy
+              Medizinische Datenschutz
             </h2>
             <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
               <h4 className="font-semibold text-red-900 mb-2">
-                Important Notice
+                Wichtiger Hinweis
               </h4>
               <p className="text-red-800 text-sm">
-                As a medical equipment supplier, we understand the importance of
-                data privacy in healthcare. We do not collect or store any
-                patient medical information through cookies. All cookie data is
-                used solely for website functionality and user experience
-                enhancement.
+                Als Medizintechnik-Lieferant verstehen wir die Bedeutung des
+                Datenschutzes im Gesundheitswesen. Wir sammeln oder speichern
+                keine Patientendaten über Cookies. Alle Cookie-Daten werden
+                ausschließlich für Website-Funktionalität und Benutzererfahrung
+                verwendet.
               </p>
             </div>
 
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              Updates to This Policy
+              Aktualisierungen dieser Richtlinie
             </h2>
             <p className="text-gray-700 mb-6">
-              We may update this Cookie Policy from time to time to reflect
-              changes in our practices or for other operational, legal, or
-              regulatory reasons. We will notify you of any material changes by
-              posting the updated policy on our website.
+              Wir können diese Cookie-Richtlinie von Zeit zu Zeit aktualisieren,
+              um Änderungen in unseren Praktiken oder aus anderen operativen,
+              rechtlichen oder regulatorischen Gründen widerzuspiegeln. Wir
+              werden Sie über wesentliche Änderungen informieren, indem wir die
+              aktualisierte Richtlinie auf unserer Website veröffentlichen.
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              Contact Us
+              Kontaktieren Sie uns
             </h2>
             <p className="text-gray-700 mb-4">
-              If you have any questions about our use of cookies or this Cookie
-              Policy, please contact us:
+              Wenn Sie Fragen zu unserer Verwendung von Cookies oder dieser
+              Cookie- Richtlinie haben, kontaktieren Sie uns bitte:
             </p>
 
             <div className="bg-gray-50 rounded-lg p-6">
               <div className="space-y-2 text-gray-700">
                 <p>
-                  <strong>Email:</strong> privacy@sanimotion.com
+                  <strong>E-Mail:</strong> privacy@sanimotion.com
                 </p>
                 <p>
-                  <strong>Phone:</strong> +1 (555) 123-4567
+                  <strong>Telefon:</strong> +1 (555) 123-4567
                 </p>
                 <p>
-                  <strong>Address:</strong> 123 Medical Equipment Drive,
-                  Healthcare City, HC 12345
+                  <strong>Adresse:</strong> 123 Medizintechnik-Straße,
+                  Gesundheitsstadt, HC 12345
                 </p>
               </div>
             </div>
@@ -364,23 +400,23 @@ export default function CookiePolicyPage() {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                 <div>
                   <p className="text-sm text-gray-600">
-                    This Cookie Policy is part of our broader Privacy Policy and
-                    Terms of Service.
+                    Diese Cookie-Richtlinie ist Teil unserer umfassenderen
+                    Datenschutzrichtlinie und Nutzungsbedingungen.
                   </p>
                 </div>
                 <div className="flex space-x-4">
-                  <Link
+                  <SafeLink
                     href="/privacy-policy"
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
-                    Privacy Policy
-                  </Link>
-                  <Link
+                    Datenschutzrichtlinie
+                  </SafeLink>
+                  <SafeLink
                     href="/terms-of-service"
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
-                    Terms of Service
-                  </Link>
+                    Nutzungsbedingungen
+                  </SafeLink>
                 </div>
               </div>
             </div>

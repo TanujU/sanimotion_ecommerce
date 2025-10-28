@@ -852,32 +852,90 @@ button {
   white-space: nowrap;
 }
 
+/* Navigation Bar Styles */
+.navbar-dropdown {
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+/* Ensure navbar is positioned correctly below marquee */
+nav {
+  position: relative !important;
+  z-index: 1000 !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Navbar positioned below marquee */
+.navbar-below-marquee {
+  margin-top: 40px;
+}
+
+/* Ensure search input doesn't overflow */
+.navbar-search-container {
+  max-width: 16rem; /* 256px */
+  min-width: 12rem; /* 192px */
+}
+
+.navbar-search-container input {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-link {
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+
+.navbar-link:hover {
+  transform: translateY(-1px);
+}
+
+.navbar-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #3b82f6;
+  transition: all 0.2s ease-in-out;
+  transform: translateX(-50%);
+}
+
+.navbar-link:hover::after {
+  width: 100%;
+}
+
+/* Mobile Navigation Styles */
+.mobile-nav {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Adjust navbar position to account for marquee */
 .navbar-with-marquee {
   top: 40px;
-}
-
-/* Hero Banner Styles */
-.hero-banner-overlay {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.2) 50%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
-}
-
-.hero-text-shadow {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.hero-button-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.hero-button-hover:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
 /* Login Page Animations */
