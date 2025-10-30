@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import LogoSquare from "components/logo-square";
 import { SupabaseAuthSecurity } from "../../lib/security/supabase-security";
 import {
   useToast,
@@ -31,36 +32,36 @@ export default function ForgotPasswordPage() {
 
       if (result.success) {
         showSuccess(
-          "Reset Email Sent",
-          "Please check your email for password reset instructions."
+          "E-Mail zum Zurücksetzen gesendet",
+          "Bitte prüfen Sie Ihre E-Mail für Anweisungen zum Zurücksetzen des Passworts."
         );
         setIsSubmitted(true);
       } else {
         const errorMessage =
-          result.error || result.message || "Failed to send reset email";
+          result.error || result.message || "Zurücksetzen-E-Mail konnte nicht gesendet werden";
         if (errorMessage.includes("User not found")) {
           showError(
-            "Email Not Found",
-            "No account found with this email address. Please check your email or create a new account."
+            "E-Mail nicht gefunden",
+            "Kein Konto mit dieser E-Mail gefunden. Bitte prüfen Sie Ihre E-Mail oder erstellen Sie ein neues Konto."
           );
         } else if (errorMessage.includes("Too many password reset attempts")) {
-          showError("Too Many Attempts", errorMessage);
+          showError("Zu viele Versuche", errorMessage);
         } else if (
           errorMessage.includes("Please enter a valid email address")
         ) {
-          showError("Invalid Email", "Please enter a valid email address.");
+          showError("Ungültige E-Mail", "Bitte geben Sie eine gültige E-Mail-Adresse ein.");
         } else {
-          showError("Reset Failed", errorMessage);
+          showError("Zurücksetzen fehlgeschlagen", errorMessage);
         }
         setError(errorMessage);
       }
     } catch (err) {
       console.error("Password reset error:", err);
       showError(
-        "Reset Failed",
-        "An unexpected error occurred. Please try again."
+        "Zurücksetzen fehlgeschlagen",
+        "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
       );
-      setError("An unexpected error occurred. Please try again.");
+      setError("Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
     } finally {
       setIsLoading(false);
     }
@@ -83,10 +84,16 @@ export default function ForgotPasswordPage() {
         >
           <div className="text-center">
             <Link href="/" className="inline-block group">
-              <h1 className="text-4xl font-bold text-black mb-2 transition-all duration-300 group-hover:text-blue-600 group-hover:scale-105">
-                Sanimotion
-              </h1>
+              <div className="mx-auto mb-2 transition-all duration-300 group-hover:scale-105">
+                <LogoSquare />
+              </div>
             </Link>
+        <div className="text-center">
+          <Link href="/" className="inline-block group">
+            <div className="mx-auto mb-2 transition-all duration-300 group-hover:scale-105">
+              <LogoSquare />
+            </div>
+          </Link>
           </div>
 
           <div className="bg-white/95 backdrop-blur-xl py-8 px-6 shadow-2xl rounded-2xl border border-white/30 text-center animate-slide-up">
@@ -107,15 +114,15 @@ export default function ForgotPasswordPage() {
             </div>
 
             <h2 className="text-2xl font-light text-gray-900 mb-4">
-              Check your email
+              Bitte prüfen Sie Ihre E-Mail
             </h2>
 
             <p className="text-gray-600 mb-6">
-              We've sent a password reset link to <strong>{email}</strong>
+              Wir haben einen Link zum Zurücksetzen des Passworts an <strong>{email}</strong> gesendet
             </p>
 
             <p className="text-sm text-gray-500 mb-6">
-              Didn't receive the email? Check your spam folder or{" "}
+              Keine E-Mail erhalten? Prüfen Sie Ihren Spam-Ordner oder {" "}
               <button
                 onClick={() => {
                   setIsSubmitted(false);
@@ -123,7 +130,7 @@ export default function ForgotPasswordPage() {
                 }}
                 className="text-blue-600 hover:text-blue-500 font-medium"
               >
-                try again
+                erneut versuchen
               </button>
             </p>
 
@@ -131,7 +138,7 @@ export default function ForgotPasswordPage() {
               href="/login"
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors"
             >
-              Back to Sign In
+              Zur Anmeldung
             </Link>
           </div>
         </div>
@@ -161,11 +168,10 @@ export default function ForgotPasswordPage() {
             </h1>
           </Link>
           <h2 className="text-2xl font-light text-gray-800 animate-fade-in-up">
-            Reset your password
+            Setzen Sie Ihr Passwort zurück
           </h2>
           <p className="mt-2 text-sm text-gray-600 animate-fade-in-up animation-delay-200">
-            Enter your email address and we'll send you a link to reset your
-            password
+            Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts
           </p>
         </div>
 
@@ -177,7 +183,7 @@ export default function ForgotPasswordPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email Address
+                E-Mail-Adresse
               </label>
               <input
                 id="email"
@@ -187,7 +193,7 @@ export default function ForgotPasswordPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-gray-300 hover:shadow-md"
-                placeholder="john@example.com"
+                placeholder="max@beispiel.de"
               />
             </div>
 
@@ -224,10 +230,10 @@ export default function ForgotPasswordPage() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Sending reset link...
+                  Sende Zurücksetzungslink...
                 </div>
               ) : (
-                "Send Reset Link"
+                "Zurücksetzungslink senden"
               )}
             </button>
           </form>
@@ -238,7 +244,7 @@ export default function ForgotPasswordPage() {
               href="/login"
               className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-all duration-300 hover:scale-105"
             >
-              Back to Sign In
+              Zur Anmeldung
             </Link>
           </div>
         </div>

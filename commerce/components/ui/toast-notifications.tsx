@@ -48,6 +48,19 @@ const toastStyles = {
   }
 };
 
+// Ensure a stable portal root to avoid removeChild errors when navigating
+let TOAST_ROOT: HTMLElement | null = null;
+function ensureToastRoot(): HTMLElement | null {
+  if (typeof document === "undefined") return null;
+  if (!TOAST_ROOT) {
+    const el = document.createElement("div");
+    el.setAttribute("id", "toast-root");
+    document.body.appendChild(el);
+    TOAST_ROOT = el;
+  }
+  return TOAST_ROOT;
+}
+
 function ToastItem({ toast, onClose }: { toast: Toast; onClose: (id: string) => void }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
@@ -115,7 +128,13 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: (id: string) => 
     </div>
   );
 
-  return createPortal(toastContent, document.body);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  const root = ensureToastRoot();
+  if (!mounted || !root) return null;
+  return createPortal(toastContent, root);
 }
 
 // Toast Container Component

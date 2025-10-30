@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import { AddToCart } from 'components/cart/add-to-cart';
-import Price from 'components/price';
-import Prose from 'components/prose';
-import { Product } from 'lib/shopify/types';
-import { VariantSelector } from './variant-selector';
-import { useState } from 'react';
-import { useCart } from 'components/cart/cart-context';
+import { AddToCart } from "components/cart/add-to-cart";
+import Price from "components/price";
+import Prose from "components/prose";
+import { ProductWithVariants as Product } from "lib/types";
+import { VariantSelector } from "./variant-selector";
+import { useState } from "react";
+import { useCart } from "components/cart/cart-context";
 
 export function ProductDescription({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const { addCartItem } = useCart();
 
   const handleIncrement = () => {
-    setQuantity(prev => prev + 1);
+    setQuantity((prev) => prev + 1);
   };
 
   const handleDecrement = () => {
-    setQuantity(prev => Math.max(1, prev - 1));
+    setQuantity((prev) => Math.max(1, prev - 1));
   };
 
   const handleAddToCart = () => {
@@ -34,8 +34,6 @@ export function ProductDescription({ product }: { product: Product }) {
 
   return (
     <>
-
-
       {/* Product Title */}
       <div className="mb-4">
         <h1 className="text-3xl font-medium text-black">{product.title}</h1>
@@ -63,28 +61,28 @@ export function ProductDescription({ product }: { product: Product }) {
         </div>
       </div>
 
-
-
-
-
       {/* Quantity Selector and Add to Cart */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">Menge:</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Menge:
+        </label>
         <div className="flex items-center space-x-1">
-          <button 
+          <button
             onClick={handleDecrement}
             className="w-10 h-10 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
           >
             <span className="text-lg font-semibold">-</span>
           </button>
-          <span className="w-12 text-center text-lg font-medium">{quantity}</span>
-          <button 
+          <span className="w-12 text-center text-lg font-medium">
+            {quantity}
+          </span>
+          <button
             onClick={handleIncrement}
             className="w-10 h-10 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
           >
             <span className="text-lg font-semibold">+</span>
           </button>
-          <button 
+          <button
             onClick={handleAddToCart}
             className="ml-4 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
           >
@@ -97,7 +95,10 @@ export function ProductDescription({ product }: { product: Product }) {
       <div className="border-t border-gray-200 pt-6">
         <div className="space-y-2 text-sm text-gray-600">
           <div>Produktnummer: ART-{product.id}</div>
-          <div>Hersteller: {product.title.includes('Croma') ? 'CROMA Pharma GmbH' : 'FREYARU'}</div>
+          <div>
+            Hersteller:{" "}
+            {product.title.includes("Croma") ? "CROMA Pharma GmbH" : "FREYARU"}
+          </div>
         </div>
       </div>
     </>

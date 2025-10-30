@@ -116,12 +116,6 @@ export default function Footer() {
               className="flex items-center hover:opacity-80 transition-opacity"
             >
               <LogoSquare size="sm" siteName={SITE_NAME} />
-              {/* FREYARU Text */}
-              <div className="flex flex-col ml-2">
-                <span className="text-sm font-medium uppercase text-black">
-                  FREYARU
-                </span>
-              </div>
             </Link>
           </div>
 

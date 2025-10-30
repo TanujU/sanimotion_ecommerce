@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import LogoSquare from "components/logo-square";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 import {
@@ -221,9 +222,9 @@ export default function ResetPasswordPage() {
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="inline-block group">
-            <h1 className="text-4xl font-bold text-black mb-2 transition-all duration-300 group-hover:text-blue-600 group-hover:scale-105">
-              Sanimotion
-            </h1>
+            <div className="mx-auto mb-2 transition-all duration-300 group-hover:scale-105">
+              <LogoSquare />
+            </div>
           </Link>
           <h2 className="text-2xl font-light text-gray-800 animate-fade-in-up">
             Set new password

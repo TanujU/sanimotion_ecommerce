@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import clsx from 'clsx';
-import { Menu } from 'lib/shopify/types';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import clsx from "clsx";
+import { Menu } from "lib/types";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function FooterMenuItem({ item }: { item: Menu }) {
   const pathname = usePathname();
@@ -19,9 +19,9 @@ export function FooterMenuItem({ item }: { item: Menu }) {
       <Link
         href={item.path}
         className={clsx(
-          'block text-gray-600 hover:text-black transition-colors',
+          "block text-gray-600 hover:text-black transition-colors",
           {
-            'text-black': active
+            "text-black": active,
           }
         )}
       >

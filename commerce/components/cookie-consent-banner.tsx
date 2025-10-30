@@ -28,15 +28,15 @@ export function CookieConsentBanner() {
       return;
     }
 
-    // Temporarily show banner for testing (ignore localStorage)
-    // const cookieConsent = localStorage.getItem("cookie-consent");
-    // if (!cookieConsent) {
-    // Show banner after a short delay
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-    // }
+    // Check if user has already given consent
+    const cookieConsent = localStorage.getItem("cookie-consent");
+    if (!cookieConsent) {
+      // Show banner after a short delay
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
   }, [pathname]);
 
   const handleAcceptAll = () => {
@@ -111,22 +111,29 @@ export function CookieConsentBanner() {
     }));
   };
 
+  // Function to reset cookie consent (for testing)
+  const resetCookieConsent = () => {
+    localStorage.removeItem("cookie-consent");
+    localStorage.removeItem("cookie-consent-date");
+    setIsVisible(true);
+  };
+
   if (!isVisible) {
-    // Temporary: Add a button to reset cookie consent for testing
-    return (
-      <div className="fixed top-4 right-4 z-50">
-        <button
-          onClick={() => {
-            localStorage.removeItem("cookie-consent");
-            localStorage.removeItem("cookie-consent-date");
-            setIsVisible(true);
-          }}
-          className="px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
-        >
-          Show Cookie Banner
-        </button>
-      </div>
-    );
+    // Add a small debug button in development
+    if (process.env.NODE_ENV === "development") {
+      return (
+        <div className="fixed top-4 right-4 z-50">
+          <button
+            onClick={resetCookieConsent}
+            className="px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600"
+            title="Reset cookie consent for testing"
+          >
+            Reset Cookies
+          </button>
+        </div>
+      );
+    }
+    return null;
   }
 
   return (

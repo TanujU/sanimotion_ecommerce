@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import LogoSquare from "components/logo-square";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../lib/auth-context";
 import {
@@ -28,7 +29,10 @@ export default function SignupPage() {
     setIsVisible(true);
     // Redirect if already logged in
     if (user) {
-      router.push("/");
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectTo = urlParams.get("redirectTo") || "/";
+      try { sessionStorage.removeItem("checkout_redirect_ts"); } catch {}
+      router.replace(redirectTo);
     }
   }, [user, router]);
 
@@ -48,10 +52,10 @@ export default function SignupPage() {
     // Validate password confirmation
     if (formData.password !== formData.confirmPassword) {
       showError(
-        "Password Mismatch",
-        "Passwords do not match. Please make sure both password fields are identical."
+        "Passwörter stimmen nicht überein",
+        "Die Passwörter stimmen nicht überein. Bitte stellen Sie sicher, dass beide Felder identisch sind."
       );
-      setError("Passwords do not match");
+      setError("Die Passwörter stimmen nicht überein");
       setIsLoading(false);
       return;
     }
@@ -66,7 +70,7 @@ export default function SignupPage() {
 
       if (error) {
         // Handle different types of errors
-        let errorMessage = "Failed to create account";
+        let errorMessage = "Konto konnte nicht erstellt werden";
 
         if (error.message) {
           errorMessage = error.message;
@@ -80,36 +84,39 @@ export default function SignupPage() {
 
         if (errorMessage.includes("User already registered")) {
           showError(
-            "Account Exists",
-            "An account with this email already exists. Please sign in instead."
+            "Konto existiert bereits",
+            "Für diese E-Mail existiert bereits ein Konto. Bitte melden Sie sich an."
           );
         } else if (errorMessage.includes("Password should be at least")) {
           showError(
-            "Weak Password",
-            "Please choose a stronger password with at least 6 characters."
+            "Schwaches Passwort",
+            "Bitte wählen Sie ein stärkeres Passwort mit mindestens 6 Zeichen."
           );
         } else {
-          showError("Sign Up Failed", errorMessage);
+          showError("Registrierung fehlgeschlagen", errorMessage);
         }
 
         setError(errorMessage);
       } else {
         showSuccess(
-          "Account Created!",
-          "Please check your email and click the verification link to activate your account."
+          "Konto erstellt!",
+          "Bitte prüfen Sie Ihre E-Mail und klicken Sie auf den Bestätigungslink, um Ihr Konto zu aktivieren."
         );
-        // Redirect to home page after successful signup
+        // Redirect to intended page after successful signup
         setTimeout(() => {
-          router.push("/");
-        }, 2000);
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectTo = urlParams.get("redirectTo") || "/checkout";
+          try { sessionStorage.removeItem("checkout_redirect_ts"); } catch {}
+          router.replace(redirectTo);
+        }, 1200);
       }
     } catch (err) {
       console.error("Signup error:", err);
       showError(
-        "Sign Up Failed",
-        "An unexpected error occurred. Please try again."
+        "Registrierung fehlgeschlagen",
+        "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
       );
-      setError("An unexpected error occurred. Please try again.");
+      setError("Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
     } finally {
       setIsLoading(false);
     }
@@ -132,15 +139,15 @@ export default function SignupPage() {
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="inline-block group">
-            <h1 className="text-4xl font-bold text-black mb-2 transition-all duration-300 group-hover:text-blue-600 group-hover:scale-105">
-              Sanimotion
-            </h1>
+            <div className="mx-auto mb-2 transition-all duration-300 group-hover:scale-105">
+              <LogoSquare />
+            </div>
           </Link>
           <h2 className="text-2xl font-light text-gray-800 animate-fade-in-up">
-            Create your account
+            Erstellen Sie Ihr Konto
           </h2>
           <p className="mt-2 text-sm text-gray-600 animate-fade-in-up animation-delay-200">
-            Join thousands of healthcare professionals
+            Schließen Sie sich tausenden Fachkräften im Gesundheitswesen an
           </p>
         </div>
 
@@ -152,7 +159,7 @@ export default function SignupPage() {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Full Name *
+                Vollständiger Name *
               </label>
               <input
                 id="name"
@@ -162,7 +169,7 @@ export default function SignupPage() {
                 value={formData.name}
                 onChange={handleInputChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-gray-300 hover:shadow-md"
-                placeholder="John Doe"
+                placeholder="Max Mustermann"
               />
             </div>
 
@@ -171,7 +178,7 @@ export default function SignupPage() {
                 htmlFor="phoneNumber"
                 className="block text-sm font-medium text-gray-700"
               >
-                Phone Number
+                Telefonnummer
               </label>
               <input
                 id="phoneNumber"
@@ -180,7 +187,7 @@ export default function SignupPage() {
                 value={formData.phoneNumber}
                 onChange={handleInputChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-gray-300 hover:shadow-md"
-                placeholder="+1 (555) 123-4567"
+                placeholder="+49 151 2345678"
               />
             </div>
 
@@ -189,7 +196,7 @@ export default function SignupPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email Address *
+                E-Mail-Adresse *
               </label>
               <input
                 id="email"
@@ -199,7 +206,7 @@ export default function SignupPage() {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-gray-300 hover:shadow-md"
-                placeholder="john@example.com"
+                placeholder="max@beispiel.de"
               />
             </div>
 
@@ -208,7 +215,7 @@ export default function SignupPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password *
+                Passwort *
               </label>
               <input
                 id="password"
@@ -221,7 +228,7 @@ export default function SignupPage() {
                 placeholder="••••••••"
               />
               <p className="mt-1 text-xs text-gray-500">
-                Must be at least 6 characters long
+                Mindestens 6 Zeichen lang
               </p>
             </div>
 
@@ -230,7 +237,7 @@ export default function SignupPage() {
                 htmlFor="confirmPassword"
                 className="block text-sm font-medium text-gray-700"
               >
-                Confirm Password *
+                Passwort bestätigen *
               </label>
               <input
                 id="confirmPassword"
@@ -277,10 +284,10 @@ export default function SignupPage() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Creating account...
+                  Konto wird erstellt...
                 </div>
               ) : (
-                "Create Account"
+                "Konto erstellen"
               )}
             </button>
           </form>
@@ -288,12 +295,12 @@ export default function SignupPage() {
           {/* Link to login */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{" "}
+              Bereits ein Konto?{" "}
               <Link
                 href="/login"
                 className="text-blue-600 hover:text-blue-700 font-medium transition-all duration-300 hover:scale-105"
               >
-                Sign in
+                Anmelden
               </Link>
             </p>
           </div>
@@ -302,19 +309,19 @@ export default function SignupPage() {
         {/* Footer */}
         <div className="text-center text-sm text-gray-500">
           <p>
-            By creating an account, you agree to our{" "}
+            Mit der Erstellung eines Kontos stimmen Sie unseren{" "}
             <Link
               href="/terms"
               className="text-blue-600 hover:text-blue-700 transition-colors duration-300"
             >
-              Terms of Service
+              Nutzungsbedingungen
             </Link>{" "}
-            and{" "}
+            und{" "}
             <Link
               href="/privacy"
               className="text-blue-600 hover:text-blue-700 transition-colors duration-300"
             >
-              Privacy Policy
+              Datenschutzbestimmungen
             </Link>
           </p>
         </div>

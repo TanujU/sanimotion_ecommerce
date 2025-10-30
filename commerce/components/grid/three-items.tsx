@@ -1,19 +1,23 @@
-import { GridTileImage } from 'components/grid/tile';
-import { getProducts } from 'lib/shopify';
-import type { Product } from 'lib/shopify/types';
-import Link from 'next/link';
+import { GridTileImage } from "components/grid/tile";
+import { getProducts } from "lib/shopify";
+import type { Product } from "lib/types";
+import Link from "next/link";
 
 function ThreeItemGridItem({
   item,
   priority,
-  isFirst = false
+  isFirst = false,
 }: {
   item: Product;
   priority?: boolean;
   isFirst?: boolean;
 }) {
   return (
-    <div className={isFirst ? 'md:col-span-1 md:row-span-1' : 'md:col-span-2 md:row-span-1'}>
+    <div
+      className={
+        isFirst ? "md:col-span-1 md:row-span-1" : "md:col-span-2 md:row-span-1"
+      }
+    >
       <Link
         className="relative block aspect-square h-full w-full"
         href={`/product/${item.handle}`}
@@ -21,15 +25,19 @@ function ThreeItemGridItem({
       >
         <GridTileImage
           src={item.featuredImage?.url}
-          sizes={isFirst ? "(min-width: 768px) 16vw, 100vw" : "(min-width: 768px) 33vw, 100vw"}
+          sizes={
+            isFirst
+              ? "(min-width: 768px) 16vw, 100vw"
+              : "(min-width: 768px) 33vw, 100vw"
+          }
           priority={priority}
           alt={item.title}
           label={{
-            position: 'bottom',
+            position: "bottom",
             title: item.title as string,
             amount: item.priceRange.maxVariantPrice.amount,
             currencyCode: item.priceRange.maxVariantPrice.currencyCode,
-            dosage: item.dosage
+            dosage: item.dosage,
           }}
         />
       </Link>

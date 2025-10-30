@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeftIcon, TruckIcon } from "@heroicons/react/24/outline";
+import { useCart } from "components/cart/cart-context";
+import Price from "components/price";
+import { useAuth } from "lib/auth-context";
+import { useRouter } from "next/navigation";
 
 export default function ShippingPage() {
+  const { cart } = useCart();
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const [selectedMethod, setSelectedMethod] = useState("standard");
   const [shippingMethods] = useState([
     {
@@ -21,6 +28,23 @@ export default function ShippingPage() {
       description: "Standardversand",
     },
   ]);
+  const [info, setInfo] = useState<{ email?: string; address?: string } | null>(null);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("checkout_info");
+      const parsed = saved ? JSON.parse(saved) : {};
+      setInfo({
+        email: parsed.email || user?.email || "",
+        address: parsed.address
+          ? `${parsed.address}${parsed.apartment ? ", " + parsed.apartment : ""}, ${parsed.zipCode || ""} ${parsed.city || ""}, ${parsed.country || ""}`
+          : undefined,
+      });
+    } catch {
+      setInfo({ email: user?.email || "" });
+    }
+  }, [user?.email]);
+
+  // No auth guard here; allow shipping without login. Auth is enforced at Pay Now.
 
   return (
     <div className="min-h-screen bg-white text-gray-900 lg:pl-20">
@@ -45,7 +69,7 @@ export default function ShippingPage() {
                 <div className="flex justify-between items-center py-2 border-b border-gray-100">
                   <div>
                     <p className="text-sm text-gray-600">Kontakt</p>
-                    <p className="font-medium">1919rethika@gmail.com</p>
+                    <p className="font-medium">{info?.email || ""}</p>
                   </div>
                   <button className="text-blue-600 text-sm hover:underline">
                     Ändern
@@ -54,9 +78,7 @@ export default function ShippingPage() {
                 <div className="flex justify-between items-center py-2">
                   <div>
                     <p className="text-sm text-gray-600">Versenden an</p>
-                    <p className="font-medium">
-                      Musterstraße 123, 80331 München, Deutschland
-                    </p>
+                    <p className="font-medium">{info?.address || "Adresse eingeben"}</p>
                   </div>
                   <button className="text-blue-600 text-sm hover:underline">
                     Ändern
@@ -124,48 +146,66 @@ export default function ShippingPage() {
             </div>
           </div>
 
-          {/* Right Column - Order Summary */}
+          {/* Right Column - Order Summary (from cart) */}
           <div className="lg:col-span-2">
             <div className="bg-gray-50 rounded-lg p-6 sticky top-8 border border-gray-200">
               <h2 className="text-xl font-semibold mb-4">Bestellübersicht</h2>
-
-              {/* Sample Product */}
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <div className="w-12 h-12 bg-white rounded"></div>
+              {(!cart || !cart.items || cart.items.length === 0) && (
+                <p className="text-sm text-gray-600">Ihr Warenkorb ist leer.</p>
+              )}
+              {cart?.items?.map((item, idx) => (
+                <div key={idx} className="flex items-center space-x-4 mb-4">
+                  <div className="relative">
+                    <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                      {item.productImageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={item.productImageUrl}
+                          alt={item.productName}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 bg-white rounded" />
+                      )}
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                      <span className="text-xs text-white font-medium">
+                        {item.quantity}
+                      </span>
+                    </div>
                   </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-xs text-white font-medium">1</span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium truncate">{item.productName}</h3>
+                    <p className="text-xs text-gray-600 truncate">{item.productHandle}</p>
+                  </div>
+                  <div className="text-right">
+                    <Price amount={String(item.totalPrice.toFixed(2))} currencyCode="EUR" />
                   </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-medium">Aqualyx Injektionslösung</h3>
-                  <p className="text-sm text-gray-600">30mg / Standard</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-medium">€150,00</p>
-                </div>
-              </div>
+              ))}
 
               <div className="border-t border-gray-300 pt-4 space-y-2">
                 <div className="flex justify-between">
                   <span>Zwischensumme</span>
-                  <span>€150,00</span>
+                  <span>
+                    <Price amount={String((cart?.totalPrice || 0).toFixed(2))} currencyCode="EUR" />
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Versand</span>
                   <span>
-                    {
-                      shippingMethods.find((m) => m.id === selectedMethod)
-                        ?.price
-                    }
+                    {shippingMethods.find((m) => m.id === selectedMethod)?.price}
                   </span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold pt-2 border-t border-gray-300">
                   <span>Gesamt</span>
                   <span>
-                    EUR €{selectedMethod === "standard" ? "156,90" : "154,90"}
+                    {(() => {
+                      const base = cart?.totalPrice || 0;
+                      const shipping = selectedMethod === "standard" ? 6.9 : 4.9;
+                      const total = (base + shipping).toFixed(2);
+                      return <Price amount={String(total)} currencyCode="EUR" />;
+                    })()}
                   </span>
                 </div>
               </div>

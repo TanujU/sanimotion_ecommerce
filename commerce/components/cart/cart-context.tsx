@@ -3,9 +3,9 @@
 import type {
   Cart,
   CartItem,
-  Product,
+  ProductWithVariants as Product,
   ProductVariant,
-} from "lib/shopify/types";
+} from "lib/types";
 import React, {
   createContext,
   useContext,
@@ -39,11 +39,156 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-function calculateItemCost(quantity: number, price: string): string {
-  return (Number(price) * quantity).toString();
+// removed legacy Shopify-style helpers; we use simplified cart shape below
+
+function createEmptyCart(): Cart {
+  return {
+    id: "empty-cart",
+    items: [],
+    totalItems: 0,
+    totalPrice: 0,
+  };
 }
 
-function updateCartItem(
+function normalizeCart(input: unknown): Cart {
+  // Defensive normalization for older/invalid shapes from localStorage
+  try {
+    const anyInput = input as any;
+    const items = Array.isArray(anyInput?.items) ? anyInput.items : [];
+
+    const safeItems = items
+      .map((raw: any) => {
+        if (!raw) return null;
+        const price = Number(raw.price);
+        const quantity = Number(raw.quantity);
+        const id = String(raw.id ?? `cart-item-${Date.now()}`);
+        const productId = String(raw.productId ?? raw.merchandise?.id ?? "");
+        const productName = String(
+          raw.productName ?? raw.merchandise?.product?.title ?? raw.title ?? ""
+        );
+        const productHandle = String(
+          raw.productHandle ?? raw.merchandise?.product?.handle ?? ""
+        );
+        const productImageUrl =
+          raw.productImageUrl ?? raw.merchandise?.product?.featuredImage?.url;
+
+        if (!productId) return null;
+        const safePrice = Number.isFinite(price) ? price : 0;
+        const safeQty =
+          Number.isFinite(quantity) && quantity > 0 ? quantity : 1;
+        return {
+          id,
+          productId,
+          productName,
+          productHandle,
+          productImageUrl,
+          price: safePrice,
+          quantity: safeQty,
+          totalPrice: safePrice * safeQty,
+        } as CartItem;
+      })
+      .filter(Boolean) as CartItem[];
+
+    const totalItems = safeItems.reduce((sum, it) => sum + it.quantity, 0);
+    const totalPrice = safeItems.reduce((sum, it) => sum + it.totalPrice, 0);
+
+    return {
+      id: String(anyInput?.id ?? "normalized-cart"),
+      items: safeItems,
+      totalItems,
+      totalPrice,
+    };
+  } catch {
+    return createEmptyCart();
+  }
+}
+
+function cartReducer(state: Cart | undefined, action: CartAction): Cart {
+  const currentCart = state ? normalizeCart(state) : createEmptyCart();
+  const items = Array.isArray(currentCart.items) ? currentCart.items : [];
+
+  switch (action.type) {
+    case "UPDATE_ITEM": {
+      const { merchandiseId, updateType } = action.payload;
+      const updatedItems = items
+        .map((item) =>
+          item.productId === merchandiseId
+            ? updateCartItemSimple(item, updateType)
+            : item
+        )
+        .filter(Boolean) as CartItem[];
+
+      return {
+        ...currentCart,
+        items: updatedItems,
+        totalItems: updatedItems.reduce((sum, item) => sum + item.quantity, 0),
+        totalPrice: updatedItems.reduce(
+          (sum, item) => sum + item.totalPrice,
+          0
+        ),
+      };
+    }
+    case "ADD_ITEM": {
+      const { variant, product } = action.payload;
+      const existingItem = items.find((item) => item.productId === variant.id);
+
+      if (existingItem) {
+        const updatedItems = items.map((item) =>
+          item.productId === variant.id
+            ? {
+                ...item,
+                quantity: item.quantity + 1,
+                totalPrice: item.price * (item.quantity + 1),
+              }
+            : item
+        );
+        return {
+          ...currentCart,
+          items: updatedItems,
+          totalItems: updatedItems.reduce(
+            (sum, item) => sum + item.quantity,
+            0
+          ),
+          totalPrice: updatedItems.reduce(
+            (sum, item) => sum + item.totalPrice,
+            0
+          ),
+        };
+      } else {
+        const newItem: CartItem = {
+          id: `cart-item-${Date.now()}`,
+          productId: variant.id,
+          productName: product.title,
+          productHandle: product.handle,
+          productImageUrl: product.featuredImage?.url,
+          price: parseFloat(variant.price.amount),
+          quantity: 1,
+          totalPrice: parseFloat(variant.price.amount),
+        };
+        const updatedItems = [...items, newItem];
+        return {
+          ...currentCart,
+          items: updatedItems,
+          totalItems: updatedItems.reduce(
+            (sum, item) => sum + item.quantity,
+            0
+          ),
+          totalPrice: updatedItems.reduce(
+            (sum, item) => sum + item.totalPrice,
+            0
+          ),
+        };
+      }
+    }
+    case "SET_CART": {
+      return action.payload;
+    }
+    default:
+      return currentCart;
+  }
+}
+
+function updateCartItemSimple(
   item: CartItem,
   updateType: UpdateType
 ): CartItem | null {
@@ -53,151 +198,11 @@ function updateCartItem(
     updateType === "plus" ? item.quantity + 1 : item.quantity - 1;
   if (newQuantity === 0) return null;
 
-  const singleItemAmount = Number(item.cost.totalAmount.amount) / item.quantity;
-  const newTotalAmount = calculateItemCost(
-    newQuantity,
-    singleItemAmount.toString()
-  );
-
   return {
     ...item,
     quantity: newQuantity,
-    cost: {
-      ...item.cost,
-      totalAmount: {
-        ...item.cost.totalAmount,
-        amount: newTotalAmount,
-      },
-    },
+    totalPrice: item.price * newQuantity,
   };
-}
-
-function createOrUpdateCartItem(
-  existingItem: CartItem | undefined,
-  variant: ProductVariant,
-  product: Product
-): CartItem {
-  const quantity = existingItem ? existingItem.quantity + 1 : 1;
-  const totalAmount = calculateItemCost(quantity, variant.price.amount);
-
-  return {
-    id: existingItem?.id,
-    quantity,
-    cost: {
-      totalAmount: {
-        amount: totalAmount,
-        currencyCode: variant.price.currencyCode,
-      },
-    },
-    merchandise: {
-      id: variant.id,
-      title: variant.title,
-      selectedOptions: variant.selectedOptions,
-      product: {
-        id: product.id,
-        handle: product.handle,
-        title: product.title,
-        featuredImage: product.featuredImage,
-      },
-    },
-  };
-}
-
-function updateCartTotals(
-  lines: CartItem[]
-): Pick<Cart, "totalQuantity" | "cost"> {
-  const totalQuantity = lines.reduce((sum, item) => sum + item.quantity, 0);
-  const totalAmount = lines.reduce(
-    (sum, item) => sum + Number(item.cost.totalAmount.amount),
-    0
-  );
-  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? "EUR";
-
-  return {
-    totalQuantity,
-    cost: {
-      subtotalAmount: { amount: totalAmount.toString(), currencyCode },
-      totalAmount: { amount: totalAmount.toString(), currencyCode },
-      totalTaxAmount: { amount: "0", currencyCode },
-    },
-  };
-}
-
-function createEmptyCart(): Cart {
-  return {
-    id: undefined,
-    checkoutUrl: "",
-    totalQuantity: 0,
-    lines: [],
-    cost: {
-      subtotalAmount: { amount: "0", currencyCode: "EUR" },
-      totalAmount: { amount: "0", currencyCode: "EUR" },
-      totalTaxAmount: { amount: "0", currencyCode: "EUR" },
-    },
-  };
-}
-
-function cartReducer(state: Cart | undefined, action: CartAction): Cart {
-  const currentCart = state || createEmptyCart();
-
-  switch (action.type) {
-    case "UPDATE_ITEM": {
-      const { merchandiseId, updateType } = action.payload;
-      const updatedLines = currentCart.lines
-        .map((item) =>
-          item.merchandise.id === merchandiseId
-            ? updateCartItem(item, updateType)
-            : item
-        )
-        .filter(Boolean) as CartItem[];
-
-      if (updatedLines.length === 0) {
-        return {
-          ...currentCart,
-          lines: [],
-          totalQuantity: 0,
-          cost: {
-            ...currentCart.cost,
-            totalAmount: { ...currentCart.cost.totalAmount, amount: "0" },
-          },
-        };
-      }
-
-      return {
-        ...currentCart,
-        ...updateCartTotals(updatedLines),
-        lines: updatedLines,
-      };
-    }
-    case "ADD_ITEM": {
-      const { variant, product } = action.payload;
-      const existingItem = currentCart.lines.find(
-        (item) => item.merchandise.id === variant.id
-      );
-      const updatedItem = createOrUpdateCartItem(
-        existingItem,
-        variant,
-        product
-      );
-
-      const updatedLines = existingItem
-        ? currentCart.lines.map((item) =>
-            item.merchandise.id === variant.id ? updatedItem : item
-          )
-        : [...currentCart.lines, updatedItem];
-
-      return {
-        ...currentCart,
-        ...updateCartTotals(updatedLines),
-        lines: updatedLines,
-      };
-    }
-    case "SET_CART": {
-      return action.payload;
-    }
-    default:
-      return currentCart;
-  }
 }
 
 export function CartProvider({
@@ -216,7 +221,7 @@ export function CartProvider({
       if (savedCart) {
         try {
           const parsedCart = JSON.parse(savedCart);
-          setCartState(parsedCart);
+          setCartState(normalizeCart(parsedCart));
           return;
         } catch (error) {
           console.error("Error parsing saved cart:", error);
@@ -229,28 +234,42 @@ export function CartProvider({
         }
       }
 
-      // If no saved cart, load from promise
+      // If no saved cart, load from provided value/promise if any
       if (cartPromise) {
-        cartPromise
-          .then((initialCart) => {
-            try {
-              const cartToSet = initialCart || createEmptyCart();
-              setCartState(cartToSet);
-              // Save to localStorage
+        const maybeThen = (cartPromise as any).then;
+        if (typeof maybeThen === "function") {
+          (cartPromise as Promise<Cart | undefined>)
+            .then((initialCart) => {
               try {
-                localStorage.setItem("cart", JSON.stringify(cartToSet));
+                const cartToSet = initialCart || createEmptyCart();
+                setCartState(normalizeCart(cartToSet));
+                try {
+                  localStorage.setItem(
+                    "cart",
+                    JSON.stringify(normalizeCart(cartToSet))
+                  );
+                } catch (error) {
+                  console.warn("Error saving cart to localStorage:", error);
+                }
               } catch (error) {
-                console.warn("Error saving cart to localStorage:", error);
+                console.error("Error setting initial cart:", error);
+                setCartState(createEmptyCart());
               }
-            } catch (error) {
-              console.error("Error setting initial cart:", error);
+            })
+            .catch((error) => {
+              console.error("Error loading cart from promise:", error);
               setCartState(createEmptyCart());
-            }
-          })
-          .catch((error) => {
-            console.error("Error loading cart from promise:", error);
+            });
+        } else {
+          try {
+            const initialCart = cartPromise as unknown as Cart | undefined;
+            const cartToSet = initialCart || createEmptyCart();
+            setCartState(normalizeCart(cartToSet));
+          } catch (error) {
+            console.error("Error using provided cart value:", error);
             setCartState(createEmptyCart());
-          });
+          }
+        }
       } else {
         // If no cartPromise provided, create empty cart
         setCartState(createEmptyCart());
@@ -296,10 +315,11 @@ export function CartProvider({
   };
 
   const setCart = (newCart: Cart) => {
-    setCartState(newCart);
+    const normalized = normalizeCart(newCart);
+    setCartState(normalized);
     // Save to localStorage
     try {
-      localStorage.setItem("cart", JSON.stringify(newCart));
+      localStorage.setItem("cart", JSON.stringify(normalized));
     } catch (error) {
       console.warn("Error saving cart to localStorage:", error);
     }
@@ -307,7 +327,7 @@ export function CartProvider({
 
   const value = useMemo(
     () => ({
-      cart,
+      cart: cart || createEmptyCart(),
       updateCartItem,
       addCartItem,
       setCart,

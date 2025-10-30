@@ -8,8 +8,7 @@ import { ProductProvider } from "components/product/product-context";
 import { ProductDescription } from "components/product/product-description";
 import Prose from "components/prose";
 import { HIDDEN_PRODUCT_TAG } from "lib/constants";
-import { getProduct, getProductRecommendations } from "lib/shopify";
-import { Image } from "lib/shopify/types";
+import { getProduct, getProductRecommendations } from "lib/products";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -22,11 +21,11 @@ export async function generateMetadata(props: {
   if (!product) return notFound();
 
   const { url, width, height, altText: alt } = product.featuredImage || {};
-  const indexable = !product.tags.includes(HIDDEN_PRODUCT_TAG);
+  const indexable = true; // All products are indexable
 
   return {
-    title: product.seo.title || product.title,
-    description: product.seo.description || product.description,
+    title: product.title,
+    description: product.description || product.title,
     robots: {
       index: indexable,
       follow: indexable,
@@ -96,7 +95,7 @@ export default async function ProductPage(props: {
               >
                 <Gallery
                   images={
-                    product.images?.slice(0, 5).map((image: Image) => ({
+                    product.images?.slice(0, 5).map((image) => ({
                       src: image.url,
                       altText: image.altText,
                     })) || []
@@ -113,10 +112,10 @@ export default async function ProductPage(props: {
               <h1 className="text-3xl font-medium text-black mb-4">
                 {product.title}
               </h1>
-              {product.descriptionHtml ? (
+              {product.description ? (
                 <Prose
                   className="text-sm leading-relaxed text-gray-700 max-w-none text-justify"
-                  html={product.descriptionHtml}
+                  html={product.description}
                 />
               ) : null}
             </div>

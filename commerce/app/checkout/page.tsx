@@ -1,14 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ChevronLeftIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import { useCart } from "components/cart/cart-context";
+import Price from "components/price";
+import { useAuth } from "lib/auth-context";
 
 type CheckoutStep = "information" | "shipping" | "payment";
 
 export default function CheckoutPage() {
+  const { cart } = useCart();
+  const { user, loading } = useAuth();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState<CheckoutStep>("information");
   const [formData, setFormData] = useState({
     email: "",
@@ -24,6 +31,20 @@ export default function CheckoutPage() {
     emailNews: false,
   });
 
+  // Prefill from auth and any saved data
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("checkout_info");
+      if (saved) {
+        setFormData((prev) => ({ ...prev, ...JSON.parse(saved) }));
+      } else if (user?.email) {
+        setFormData((prev) => ({ ...prev, email: user.email || "" }));
+      }
+    } catch {}
+  }, [user?.email]);
+
+  // No auth guard here; allow checkout without login. Auth is enforced at Pay Now.
+
   const steps = [
     { id: "information", name: "Information" },
     { id: "shipping", name: "Versand" },
@@ -37,6 +58,9 @@ export default function CheckoutPage() {
   };
 
   const handleContinue = () => {
+    try {
+      localStorage.setItem("checkout_info", JSON.stringify(formData));
+    } catch {}
     if (currentStep === "information") {
       window.location.href = "/checkout/shipping";
     } else if (currentStep === "shipping") {
@@ -287,44 +311,60 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          {/* Right Column - Order Summary */}
+          {/* Right Column - Order Summary (from cart) */}
           <div className="lg:col-span-2">
             <div className="bg-gray-50 rounded-lg p-6 sticky top-8 border border-gray-200">
               <h2 className="text-xl font-semibold mb-4">Bestellübersicht</h2>
-
-              {/* Sample Product */}
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="relative">
-                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <div className="w-12 h-12 bg-white rounded"></div>
+              {(!cart || !cart.items || cart.items.length === 0) && (
+                <p className="text-sm text-gray-600">Ihr Warenkorb ist leer.</p>
+              )}
+              {cart?.items?.map((item, idx) => (
+                <div key={idx} className="flex items-center space-x-4 mb-4">
+                  <div className="relative">
+                    <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                      {item.productImageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={item.productImageUrl}
+                          alt={item.productName}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 bg-white rounded" />
+                      )}
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                      <span className="text-xs text-white font-medium">
+                        {item.quantity}
+                      </span>
+                    </div>
                   </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-xs text-white font-medium">1</span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium truncate">{item.productName}</h3>
+                    <p className="text-xs text-gray-600 truncate">{item.productHandle}</p>
+                  </div>
+                  <div className="text-right">
+                    <Price amount={String(item.totalPrice.toFixed(2))} currencyCode="EUR" />
                   </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-medium">Aqualyx Injektionslösung</h3>
-                  <p className="text-sm text-gray-600">30mg / Standard</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-medium">€150,00</p>
-                </div>
-              </div>
+              ))}
 
               <div className="border-t border-gray-300 pt-4 space-y-2">
                 <div className="flex justify-between">
                   <span>Zwischensumme</span>
-                  <span>€150,00</span>
+                  <span>
+                    <Price amount={String((cart?.totalPrice || 0).toFixed(2))} currencyCode="EUR" />
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Versand</span>
-                  <span className="text-gray-500">
-                    Wird im nächsten Schritt berechnet
-                  </span>
+                  <span className="text-gray-500">Wird im nächsten Schritt berechnet</span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold pt-2 border-t border-gray-300">
                   <span>Gesamt</span>
-                  <span>EUR €150,00</span>
+                  <span>
+                    <Price amount={String((cart?.totalPrice || 0).toFixed(2))} currencyCode="EUR" />
+                  </span>
                 </div>
               </div>
             </div>

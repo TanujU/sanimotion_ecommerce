@@ -1,70 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
-import { useCart } from "components/cart/cart-context";
 
 export default function CheckoutSuccessPage() {
-  const { setCart } = useCart();
-  const hasClearedCart = useRef(false);
-
-  useEffect(() => {
-    // Clear the cart only once after successful checkout
-    if (!hasClearedCart.current) {
-      setCart({
-        id: "mock-cart-id",
-        checkoutUrl: "#",
-        cost: {
-          subtotalAmount: { amount: "0.00", currencyCode: "EUR" },
-          totalAmount: { amount: "0.00", currencyCode: "EUR" },
-          totalTaxAmount: { amount: "0.00", currencyCode: "EUR" },
-        },
-        lines: [],
-        totalQuantity: 0,
-      });
-      hasClearedCart.current = true;
-    }
-  }, [setCart]);
-
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center lg:pl-20">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8 text-center">
-        <div className="mb-6">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-            <svg
-              className="h-6 w-6 text-green-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </div>
+    <div className="min-h-screen bg-white text-gray-900 lg:pl-20">
+      <div className="mx-auto max-w-3xl px-4 py-16 text-center">
+        <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="h-10 w-10 text-green-600"
+          >
+            <path
+              fillRule="evenodd"
+              d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.03-2.53a.75.75 0 0 0-1.06-1.06l-5.47 5.47-2.22-2.22a.75.75 0 1 0-1.06 1.06l2.75 2.75c.293.293.767.293 1.06 0l6-6Z"
+              clipRule="evenodd"
+            />
+          </svg>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">
-          Bestellung erfolgreich!
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Vielen Dank für Ihren Kauf. Ihre Bestellung wurde erfolgreich
-          aufgegeben. In einer echten Implementierung würden Sie zu einem
-          Zahlungsanbieter weitergeleitet.
+        <h1 className="text-3xl font-semibold">Order placed successfully</h1>
+        <p className="mt-3 text-gray-600">
+          Thank you for your purchase. We emailed your confirmation. You can safely
+          close this page or continue shopping.
         </p>
-        <div className="space-y-3">
+        <div className="mt-8 flex justify-center gap-3">
           <Link
             href="/"
-            className="block w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+            className="rounded-lg bg-blue-600 px-6 py-3 text-white hover:bg-blue-700"
           >
-            Weiter einkaufen
+            Continue shopping
           </Link>
-          <p className="text-sm text-gray-500">
-            Dies ist eine Demo-Umgebung. Es wurde keine echte Zahlung
-            abgewickelt.
-          </p>
+          <Link
+            href="/profile"
+            className="rounded-lg border border-gray-300 px-6 py-3 hover:bg-gray-50"
+          >
+            View orders
+          </Link>
         </div>
       </div>
     </div>

@@ -1,29 +1,39 @@
-'use client';
+"use client";
 
-import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
-import clsx from 'clsx';
-import { updateItemQuantity } from 'components/cart/actions';
-import type { CartItem } from 'lib/shopify/types';
-import { useActionState } from 'react';
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+// Safe icon wrappers for React 19 compatibility
+const SafePlusIcon = (props: any) => {
+  const Icon = PlusIcon as any;
+  return <Icon {...props} />;
+};
+const SafeMinusIcon = (props: any) => {
+  const Icon = MinusIcon as any;
+  return <Icon {...props} />;
+};
+import clsx from "clsx";
+import { updateItemQuantity } from "components/cart/actions";
+import type { CartItem } from "lib/types";
+import { useActionState } from "react";
+import { useCart } from "./cart-context";
 
-function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
+function SubmitButton({ type }: { type: "plus" | "minus" }) {
   return (
     <button
       type="submit"
       aria-label={
-        type === 'plus' ? 'Artikelmenge erhöhen' : 'Artikelmenge reduzieren'
+        type === "plus" ? "Artikelmenge erhöhen" : "Artikelmenge reduzieren"
       }
       className={clsx(
-        'ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full p-2 transition-all duration-200 hover:border-neutral-800 hover:opacity-80',
+        "ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full p-2 transition-all duration-200 hover:border-neutral-800 hover:opacity-80",
         {
-          'ml-auto': type === 'minus'
+          "ml-auto": type === "minus",
         }
       )}
     >
-      {type === 'plus' ? (
-        <PlusIcon className="h-4 w-4 text-neutral-500" />
+      {type === "plus" ? (
+        <SafePlusIcon className="h-4 w-4 text-neutral-500" />
       ) : (
-        <MinusIcon className="h-4 w-4 text-neutral-500" />
+        <SafeMinusIcon className="h-4 w-4 text-neutral-500" />
       )}
     </button>
   );
@@ -32,23 +42,26 @@ function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
 export function EditItemQuantityButton({
   item,
   type,
-  optimisticUpdate
+  optimisticUpdate,
 }: {
   item: CartItem;
-  type: 'plus' | 'minus';
+  type: "plus" | "minus";
   optimisticUpdate: any;
 }) {
   const [message, formAction] = useActionState(updateItemQuantity, null);
+  const { updateCartItem } = useCart();
   const payload = {
-    merchandiseId: item.merchandise.id,
-    quantity: type === 'plus' ? item.quantity + 1 : item.quantity - 1
+    merchandiseId: item.productId,
+    quantity: type === "plus" ? item.quantity + 1 : item.quantity - 1,
   };
   const updateItemQuantityAction = formAction.bind(null, payload);
 
   return (
     <form
       action={async () => {
-        optimisticUpdate(payload.merchandiseId, type);
+        // Optimistic local update
+        updateCartItem(payload.merchandiseId, type);
+        // Server sync (best-effort)
         updateItemQuantityAction();
       }}
     >

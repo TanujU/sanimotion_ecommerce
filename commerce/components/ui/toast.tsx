@@ -49,6 +49,18 @@ const toastStyles = {
   }
 };
 
+let TOAST_ROOT: HTMLElement | null = null;
+function ensureToastRoot(): HTMLElement | null {
+  if (typeof document === "undefined") return null;
+  if (!TOAST_ROOT) {
+    const el = document.createElement("div");
+    el.setAttribute("id", "toast-root");
+    document.body.appendChild(el);
+    TOAST_ROOT = el;
+  }
+  return TOAST_ROOT;
+}
+
 export function Toast({ id, type, title, message, duration = 5000, onClose }: ToastProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
@@ -116,7 +128,11 @@ export function Toast({ id, type, title, message, duration = 5000, onClose }: To
     </div>
   );
 
-  return createPortal(toastContent, document.body);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+  const root = ensureToastRoot();
+  if (!mounted || !root) return null;
+  return createPortal(toastContent, root);
 }
 
 // Toast Container Component

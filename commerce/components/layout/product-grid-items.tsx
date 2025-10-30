@@ -1,30 +1,93 @@
-import Grid from 'components/grid';
-import { GridTileImage } from 'components/grid/tile';
-import { Product } from 'lib/shopify/types';
-import Link from 'next/link';
+import Grid from "components/grid";
+import { GridTileImage } from "components/grid/tile";
+import { ProductWithVariants } from "lib/types";
+import Link from "next/link";
+import { FavoriteButton } from "components/favorite-button";
+import { AddToCart } from "components/cart/add-to-cart";
 
-export default function ProductGridItems({ products }: { products: Product[] }) {
+// Type-safe Link component for React 19 compatibility
+const SafeLink = ({
+  href,
+  className,
+  children,
+  ...props
+}: {
+  href: string;
+  className?: string;
+  children: React.ReactNode;
+  [key: string]: any;
+}) => {
+  const LinkComponent = Link as any;
+  return (
+    <LinkComponent href={href} className={className} {...props}>
+      {children}
+    </LinkComponent>
+  );
+};
+
+export default function ProductGridItems({
+  products,
+}: {
+  products: ProductWithVariants[];
+}) {
   return (
     <>
       {products.map((product) => (
-        <Grid.Item key={product.id} className="animate-fadeIn">
-          <Link
+        <Grid.Item key={product.id} className="animate-fadeIn relative group">
+          <SafeLink
             className="relative inline-block h-full w-full"
             href={`/product/${product.handle}`}
-            prefetch={true}
           >
-            <GridTileImage
-              alt={product.title}
-              label={{
+            {(() => {
+              const amount = (product.priceRange?.maxVariantPrice?.amount ||
+                product.variants?.[0]?.price?.amount ||
+                (typeof (product as any).price === "number"
+                  ? (product as any).price.toFixed(2)
+                  : (product as any).price || "0.00")) as string;
+              const currency = (product.priceRange?.maxVariantPrice
+                ?.currencyCode ||
+                product.variants?.[0]?.price?.currencyCode ||
+                "EUR") as string;
+              return (
+                <GridTileImage
+                  alt={product.title}
+                  label={{
+                    title: product.title,
+                    amount,
+                    currencyCode: currency,
+                    dosage: product.dosage,
+                  }}
+                  src={product.featuredImage?.url}
+                  sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+                />
+              );
+            })()}
+          </SafeLink>
+          {/* Favorite Button */}
+          <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <FavoriteButton
+              product={{
+                id: product.id,
                 title: product.title,
-                amount: product.priceRange.maxVariantPrice.amount,
-                currencyCode: product.priceRange.maxVariantPrice.currencyCode,
-                dosage: product.dosage
+                price: `€${String(
+                  product.priceRange?.maxVariantPrice?.amount ||
+                    product.variants?.[0]?.price?.amount ||
+                    (typeof (product as any).price === "number"
+                      ? (product as any).price.toFixed(2)
+                      : (product as any).price || "0.00")
+                ).replace(".", ",")}`,
+                sizes: product.dosage ? [product.dosage] : [],
+                image: product.featuredImage?.url || "",
+                alt: product.title,
               }}
-              src={product.featuredImage?.url}
-              sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+              size="sm"
             />
-          </Link>
+          </div>
+
+          {/* Add to Cart Button */}
+          <div className="absolute bottom-3 left-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <AddToCart product={product} />
+          </div>
         </Grid.Item>
       ))}
     </>

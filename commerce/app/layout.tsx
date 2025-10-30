@@ -1,12 +1,13 @@
 import { CartProvider } from "components/cart/cart-context";
 import { Navbar } from "components/layout/navbar";
 import { GeistSans } from "geist/font/sans";
-import { getCart } from "lib/shopify";
+import { getCart } from "lib/cart";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import { AuthProvider } from "lib/auth-context";
 import { SessionWarningModal } from "components/session-warning";
 import { CookieConsentBanner } from "components/cookie-consent-banner";
+import { FavoritesProvider } from "lib/favorites-context";
 
 // Type-safe Toaster for React 19 compatibility
 const SafeToaster = ({
@@ -42,8 +43,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Don't await the fetch, pass the Promise to the context provider
-  const cart = getCart();
+  // Get cart as Promise for context provider
+  const cart = Promise.resolve(getCart());
 
   return (
     <html lang="de" className={GeistSans.variable} suppressHydrationWarning>
@@ -85,15 +86,17 @@ export default async function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
-          <CartProvider cartPromise={cart}>
-            <Navbar />
-            <main className="relative z-10">
-              {children}
-              <SafeToaster closeButton />
-              <SessionWarningModal />
-              <CookieConsentBanner />
-            </main>
-          </CartProvider>
+          <FavoritesProvider>
+            <CartProvider cartPromise={cart}>
+              <Navbar />
+              <main className="relative z-10">
+                {children}
+                <SafeToaster closeButton />
+                <SessionWarningModal />
+                <CookieConsentBanner />
+              </main>
+            </CartProvider>
+          </FavoritesProvider>
         </AuthProvider>
       </body>
     </html>

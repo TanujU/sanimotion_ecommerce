@@ -1,24 +1,31 @@
-import clsx from 'clsx';
+import clsx from "clsx";
+import React from "react";
 
-const Price = ({
-  amount,
-  className,
-  currencyCode = 'EUR',
-  currencyCodeClassName
-}: {
+type PriceProps = {
   amount: string;
   className?: string;
   currencyCode: string;
   currencyCodeClassName?: string;
-} & React.ComponentProps<'p'>) => (
-  <p suppressHydrationWarning={true} className={className}>
-    {`${new Intl.NumberFormat(undefined, {
-      style: 'currency',
-      currency: currencyCode,
-      currencyDisplay: 'narrowSymbol'
-    }).format(parseFloat(amount))}`}
-    <span className={clsx('ml-1 inline', currencyCodeClassName)}>{`${currencyCode}`}</span>
-  </p>
-);
+} & React.ComponentProps<"p">;
 
-export default Price;
+export default function Price({
+  amount,
+  className,
+  currencyCode = "EUR",
+  currencyCodeClassName,
+}: PriceProps) {
+  const numeric = parseFloat(String(amount ?? "0").replace(",", "."));
+  const safeNumber = Number.isFinite(numeric) ? numeric : 0;
+  // Format number with German grouping/decimal but force € before value
+  const numberOnly = new Intl.NumberFormat("de-DE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(safeNumber);
+  const formatted = `€${numberOnly}`;
+
+  return (
+    <p suppressHydrationWarning={true} className={className}>
+      {formatted}
+    </p>
+  );
+}

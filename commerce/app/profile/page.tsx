@@ -40,15 +40,8 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    console.log("Profile page - Auth state:", {
-      loading,
-      user: user?.id,
-      email: user?.email,
-    });
-
     if (!loading && !user) {
-      console.log("No user found, redirecting to login");
-      router.push("/login");
+      router.replace(`/login?redirectTo=${encodeURIComponent("/profile")}`);
     }
   }, [user, loading, router]);
 
@@ -123,57 +116,7 @@ export default function ProfilePage() {
     );
   }
 
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center lg:pl-20">
-        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            🔍 Profile Page Debug
-          </h2>
-          <div className="space-y-3 text-sm">
-            <div className="p-3 bg-blue-50 rounded-lg">
-              <p>
-                <strong>Loading:</strong> {loading ? "✅ true" : "❌ false"}
-              </p>
-              <p>
-                <strong>User:</strong> {"❌ Not found"}
-              </p>
-              <p>
-                <strong>User ID:</strong> N/A
-              </p>
-              <p>
-                <strong>User Email:</strong> N/A
-              </p>
-            </div>
-
-            <div className="p-3 bg-yellow-50 rounded-lg">
-              <p className="font-medium text-yellow-800">📋 What this means:</p>
-              <ul className="text-xs text-yellow-700 mt-1 space-y-1">
-                <li>• If Loading = true: Still checking authentication</li>
-                <li>• If User = Not found: You need to create an account</li>
-                <li>• If User = Present: You're logged in successfully</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-6 space-y-3">
-            <SafeLink
-              href="/signup"
-              className="block w-full text-center bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700"
-            >
-              🚀 Create Account
-            </SafeLink>
-            <SafeLink
-              href="/login"
-              className="block w-full text-center bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-            >
-              🔑 Login
-            </SafeLink>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 lg:pl-20">

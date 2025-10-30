@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import LogoSquare from "components/logo-square";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../lib/auth-context";
 import {
@@ -25,7 +26,10 @@ export default function LoginPage() {
     setIsVisible(true);
     // Redirect if already logged in
     if (user) {
-      router.push("/");
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectTo = urlParams.get("redirectTo") || "/";
+      try { sessionStorage.removeItem("checkout_redirect_ts"); } catch {}
+      router.replace(redirectTo);
     }
 
     // Check for success message from password reset
@@ -33,8 +37,8 @@ export default function LoginPage() {
     const message = urlParams.get("message");
     if (message === "password_reset_success") {
       showSuccess(
-        "Password Reset Successful",
-        "Your password has been reset. Please sign in with your new password."
+        "Passwort erfolgreich zurückgesetzt",
+        "Ihr Passwort wurde zurückgesetzt. Bitte melden Sie sich mit Ihrem neuen Passwort an."
       );
       // Clean up the URL
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -118,10 +122,13 @@ export default function LoginPage() {
         setError(errorMessage);
       } else if (result.success) {
         showSuccess("Welcome Back!", "You have successfully signed in.");
-        // Redirect to home page after successful login
+        // Redirect to intended page after successful login
         setTimeout(() => {
-          router.push("/");
-        }, 1500);
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectTo = urlParams.get("redirectTo") || "/checkout";
+          try { sessionStorage.removeItem("checkout_redirect_ts"); } catch {}
+          router.replace(redirectTo);
+        }, 800);
       } else {
         showError(
           "Sign In Failed",
@@ -158,15 +165,15 @@ export default function LoginPage() {
         {/* Header */}
         <div className="text-center">
           <Link href="/" className="inline-block group">
-            <h1 className="text-4xl font-bold text-black mb-2 transition-all duration-300 group-hover:text-blue-600 group-hover:scale-105">
-              Sanimotion
-            </h1>
+            <div className="mx-auto mb-2 transition-all duration-300 group-hover:scale-105">
+              <LogoSquare />
+            </div>
           </Link>
           <h2 className="text-2xl font-light text-gray-800 animate-fade-in-up">
-            Welcome back
+            Willkommen zurück
           </h2>
           <p className="mt-2 text-sm text-gray-600 animate-fade-in-up animation-delay-200">
-            Sign in to access your medical equipment dashboard
+            Melden Sie sich an, um auf Ihr Dashboard zuzugreifen
           </p>
         </div>
 
@@ -178,7 +185,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email Address
+                E-Mail-Adresse
               </label>
               <input
                 id="email"
@@ -188,7 +195,7 @@ export default function LoginPage() {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-300 hover:border-gray-300 hover:shadow-md"
-                placeholder="john@example.com"
+                placeholder="max@beispiel.de"
               />
             </div>
 
@@ -197,7 +204,7 @@ export default function LoginPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                Passwort
               </label>
               <input
                 id="password"
@@ -244,10 +251,10 @@ export default function LoginPage() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Signing in...
+                  Anmeldung...
                 </div>
               ) : (
-                "Sign In"
+                "Anmelden"
               )}
             </button>
           </form>
@@ -255,12 +262,12 @@ export default function LoginPage() {
           {/* Link to signup */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
+              Noch kein Konto?{" "}
               <Link
                 href="/signup"
                 className="text-blue-600 hover:text-blue-700 font-medium transition-all duration-300 hover:scale-105"
               >
-                Sign up
+                Registrieren
               </Link>
             </p>
           </div>
@@ -271,7 +278,7 @@ export default function LoginPage() {
               href="/forgot-password"
               className="text-sm text-gray-500 hover:text-gray-700 transition-all duration-300 hover:scale-105"
             >
-              Forgot your password?
+              Passwort vergessen?
             </Link>
           </div>
         </div>
@@ -279,19 +286,19 @@ export default function LoginPage() {
         {/* Footer */}
         <div className="text-center text-sm text-gray-500">
           <p>
-            By continuing, you agree to our{" "}
+            Mit Ihrer Anmeldung stimmen Sie unseren{" "}
             <Link
               href="/terms"
               className="text-blue-600 hover:text-blue-700 transition-colors duration-300"
             >
-              Terms of Service
+              Nutzungsbedingungen
             </Link>{" "}
-            and{" "}
+            und{" "}
             <Link
               href="/privacy"
               className="text-blue-600 hover:text-blue-700 transition-colors duration-300"
             >
-              Privacy Policy
+              Datenschutzbestimmungen
             </Link>
           </p>
         </div>

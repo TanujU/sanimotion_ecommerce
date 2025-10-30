@@ -56,8 +56,8 @@ export async function middleware(req: NextRequest) {
     res.headers.set('X-RateLimit-Limit', '100')
     res.headers.set('X-RateLimit-Remaining', '99')
     
-    // Handle protected routes - temporarily disable for profile to test
-    const protectedRoutes = ['/checkout', '/admin'] // Removed '/profile' temporarily
+    // Handle protected routes: keep admin protected; checkout uses client-side guard
+    const protectedRoutes = ['/admin']
     const isProtectedRoute = protectedRoutes.some(route => 
       req.nextUrl.pathname.startsWith(route)
     )

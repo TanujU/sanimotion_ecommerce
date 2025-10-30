@@ -1,7 +1,7 @@
 //import Grid from "components/grid";
 //import ProductGridItems from "components/layout/product-grid-items";
 import Footer from "components/layout/footer";
-import { getProducts } from "lib/shopify";
+import { getProducts } from "lib/products";
 import { GridTileImage } from "components/grid/tile";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -47,17 +47,10 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const products = await getProducts({});
+  const products = await getProducts();
 
   // Get first 5 products as bestsellers from Supabase database
-  const bestsellersData = products.slice(0, 5).map((product) => ({
-    id: product.id,
-    title: product.title,
-    price: `€${product.priceRange.maxVariantPrice.amount}`,
-    sizes: product.dosage ? [product.dosage] : [],
-    image: product.featuredImage?.url || "",
-    alt: product.title,
-  }));
+  const bestsellersData = products.slice(0, 5);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">

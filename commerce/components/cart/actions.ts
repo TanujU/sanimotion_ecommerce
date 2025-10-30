@@ -2,13 +2,12 @@
 
 import { TAGS } from 'lib/constants';
 import {
-  addToCart,
+  addItem as addToCart,
   createCart,
   getCart,
-  removeFromCart,
-  updateCart
-} from 'lib/shopify';
-import { clearMockCart } from 'lib/mock-data';
+  removeItem as removeFromCart,
+  updateItem as updateCart
+} from 'lib/cart';
 import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -39,11 +38,11 @@ export async function removeItem(prevState: any, merchandiseId: string) {
       return 'Fehler beim Laden des Warenkorbs';
     }
 
-    const lineItem = cart.lines.find(
-      (line) => line.merchandise.id === merchandiseId
+    const lineItem = cart.items.find(
+      (item) => item.productId === merchandiseId
     );
 
-    if (lineItem && lineItem.id) {
+    if (lineItem) {
       await removeFromCart([lineItem.id]);
       revalidateTag(TAGS.cart);
       return null;
@@ -72,18 +71,17 @@ export async function updateItemQuantity(
       return 'Fehler beim Laden des Warenkorbs';
     }
 
-    const lineItem = cart.lines.find(
-      (line) => line.merchandise.id === merchandiseId
+    const lineItem = cart.items.find(
+      (item) => item.productId === merchandiseId
     );
 
-    if (lineItem && lineItem.id) {
+    if (lineItem) {
       if (quantity === 0) {
         await removeFromCart([lineItem.id]);
       } else {
         await updateCart([
           {
             id: lineItem.id,
-            merchandiseId,
             quantity
           }
         ]);
@@ -104,14 +102,8 @@ export async function updateItemQuantity(
 export async function redirectToCheckout() {
   let cart = await getCart();
   
-  // For mock environment, redirect to our custom checkout flow
-  if (cart?.checkoutUrl === '#') {
-    // In a real implementation, this would redirect to Shopify checkout
-    // For now, we'll redirect to our custom checkout process
-    redirect('/checkout');
-  }
-  
-  redirect(cart!.checkoutUrl);
+  // Always redirect to our custom checkout flow
+  redirect('/checkout');
 }
 
 export async function createCartAndSetCookie() {
