@@ -4,9 +4,9 @@ import Grid from "components/grid";
 import Footer from "components/layout/footer";
 
 export const metadata = {
-  title: "All Products",
+  title: "Alle Produkte",
   description:
-    "Browse our complete collection of medical products and equipment.",
+    "Durchsuchen Sie unser vollständiges Sortiment an medizinischen Produkten und Ausrüstung.",
 };
 
 export default async function AllProductsPage() {
@@ -18,10 +18,10 @@ export default async function AllProductsPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-            All Products
+            Alle Produkte
           </h1>
           <p className="mt-2 text-lg text-gray-600">
-            {products.length} products available
+            {products.length} Produkte verfügbar
           </p>
         </div>
 
@@ -33,7 +33,7 @@ export default async function AllProductsPage() {
         ) : (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">
-              No products available at the moment.
+              Derzeit sind keine Produkte verfügbar.
             </p>
           </div>
         )}

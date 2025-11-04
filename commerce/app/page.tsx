@@ -72,7 +72,7 @@ export default async function HomePage() {
 
       {/* Content wrapper */}
       <div>
-        {/* Featured Products Section with Enhanced Animations */}
+        {/* Hervorgehobene Produkte Bereich mit erweiterten Animationen */}
         <div className="mx-auto max-w-7xl px-4 py-16 pt-8 sm:px-6 lg:px-8">
           <div className="text-center mb-16 scroll-reveal">
             <h2 className="text-3xl font-weight-light tracking-tight text-gray-900 sm:text-4xl">
@@ -152,7 +152,7 @@ export default async function HomePage() {
           <div className="mb-16">
             <div className="text-left mb-12 scroll-reveal">
               <h2 className="text-3xl font-light tracking-wide text-gray-900 sm:text-4xl">
-                Bestsellers
+                Meistverkaufte Produkte
               </h2>
             </div>
 
@@ -294,15 +294,17 @@ export default async function HomePage() {
                         defaultValue=""
                       >
                         <option value="" disabled>
-                          product type
+                          Produkttyp
                         </option>
                         <option value="dermal-filler">Dermal Filler</option>
-                        <option value="skin-booster">Skin Booster</option>
-                        <option value="fat-dissolving">Fat Dissolving</option>
+                        <option value="skin-booster">Hautauffrischung</option>
+                        <option value="fat-dissolving">Fettauflösung</option>
                         <option value="wrinkle-treatment">
-                          Wrinkle Treatment
+                          Faltenbehandlung
                         </option>
-                        <option value="lip-enhancement">Lip Enhancement</option>
+                        <option value="lip-enhancement">
+                          Lippenvergrößerung
+                        </option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none">
                         <svg
@@ -321,7 +323,9 @@ export default async function HomePage() {
                       </div>
                     </div>
 
-                    <div className="text-sm text-gray-500 mb-2">to target</div>
+                    <div className="text-sm text-gray-500 mb-2">
+                      zur Behandlung
+                    </div>
 
                     {/* Concern Dropdown */}
                     <div className="relative">
@@ -330,14 +334,14 @@ export default async function HomePage() {
                         defaultValue=""
                       >
                         <option value="" disabled>
-                          concern
+                          Anliegen
                         </option>
-                        <option value="fine-lines">Fine Lines</option>
-                        <option value="volume-loss">Volume Loss</option>
-                        <option value="skin-texture">Skin Texture</option>
-                        <option value="hydration">Hydration</option>
-                        <option value="fat-reduction">Fat Reduction</option>
-                        <option value="lip-volume">Lip Volume</option>
+                        <option value="fine-lines">Feine Linien</option>
+                        <option value="volume-loss">Volumenverlust</option>
+                        <option value="skin-texture">Hauttextur</option>
+                        <option value="hydration">Hydratation</option>
+                        <option value="fat-reduction">Fettreduktion</option>
+                        <option value="lip-volume">Lippenvolumen</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none">
                         <svg
@@ -362,7 +366,7 @@ export default async function HomePage() {
                     type="submit"
                     className="w-full bg-transparent border-2 border-gray-300 text-gray-700 py-4 px-8 rounded-full hover:border-gray-400 hover:text-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50 text-base font-medium"
                   >
-                    Get My Products
+                    Meine Produkte finden
                   </button>
                 </form>
               </div>

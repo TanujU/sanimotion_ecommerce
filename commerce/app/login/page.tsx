@@ -121,7 +121,7 @@ export default function LoginPage() {
         }
         setError(errorMessage);
       } else if (result.success) {
-        showSuccess("Welcome Back!", "You have successfully signed in.");
+        showSuccess("Willkommen zurück!", "Sie haben sich erfolgreich angemeldet.");
         // Redirect to intended page after successful login
         setTimeout(() => {
           const urlParams = new URLSearchParams(window.location.search);

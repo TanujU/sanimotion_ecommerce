@@ -335,7 +335,7 @@ export default function ResetPasswordPage() {
               href="/login"
               className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-all duration-300 hover:scale-105"
             >
-              Back to Sign In
+              Zurück zur Anmeldung
             </Link>
           </div>
         </div>

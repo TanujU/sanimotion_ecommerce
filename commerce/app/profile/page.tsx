@@ -360,8 +360,8 @@ export default function ProfilePage() {
                 />
               </svg>
               <div>
-                <h3 className="font-medium text-gray-900">Back to Home</h3>
-                <p className="text-sm text-gray-600">Return to homepage</p>
+                <h3 className="font-medium text-gray-900">Zurück zur Startseite</h3>
+                <p className="text-sm text-gray-600">Zur Startseite zurückkehren</p>
               </div>
             </SafeLink>
           </div>

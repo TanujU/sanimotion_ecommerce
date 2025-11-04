@@ -39,7 +39,7 @@ export function BestsellersCarousel({ products }: BestsellersCarouselProps) {
     return (
       <div className="text-center py-12">
         <p className="text-gray-500 text-lg">
-          No products available at the moment.
+          Derzeit sind keine Produkte verfügbar.
         </p>
       </div>
     );
@@ -106,7 +106,7 @@ export function BestsellersCarousel({ products }: BestsellersCarouselProps) {
               <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden h-full flex flex-col">
                 {/* Bestseller Badge */}
                 <div className="absolute top-3 left-3 z-10 bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                  Bestseller
+                  Meistverkauft
                 </div>
                 
                 {/* Favorite Button */}
