@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useAuth } from "../lib/auth-context";
 import { useCart } from "./cart/cart-context";
+import { getCategories, type CategoryWithPath } from "../lib/categories";
 
 // Type-safe components for React 19 compatibility
 const SafeLink = ({
@@ -53,15 +54,16 @@ export function SearchIcon() {
 // Hamburger Menu Icon Component - Exportable
 export function HamburgerIcon() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [categories, setCategories] = useState<CategoryWithPath[]>([]);
 
-  const categories = [
-    { title: "Diagnostic Equipment", path: "/search/diagnostic-equipment" },
-    { title: "Surgical Instruments", path: "/search/surgical-instruments" },
-    { title: "Patient Care", path: "/search/patient-care" },
-    { title: "Laboratory Equipment", path: "/search/laboratory-equipment" },
-    { title: "Emergency & Trauma", path: "/search/emergency-trauma" },
-    { title: "Rehabilitation", path: "/search/rehabilitation" },
-  ];
+  // Fetch categories from database
+  useEffect(() => {
+    async function fetchCategories() {
+      const cats = await getCategories();
+      setCategories(cats);
+    }
+    fetchCategories();
+  }, []);
 
   return (
     <div className="relative">

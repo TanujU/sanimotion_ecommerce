@@ -10,6 +10,8 @@ import { ScrollAnimations } from "components/scroll-animations";
 //import { BestsellersCarousel } from "../components/bestsellers-carousel";
 import type { Metadata } from "next";
 import { BestsellersCarousel } from "../components/bestsellers-carousel";
+import { CategoriesCarousel } from "../components/categories-carousel";
+import { getCategories } from "../lib/categories";
 
 // Type-safe Link wrapper for React 19 compatibility
 const SafeLink = ({
@@ -34,14 +36,16 @@ const SafeLink = ({
 };
 
 export const metadata: Metadata = {
-  title: "Sanimotion - Professional Medical Equipment & Healthcare Supplies",
+  title:
+    "Sanimotion - Professionelle medizinische Ausrüstung & Gesundheitsprodukte",
   description:
-    "Premium Medical Equipment and Healthcare Supplies - Professional Grade Medical Devices and Medicines. Trusted by healthcare professionals worldwide.",
+    "Premium medizinische Ausrüstung und Gesundheitsprodukte - Professionelle medizinische Geräte und Medizin. Vertraut von Gesundheitsfachkräften weltweit.",
   openGraph: {
     type: "website",
-    title: "Sanimotion - Professional Medical Equipment & Healthcare Supplies",
+    title:
+      "Sanimotion - Professionelle medizinische Ausrüstung & Gesundheitsprodukte",
     description:
-      "Premium Medical Equipment and Healthcare Supplies - Professional Grade Medical Devices and Medicines.",
+      "Premium medizinische Ausrüstung und Gesundheitsprodukte - Professionelle medizinische Geräte und Medizin.",
     url: "/",
   },
 };
@@ -49,8 +53,18 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const products = await getProducts();
 
-  // Get first 5 products as bestsellers from Supabase database
-  const bestsellersData = products.slice(0, 5);
+  // Fetch categories from database
+  const categories = await getCategories();
+
+  // Get products with images and descriptions for bestsellers
+  const bestsellersData = products
+    .filter((product) => {
+      const hasImage = product.featuredImage?.url || product.imageUrl;
+      const hasDescription =
+        product.description && product.description.trim().length > 0;
+      return hasImage && hasDescription;
+    })
+    .slice(0, 5);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
@@ -62,7 +76,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-16 pt-8 sm:px-6 lg:px-8">
           <div className="text-center mb-16 scroll-reveal">
             <h2 className="text-3xl font-weight-light tracking-tight text-gray-900 sm:text-4xl">
-              What are you looking for today?
+              Was suchen Sie heute?
             </h2>
           </div>
 
@@ -79,7 +93,8 @@ export default async function HomePage() {
               </div>
               <div className="p-6">
                 <p className="text-gray-800 font-medium text-center">
-                  Order your medical prescription, with free delivery
+                  Bestellen Sie Ihr medizinisches Rezept mit kostenloser
+                  Lieferung
                 </p>
               </div>
             </div>
@@ -95,7 +110,7 @@ export default async function HomePage() {
               </div>
               <div className="p-6">
                 <p className="text-gray-800 font-medium text-center">
-                  Check your medicine is in stock
+                  Prüfen Sie, ob Ihre Medizin vorrätig ist
                 </p>
               </div>
             </div>
@@ -111,7 +126,7 @@ export default async function HomePage() {
               </div>
               <div className="p-6">
                 <p className="text-gray-800 font-medium text-center">
-                  Explore Online Doctor support
+                  Erkunden Sie die Online-Arzt-Unterstützung
                 </p>
               </div>
             </div>
@@ -127,7 +142,7 @@ export default async function HomePage() {
               </div>
               <div className="p-6">
                 <p className="text-gray-800 font-medium text-center">
-                  Shop health and wellness essentials
+                  Kaufen Sie Gesundheits- und Wellness-Produkte
                 </p>
               </div>
             </div>
@@ -149,95 +164,101 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="text-center mb-12 scroll-reveal">
             <h2 className="text-3xl font-light tracking-wide text-gray-900 sm:text-4xl">
-              Shop by Category
+              Nach Kategorie einkaufen
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-7xl mx-auto stagger-reveal">
-            {/* Weight Loss */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-100">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/healthy-lifestyle-weight-loss-concept_690064-9807.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Weight loss products"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+          {categories.length > 0 ? (
+            <CategoriesCarousel categories={categories} />
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-7xl mx-auto stagger-reveal">
+              {/* Weight Loss */}
+              <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-100">
+                <div className="aspect-square overflow-hidden rounded-t-lg">
+                  <img
+                    src="https://img.freepik.com/premium-photo/healthy-lifestyle-weight-loss-concept_690064-9807.jpg?semt=ais_hybrid&w=400&q=80"
+                    alt="Weight loss products"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <p className="text-gray-800 font-medium">Gewichtsreduktion</p>
+                </div>
               </div>
-              <div className="p-4 text-center">
-                <p className="text-gray-800 font-medium">Weight Loss</p>
-              </div>
-            </div>
 
-            {/* Allergy */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-200">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/allergy-medication-antihistamine-concept_690064-9808.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Allergy medications"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              {/* Allergy */}
+              <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-200">
+                <div className="aspect-square overflow-hidden rounded-t-lg">
+                  <img
+                    src="https://img.freepik.com/premium-photo/allergy-medication-antihistamine-concept_690064-9808.jpg?semt=ais_hybrid&w=400&q=80"
+                    alt="Allergy medications"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <p className="text-gray-800 font-medium">Allergie</p>
+                </div>
               </div>
-              <div className="p-4 text-center">
-                <p className="text-gray-800 font-medium">Allergy</p>
-              </div>
-            </div>
 
-            {/* Medical Devices */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-300">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/medical-devices-equipment-healthcare_690064-9809.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Medical devices"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              {/* Medical Devices */}
+              <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-300">
+                <div className="aspect-square overflow-hidden rounded-t-lg">
+                  <img
+                    src="https://img.freepik.com/premium-photo/medical-devices-equipment-healthcare_690064-9809.jpg?semt=ais_hybrid&w=400&q=80"
+                    alt="Medical devices"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <p className="text-gray-800 font-medium">
+                    Medizinische Geräte
+                  </p>
+                </div>
               </div>
-              <div className="p-4 text-center">
-                <p className="text-gray-800 font-medium">Medical Devices</p>
-              </div>
-            </div>
 
-            {/* Vitamins */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-400">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/vitamins-supplements-health-wellness_690064-9810.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Vitamins and supplements"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              {/* Vitamins */}
+              <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-400">
+                <div className="aspect-square overflow-hidden rounded-t-lg">
+                  <img
+                    src="https://img.freepik.com/premium-photo/vitamins-supplements-health-wellness_690064-9810.jpg?semt=ais_hybrid&w=400&q=80"
+                    alt="Vitamins and supplements"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <p className="text-gray-800 font-medium">Vitamine</p>
+                </div>
               </div>
-              <div className="p-4 text-center">
-                <p className="text-gray-800 font-medium">Vitamins</p>
-              </div>
-            </div>
 
-            {/* Women's Health */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-500">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/womens-health-wellness-medical-care_690064-9811.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Women's health products"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              {/* Women's Health */}
+              <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-500">
+                <div className="aspect-square overflow-hidden rounded-t-lg">
+                  <img
+                    src="https://img.freepik.com/premium-photo/womens-health-wellness-medical-care_690064-9811.jpg?semt=ais_hybrid&w=400&q=80"
+                    alt="Women's health products"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <p className="text-gray-800 font-medium">Frauengesundheit</p>
+                </div>
               </div>
-              <div className="p-4 text-center">
-                <p className="text-gray-800 font-medium">Women's Health</p>
-              </div>
-            </div>
 
-            {/* Men's Health */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-600">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/mens-health-wellness-medical-care_690064-9812.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Men's health products"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-4 text-center">
-                <p className="text-gray-800 font-medium">Men's Health</p>
+              {/* Men's Health */}
+              <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer scroll-reveal animate-delay-600">
+                <div className="aspect-square overflow-hidden rounded-t-lg">
+                  <img
+                    src="https://img.freepik.com/premium-photo/mens-health-wellness-medical-care_690064-9812.jpg?semt=ais_hybrid&w=400&q=80"
+                    alt="Men's health products"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <p className="text-gray-800 font-medium">Männergesundheit</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Find Your Formulation Section */}
@@ -248,12 +269,12 @@ export default async function HomePage() {
               <div className="relative">
                 <div className="absolute -top-20 left-0 w-full h-px bg-gray-400"></div>
                 <h2 className="text-4xl font-bold text-gray-800 mb-4 mt-4">
-                  Find Your Products
+                  Finden Sie Ihre Produkte
                 </h2>
               </div>
               <p className="text-lg text-gray-500 leading-relaxed">
-                Filter our medical products based on your concerns, you'd like
-                to address most.
+                Filtern Sie unsere medizinischen Produkte nach Ihren Anliegen,
+                die Sie am meisten ansprechen möchten.
               </p>
             </div>
 
@@ -263,7 +284,7 @@ export default async function HomePage() {
                 <form className="space-y-8">
                   <div>
                     <label className="block text-lg font-medium text-gray-800 mb-4">
-                      I am looking for
+                      Ich suche nach
                     </label>
 
                     {/* Product Type Dropdown */}

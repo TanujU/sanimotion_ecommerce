@@ -88,12 +88,6 @@ export default function ForgotPasswordPage() {
                 <LogoSquare />
               </div>
             </Link>
-        <div className="text-center">
-          <Link href="/" className="inline-block group">
-            <div className="mx-auto mb-2 transition-all duration-300 group-hover:scale-105">
-              <LogoSquare />
-            </div>
-          </Link>
           </div>
 
           <div className="bg-white/95 backdrop-blur-xl py-8 px-6 shadow-2xl rounded-2xl border border-white/30 text-center animate-slide-up">

@@ -56,6 +56,12 @@ export default async function ProductPage(props: {
   const product = await getProduct(params.handle);
 
   if (!product) return notFound();
+  
+  // Debug logging
+  console.log('Product handle:', params.handle);
+  console.log('Product images:', product.images);
+  console.log('Product featuredImage:', product.featuredImage);
+  console.log('Product imageUrl:', product.imageUrl);
 
   const productJsonLd = {
     "@context": "https://schema.org",
@@ -95,10 +101,26 @@ export default async function ProductPage(props: {
               >
                 <Gallery
                   images={
-                    product.images?.slice(0, 5).map((image) => ({
-                      src: image.url,
-                      altText: image.altText,
-                    })) || []
+                    product.images && product.images.length > 0
+                      ? product.images.slice(0, 5).map((image) => ({
+                          src: image.url,
+                          altText: image.altText,
+                        }))
+                      : product.featuredImage?.url
+                        ? [
+                            {
+                              src: product.featuredImage.url,
+                              altText: product.featuredImage.altText || product.title,
+                            },
+                          ]
+                        : product.imageUrl
+                          ? [
+                              {
+                                src: product.imageUrl,
+                                altText: product.title,
+                              },
+                            ]
+                          : []
                   }
                 />
               </Suspense>

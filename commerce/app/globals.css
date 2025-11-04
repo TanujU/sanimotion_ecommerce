@@ -816,13 +816,14 @@ button {
   left: 0;
   right: 0;
   z-index: 60;
-  background: linear-gradient(135deg, #f3f3f3 0%, #ffffff 100%);
+  background: #ffffff;
   color: black;
   overflow: hidden;
   white-space: nowrap;
   height: 40px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .marquee__inner {
@@ -859,15 +860,24 @@ button {
 
 /* Ensure navbar is positioned correctly below marquee */
 nav {
-  position: relative !important;
-  z-index: 1000 !important;
+  position: fixed !important;
+  top: 40px !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 50 !important;
   display: block !important;
   visibility: visible !important;
+  background: white !important;
 }
 
 /* Navbar positioned below marquee */
 .navbar-below-marquee {
-  margin-top: 40px;
+  margin-top: 0;
+}
+
+/* Add padding to body to account for fixed header */
+body {
+  padding-top: 96px; /* 40px marquee + 56px navbar */
 }
 
 /* Ensure search input doesn't overflow */

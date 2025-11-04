@@ -98,67 +98,74 @@ export function BestsellersCarousel({ products }: BestsellersCarouselProps) {
             product.variants?.[0]?.price?.currencyCode ||
             "EUR") as string;
           return (
-            <div
+            <Link
               key={product.id}
-              className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer relative h-96"
+              href={`/product/${product.handle}`}
+              className="block group relative"
             >
-              <div className="absolute top-3 left-3 z-10">
-                <span className="text-gray-600 text-xs font-semibold px-2 py-1">
+              <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden h-full flex flex-col">
+                {/* Bestseller Badge */}
+                <div className="absolute top-3 left-3 z-10 bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                   Bestseller
-                </span>
-              </div>
-              <div className="absolute top-3 right-3 z-10">
-                <FavoriteButton
-                  product={{
-                    id: product.id,
-                    title: product.title,
-                    price: `€${String(amount).replace(".", ",")}`,
-                    sizes: product.dosage ? [product.dosage] : [],
-                    image: product.featuredImage?.url || "",
-                    alt: product.title,
-                  }}
-                />
-              </div>
-              <div className="h-56 overflow-hidden rounded-t-lg bg-gray-50 flex items-center justify-center p-4">
-                {product.featuredImage?.url ? (
-                  <img
-                    src={product.featuredImage.url}
-                    alt={product.title}
-                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                </div>
+                
+                {/* Favorite Button */}
+                <div className="absolute top-3 right-3 z-10">
+                  <FavoriteButton
+                    product={{
+                      id: product.id,
+                      title: product.title,
+                      price: `€${String(amount).replace(".", ",")}`,
+                      sizes: product.dosage ? [product.dosage] : [],
+                      image: product.featuredImage?.url || "",
+                      alt: product.title,
+                    }}
+                    size="md"
                   />
-                ) : (
-                  <ImageNotAvailable className="group" size={180} />
-                )}
-              </div>
-              <div className="p-4 flex flex-col h-40 relative z-20">
-                <div className="flex-grow">
-                  <h3 className="font-semibold text-gray-900 text-lg mb-1">
+                </div>
+                
+                {/* Product Image */}
+                <div className="relative aspect-square w-full overflow-hidden bg-gray-50">
+                  {product.featuredImage?.url ? (
+                    <img
+                      src={product.featuredImage.url}
+                      alt={product.title}
+                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center w-full h-full">
+                      <ImageNotAvailable className="group" size={180} />
+                    </div>
+                  )}
+                </div>
+                
+                {/* Product Info */}
+                <div className="flex flex-col p-4 bg-white border-t border-gray-100">
+                  <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 min-h-[2.5rem]">
                     {product.title}
                   </h3>
-                </div>
-                <div className="mt-auto relative z-30">
-                  <div className="border-t border-gray-200 mb-3"></div>
-                  <div className="flex items-center justify-between mb-2">
+                  
+                  {product.dosage && (
+                    <p className="text-xs text-gray-500 mb-3">
+                      {product.dosage}
+                    </p>
+                  )}
+                  
+                  <div className="flex items-center justify-between mt-auto">
                     <Price
                       amount={amount}
                       currencyCode={currency}
-                      className="text-1xl font-semibold-light text-gray-900"
+                      className="text-lg font-bold text-blue-600"
                     />
-                    {product.dosage && (
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xs text-gray-600">
-                          {product.dosage}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  {/* Add to Cart Button */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <AddToCart product={product} />
                   </div>
                 </div>
+                
+                {/* Add to Cart Button - bottom right corner */}
+                <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <AddToCart product={product} compact />
+                </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

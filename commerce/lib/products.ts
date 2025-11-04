@@ -34,18 +34,47 @@ function sanitizePrice(value: any): string {
   return Number.isFinite(num) ? num.toFixed(2) : '0.00';
 }
 
-// Get all products from Supabase
-export async function getProducts(searchQuery?: string): Promise<ProductWithVariants[]> {
+// Get all products from Supabase with images
+export async function getProducts(searchQuery?: string, categoryName?: string): Promise<ProductWithVariants[]> {
   try {
+    console.log('Fetching products with filters:', { searchQuery, categoryName });
+    
     let query = supabase
       .from('products')
-      .select('*'); // be tolerant to differing column names across environments
+      .select(`
+        *,
+        product_images!product_images_product_id_fkey(
+          image_url,
+          is_primary,
+          sort_order
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    // Filter by Produktbereich (category) if provided
+    if (categoryName) {
+      console.log('Filtering by Produktbereich:', categoryName);
+      query = query.eq('Produktbereich', categoryName);
+    }
 
     const { data: products, error } = await query;
 
     if (error) {
-      console.error('Error fetching products:', error);
+      console.error('Error fetching products from Supabase:', error);
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      console.error('Error details:', error.details);
       return [];
+    }
+
+    if (!products) {
+      console.log('No products returned from query');
+      return [];
+    }
+
+    console.log(`Fetched ${products.length} products`);
+    if (categoryName && products.length > 0) {
+      console.log('Sample product Produktbereich:', products[0]?.Produktbereich);
     }
 
     const mapped = products.map(convertToProductWithVariants);
@@ -57,7 +86,7 @@ export async function getProducts(searchQuery?: string): Promise<ProductWithVari
     }
     return mapped;
   } catch (error) {
-    console.error('Error in getProducts:', error);
+    console.error('Exception in getProducts:', error);
     return [];
   }
 }
@@ -67,18 +96,51 @@ export async function getProduct(handle: string): Promise<ProductWithVariants | 
   try {
     const { data: products, error } = await supabase
       .from('products')
-      .select('*');
+      .select(`
+        *,
+        product_images!product_images_product_id_fkey(
+          image_url,
+          is_primary,
+          sort_order
+        )
+      `);
 
     if (error) {
       console.error('Error fetching products:', error);
       return null;
     }
 
+    console.log('Looking for handle:', handle);
+    console.log('Available products:', products?.map(p => ({
+      name: p.name ?? p.Artikelbezeichnung,
+      handle: createHandle(p.name ?? p.Artikelbezeichnung),
+      images: p.product_images
+    })));
+
     // Find product by matching handle
     const product = products.find(p => createHandle(p.name ?? p.Artikelbezeichnung) === handle);
-    if (!product) return null;
+    
+    if (!product) {
+      console.log('Product not found for handle:', handle);
+      return null;
+    }
 
-    return convertToProductWithVariants(product);
+    console.log('Found product:', {
+      name: product.name ?? product.Artikelbezeichnung,
+      product_images: product.product_images,
+      price: product.price
+    });
+
+    const converted = convertToProductWithVariants(product);
+    console.log('Converted product:', {
+      title: converted.title,
+      images: converted.images,
+      featuredImage: converted.featuredImage,
+      imageUrl: converted.imageUrl,
+      price: converted.priceRange
+    });
+
+    return converted;
   } catch (error) {
     console.error('Error in getProduct:', error);
     return null;
@@ -90,7 +152,14 @@ export async function getProductRecommendations(productId: string): Promise<Prod
   try {
     const { data: products, error } = await supabase
       .from('products')
-      .select('*')
+      .select(`
+        *,
+        product_images!product_images_product_id_fkey(
+          image_url,
+          is_primary,
+          sort_order
+        )
+      `)
       .neq('id', productId)
       .limit(3);
 
@@ -113,6 +182,23 @@ function convertToProductWithVariants(product: any): ProductWithVariants {
   const rawPrice = product.price ?? product.Preis ?? product.preis;
   const priceAmount = sanitizePrice(rawPrice);
   
+  // Get primary image from product_images relation
+  const productImages = product.product_images || [];
+  const primaryImage = productImages.find((img: any) => img.is_primary) || productImages[0];
+  const rawImageUrl = primaryImage?.image_url || product.image_url || product.imageUrl;
+  const imageUrl = rawImageUrl ? rawImageUrl.trim() : undefined;
+  
+  // Build all images array with trimmed URLs
+  const allImages = productImages
+    .sort((a: any, b: any) => (a.sort_order || 0) - (b.sort_order || 0))
+    .map((img: any) => ({
+      url: img.image_url ? img.image_url.trim() : '',
+      altText: productName,
+      width: 800,
+      height: 800
+    }))
+    .filter((img: any) => img.url.length > 0); // Filter out empty URLs
+  
   return {
     id: product.id,
     name: productName,
@@ -120,7 +206,7 @@ function convertToProductWithVariants(product: any): ProductWithVariants {
     handle,
     dosage: '1 Stück', // Default dosage since it's not in the database
     description: product.description || `${productName} - Medical product`,
-    imageUrl: product.image_url ?? product.imageUrl ?? undefined,
+    imageUrl: imageUrl,
     availableForSale: product.is_active === undefined ? true : !!product.is_active,
     createdAt: product.created_at || new Date().toISOString(),
     updatedAt: product.updated_at || new Date().toISOString(),
@@ -138,7 +224,7 @@ function convertToProductWithVariants(product: any): ProductWithVariants {
       maxVariantPrice: { amount: priceAmount, currencyCode: 'EUR' },
       minVariantPrice: { amount: priceAmount, currencyCode: 'EUR' }
     },
-    images: product.image_url ? [{ url: product.image_url, altText: productName, width: 800, height: 800 }] : [],
-    featuredImage: product.image_url ? { url: product.image_url, altText: productName, width: 800, height: 800 } : undefined
+    images: allImages.length > 0 ? allImages : (imageUrl ? [{ url: imageUrl, altText: productName, width: 800, height: 800 }] : []),
+    featuredImage: imageUrl ? { url: imageUrl, altText: productName, width: 800, height: 800 } : undefined
   };
 }

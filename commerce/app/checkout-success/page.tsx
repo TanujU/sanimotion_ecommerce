@@ -1,8 +1,33 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
+import { useCart } from "components/cart/cart-context";
 
 export default function CheckoutSuccessPage() {
+  const { setCart } = useCart();
+  const hasClearedCart = useRef(false);
+
+  useEffect(() => {
+    // Clear the cart only once after successful checkout
+    if (!hasClearedCart.current) {
+      setCart({
+        id: "mock-cart-id",
+        items: [],
+        totalItems: 0,
+        totalPrice: 0,
+      });
+      hasClearedCart.current = true;
+      
+      // Also clear localStorage cart
+      try {
+        localStorage.removeItem("cart");
+      } catch (e) {
+        console.warn("Could not clear localStorage cart:", e);
+      }
+    }
+  }, [setCart]);
+
   return (
     <div className="min-h-screen bg-white text-gray-900 lg:pl-20">
       <div className="mx-auto max-w-3xl px-4 py-16 text-center">
@@ -20,23 +45,22 @@ export default function CheckoutSuccessPage() {
             />
           </svg>
         </div>
-        <h1 className="text-3xl font-semibold">Order placed successfully</h1>
+        <h1 className="text-3xl font-semibold">Bestellung erfolgreich aufgegeben</h1>
         <p className="mt-3 text-gray-600">
-          Thank you for your purchase. We emailed your confirmation. You can safely
-          close this page or continue shopping.
+          Vielen Dank für Ihren Einkauf. Wir haben Ihnen eine Bestätigung per E-Mail gesendet. Sie können diese Seite sicher schließen oder weiter einkaufen.
         </p>
         <div className="mt-8 flex justify-center gap-3">
           <Link
             href="/"
             className="rounded-lg bg-blue-600 px-6 py-3 text-white hover:bg-blue-700"
           >
-            Continue shopping
+            Weiter einkaufen
           </Link>
           <Link
             href="/profile"
             className="rounded-lg border border-gray-300 px-6 py-3 hover:bg-gray-50"
           >
-            View orders
+            Bestellungen anzeigen
           </Link>
         </div>
       </div>

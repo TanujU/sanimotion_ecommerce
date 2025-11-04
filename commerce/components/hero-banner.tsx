@@ -14,6 +14,7 @@ import {
   LogoutIcon,
   SignInIcon,
 } from "./scroll-nav";
+import { getCategories, type CategoryWithPath } from "../lib/categories";
 
 // Type-safe components for React 19 compatibility
 const SafeImage = ({
@@ -105,7 +106,7 @@ function CartLink({ isMobile = false }: { isMobile?: boolean }) {
             : "text-black hover:font-bold text-sm font-medium tracking-wider uppercase"
         } transition-all duration-300 cursor-pointer`}
       >
-        CART
+        WARENKORB
       </button>
     </div>
   );
@@ -144,51 +145,50 @@ export function HeroBanner({
     useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isScrollNavVisible, setIsScrollNavVisible] = useState(false);
+  const [categories, setCategories] = useState<CategoryWithPath[]>([]);
   const heroRef = useRef<HTMLDivElement>(null);
 
   // Hero slides data
   const heroSlides = [
     {
       title: "Sanimotion",
-      subtitle: "Medical Excellence",
+      subtitle: "Medizinische Exzellenz",
       description:
-        "Premium medical equipment and healthcare supplies trusted by professionals worldwide. Discover our comprehensive range of medical devices, equipment, and supplies for hospitals, clinics, and medical practices.",
+        "Premium medizinische Ausrüstung und Gesundheitsprodukte, denen Fachleute weltweit vertrauen. Entdecken Sie unser umfassendes Sortiment an medizinischen Geräten, Ausrüstung und Zubehör für Krankenhäuser, Kliniken und Arztpraxen.",
       imageUrl:
         "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       imageAlt:
-        "Modern hospital room with advanced medical equipment and monitoring systems",
+        "Modernes Krankenhauszimmer mit fortschrittlicher medizinischer Ausrüstung und Überwachungssystemen",
     },
     {
-      title: "Advanced Technology",
-      subtitle: "Innovation in Healthcare",
+      title: "Fortschrittliche Technologie",
+      subtitle: "Innovation im Gesundheitswesen",
       description:
-        "Cutting-edge medical technology and state-of-the-art equipment designed to enhance patient care and improve clinical outcomes. Trusted by leading healthcare institutions worldwide.",
+        "Hochmoderne medizinische Technologie und modernste Ausrüstung zur Verbesserung der Patientenversorgung und klinischen Ergebnisse. Vertraut von führenden Gesundheitseinrichtungen weltweit.",
       imageUrl:
         "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-      imageAlt:
-        "High-tech medical laboratory with diagnostic equipment and instruments",
+      imageAlt: "High-Tech-Medizinlabor mit Diagnosegeräten und Instrumenten",
     },
     {
-      title: "Professional Grade",
-      subtitle: "Quality Assurance",
+      title: "Professionelle Qualität",
+      subtitle: "Qualitätssicherung",
       description:
-        "Rigorous quality standards and professional-grade medical supplies that meet international healthcare regulations. Your trusted partner in medical excellence and patient safety.",
+        "Strenge Qualitätsstandards und professionelle medizinische Versorgung, die internationalen Gesundheitsvorschriften entsprechen. Ihr vertrauenswürdiger Partner für medizinische Exzellenz und Patientensicherheit.",
       imageUrl:
         "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
       imageAlt:
-        "Surgical instruments and medical tools in a sterile environment",
+        "Chirurgische Instrumente und medizinische Werkzeuge in steriler Umgebung",
     },
   ];
 
-  // Categories data for dropdown
-  const categories = [
-    { title: "Diagnostic Equipment", path: "/search/diagnostic-equipment" },
-    { title: "Surgical Instruments", path: "/search/surgical-instruments" },
-    { title: "Patient Care", path: "/search/patient-care" },
-    { title: "Laboratory Equipment", path: "/search/laboratory-equipment" },
-    { title: "Emergency & Trauma", path: "/search/emergency-trauma" },
-    { title: "Rehabilitation", path: "/search/rehabilitation" },
-  ];
+  // Fetch categories from database
+  useEffect(() => {
+    async function fetchCategories() {
+      const cats = await getCategories();
+      setCategories(cats);
+    }
+    fetchCategories();
+  }, []);
 
   // Initial loading animation sequence
   useEffect(() => {
@@ -543,7 +543,7 @@ export function HeroBanner({
                         />
                       </svg>
                     )}
-                    SEARCH
+                    SUCHE
                   </SafeLink>
                 </div>
               </li>
@@ -576,7 +576,7 @@ export function HeroBanner({
                           setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen)
                         }
                       >
-                        CATEGORIES
+                        KATEGORIEN
                         <svg
                           className={`inline-block ml-1 w-3 h-3 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
                           fill="none"
@@ -637,7 +637,7 @@ export function HeroBanner({
                         d="M4 6h4v4H4V6zm6 0h4v4h-4V6zm6 0h4v4h-4V6zM4 12h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"
                       />
                     </svg>
-                    CATEGORIES
+                    KATEGORIEN
                     <svg
                       className={`ml-auto w-4 h-4 transition-transform duration-200 ${isCategoriesDropdownOpen ? "rotate-180" : ""}`}
                       fill="none"

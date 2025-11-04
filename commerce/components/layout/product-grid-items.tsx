@@ -63,8 +63,8 @@ export default function ProductGridItems({
               );
             })()}
           </SafeLink>
-          {/* Favorite Button */}
-          <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          {/* Favorite Button - Top Right, always visible */}
+          <div className="absolute top-3 right-3 z-10">
             <FavoriteButton
               product={{
                 id: product.id,
@@ -80,13 +80,13 @@ export default function ProductGridItems({
                 image: product.featuredImage?.url || "",
                 alt: product.title,
               }}
-              size="sm"
+              size="md"
             />
           </div>
 
-          {/* Add to Cart Button */}
-          <div className="absolute bottom-3 left-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <AddToCart product={product} />
+          {/* Add to Cart Button - bottom right corner */}
+          <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <AddToCart product={product} compact />
           </div>
         </Grid.Item>
       ))}

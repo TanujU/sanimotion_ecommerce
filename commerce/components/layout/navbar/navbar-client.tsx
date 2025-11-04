@@ -224,7 +224,7 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
 
   // Shop dropdown items
   const shopItems = [
-    { name: "All Products", href: "/products" },
+    { name: "Alle Produkte", href: "/products" },
     { name: "Injectable Fillers", href: "/search/injectable" },
     { name: "Skin Care", href: "/search/skincare" },
     { name: "Medical Devices", href: "/search/devices" },
@@ -249,10 +249,10 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
 
   return (
     <>
-      <MarqueeAnnouncement text="Premium Medical Equipment & Healthcare Supplies - Trusted by Professionals Worldwide" />
+      <MarqueeAnnouncement text="Premium medizinische Ausrüstung & Gesundheitsprodukte - Vertraut von Fachleuten weltweit" />
 
       {/* Main Navigation Bar */}
-      <nav className="bg-white shadow-sm border-b border-gray-200 relative z-40 navbar-below-marquee">
+      <nav className="bg-white border-b border-gray-200 relative z-40 navbar-below-marquee">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -270,7 +270,7 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
                   href="/"
                   className="navbar-link text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium"
                 >
-                  Home
+                  Startseite
                 </SafeLink>
 
                 {/* Shop Dropdown */}
@@ -279,7 +279,7 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
                     onClick={() => setIsShopDropdownOpen(!isShopDropdownOpen)}
                     className="navbar-link text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium flex items-center"
                   >
-                    Shop
+                    Einkaufen
                     <SafeChevronDownIcon
                       className={`ml-1 h-4 w-4 transition-transform duration-200 ${isShopDropdownOpen ? "rotate-180" : ""}`}
                     />
@@ -307,7 +307,7 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
                   href="/about"
                   className="navbar-link text-gray-900 hover:text-blue-600 px-3 py-2 text-sm font-medium"
                 >
-                  About Us
+                  Über uns
                 </SafeLink>
               </div>
             </div>
@@ -428,13 +428,13 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
                 className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 rounded-md"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Home
+                Startseite
               </SafeLink>
 
               {/* Mobile Shop Dropdown */}
               <div className="px-3 py-2">
                 <div className="text-base font-medium text-gray-900 mb-2">
-                  Shop
+                  Einkaufen
                 </div>
                 <div className="pl-4 space-y-1">
                   {shopItems.map((item) => (
@@ -455,7 +455,7 @@ export function NavbarClient({ menu, siteName }: NavbarClientProps) {
                 className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-blue-600 hover:bg-gray-50 rounded-md"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                About Us
+                Über uns
               </SafeLink>
 
               {/* Mobile Search */}

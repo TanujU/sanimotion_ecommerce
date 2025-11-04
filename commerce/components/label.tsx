@@ -15,31 +15,29 @@ const Label = ({
   position?: "bottom" | "center";
 }) => {
   return (
-    <div
-      className={clsx(
-        "absolute bottom-0 left-0 flex w-full px-4 pb-4 @container/label",
-        {
-          "lg:px-20 lg:pb-[35%]": position === "center",
-        }
+    <div className="flex flex-col p-4 bg-white w-full border-t border-gray-100">
+      {/* Product Title */}
+      <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 min-h-[2.5rem]">
+        {title}
+      </h3>
+      
+      {/* Dosage */}
+      {dosage && (
+        <p className="text-xs text-gray-500 mb-3">
+          {dosage}
+        </p>
       )}
-    >
-      <div className="flex items-center bg-white/30 p-1 text-xs font-semibold text-black backdrop-blur-sm h-16 w-full">
-        <div className="mr-4 flex-1 pl-2 min-w-0 max-w-[70%]">
-          <h3 className="line-clamp-2 leading-tight tracking-tight h-8 flex items-center">
-            {title}
-          </h3>
-          {dosage && (
-            <p className="text-xs text-gray-600 mt-1 font-normal h-4 flex items-center">
-              {dosage}
-            </p>
-          )}
-        </div>
+      
+      {/* Price and Add to Cart space */}
+      <div className="flex items-center justify-between mt-auto">
         <Price
-          className="flex-shrink-0 rounded-full bg-blue-600 p-2 text-white min-w-[80px]"
+          className="text-lg font-bold text-blue-600"
           amount={amount}
           currencyCode={currencyCode}
-          currencyCodeClassName="hidden @[275px]/label:inline"
+          currencyCodeClassName="hidden"
         />
+        {/* Space reserved for Add to Cart button */}
+        <div className="add-to-cart-slot"></div>
       </div>
     </div>
   );
