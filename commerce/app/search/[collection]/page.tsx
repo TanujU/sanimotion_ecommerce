@@ -6,6 +6,9 @@ import ProductGridItems from "components/layout/product-grid-items";
 import { getProducts } from "lib/products";
 import { getCategoryBySlug } from "lib/categories";
 
+// Cache category pages for 30 minutes
+export const revalidate = 1800;
+
 export async function generateMetadata(props: {
   params: Promise<{ collection: string }>;
 }): Promise<Metadata> {
@@ -47,7 +50,7 @@ export default async function CategoryPage(props: {
           Keine Produkte in dieser Kategorie gefunden
         </p>
       ) : (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <Grid className="grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <ProductGridItems products={products} />
         </Grid>
       )}

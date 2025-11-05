@@ -8,6 +8,9 @@ export const metadata = {
   description: "Suchen Sie nach Produkten im Shop.",
 };
 
+// Cache search results for 10 minutes
+export const revalidate = 600;
+
 export default async function SearchPage(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
@@ -30,7 +33,7 @@ export default async function SearchPage(props: {
         </p>
       ) : null}
       {products.length > 0 ? (
-        <Grid className="grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+        <Grid className="grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <ProductGridItems products={products} />
         </Grid>
       ) : null}

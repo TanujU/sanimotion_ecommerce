@@ -6,6 +6,7 @@ import { addItem } from "components/cart/actions";
 import { ProductWithVariants as Product, ProductVariant } from "lib/types";
 import { useActionState } from "react";
 import { useCart } from "./cart-context";
+import { useGlobalToast } from "lib/global-toast";
 
 function SubmitButton({
   availableForSale,
@@ -100,22 +101,25 @@ export function AddToCart({ product, compact = false }: { product: Product; comp
   const { variants, availableForSale } = product;
   const { addCartItem } = useCart();
   const [message, formAction, pending] = useActionState(addItem, null);
+  const { showSuccess } = useGlobalToast();
 
   // For simplicity, just use the first variant if available
   const selectedVariantId = variants.length > 0 ? variants[0]?.id : undefined;
   const selectedVariant = variants.find((v) => v.id === selectedVariantId);
 
-  const handleSubmit = async () => {
-    if (selectedVariant) {
-      // Optimistically add to cart
-      addCartItem(selectedVariant, product);
-    }
-    // Then call the server action
-    formAction(selectedVariantId);
-  };
-
   return (
-    <form action={handleSubmit}>
+    <form
+      action={async () => {
+        if (selectedVariant) {
+          // Optimistically add to cart
+          addCartItem(selectedVariant, product);
+          // Show success toast
+          showSuccess("Zum Warenkorb hinzugefügt", product.title, 3000);
+        }
+        // Then call the server action
+        formAction(selectedVariantId);
+      }}
+    >
       <SubmitButton
         availableForSale={availableForSale}
         selectedVariantId={selectedVariantId}

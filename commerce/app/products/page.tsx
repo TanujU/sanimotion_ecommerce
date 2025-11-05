@@ -9,6 +9,9 @@ export const metadata = {
     "Durchsuchen Sie unser vollständiges Sortiment an medizinischen Produkten und Ausrüstung.",
 };
 
+// Cache this page for 30 minutes
+export const revalidate = 1800;
+
 export default async function AllProductsPage() {
   const products = await getProducts();
 
@@ -27,7 +30,7 @@ export default async function AllProductsPage() {
 
         {/* Products Grid */}
         {products.length > 0 ? (
-          <Grid className="grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <Grid className="grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             <ProductGridItems products={products} />
           </Grid>
         ) : (
@@ -42,5 +45,3 @@ export default async function AllProductsPage() {
     </div>
   );
 }
-
-

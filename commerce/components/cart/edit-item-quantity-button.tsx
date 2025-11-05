@@ -15,6 +15,7 @@ import { updateItemQuantity } from "components/cart/actions";
 import type { CartItem } from "lib/types";
 import { useActionState } from "react";
 import { useCart } from "./cart-context";
+import { useGlobalToast } from "lib/global-toast";
 
 function SubmitButton({ type }: { type: "plus" | "minus" }) {
   return (
@@ -50,6 +51,7 @@ export function EditItemQuantityButton({
 }) {
   const [message, formAction] = useActionState(updateItemQuantity, null);
   const { updateCartItem } = useCart();
+  const { showSuccess, showInfo } = useGlobalToast();
   const payload = {
     merchandiseId: item.productId,
     quantity: type === "plus" ? item.quantity + 1 : item.quantity - 1,
@@ -61,6 +63,16 @@ export function EditItemQuantityButton({
       action={async () => {
         // Optimistic local update
         updateCartItem(payload.merchandiseId, type);
+        
+        // Show toast based on action
+        if (type === "plus") {
+          showSuccess("Menge erhöht", `${item.productName} (${payload.quantity})`, 2000);
+        } else if (payload.quantity === 0) {
+          showInfo("Aus Warenkorb entfernt", item.productName, 3000);
+        } else {
+          showInfo("Menge reduziert", `${item.productName} (${payload.quantity})`, 2000);
+        }
+        
         // Server sync (best-effort)
         updateItemQuantityAction();
       }}

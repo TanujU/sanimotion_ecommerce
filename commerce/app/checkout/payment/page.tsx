@@ -17,6 +17,10 @@ export default function PaymentPage() {
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [info, setInfo] = useState<{ email?: string; address?: string } | null>(null);
+  
+  const SHIPPING_COST = 6.90;
+  const subtotal = cart?.totalPrice || 0;
+  const total = subtotal + SHIPPING_COST;
   useEffect(() => {
     try {
       const saved = localStorage.getItem("checkout_info");
@@ -70,8 +74,8 @@ export default function PaymentPage() {
           body: JSON.stringify({
             toEmail: (saved?.email || user?.email) as string,
             subject: "Payment Successful - Order Placed",
-            text: `Payment successful. Your order totaling €${(cart?.totalPrice || 0).toFixed(2)} has been placed.`,
-            html: `<h2>Payment Successful</h2><p>Thank you for your order.</p><p>Order total: <strong>€${(cart?.totalPrice || 0).toFixed(2)}</strong></p>`,
+            text: `Payment successful. Your order totaling €${total.toFixed(2)} (including €${SHIPPING_COST.toFixed(2)} shipping) has been placed.`,
+            html: `<h2>Payment Successful</h2><p>Thank you for your order.</p><p>Subtotal: <strong>€${subtotal.toFixed(2)}</strong></p><p>Shipping: <strong>€${SHIPPING_COST.toFixed(2)}</strong></p><p>Order total: <strong>€${total.toFixed(2)}</strong></p>`,
           }),
         });
 
@@ -222,12 +226,14 @@ export default function PaymentPage() {
                 </div>
                 <div className="flex justify-between">
                   <span>Versand</span>
-                  <span className="text-gray-500">Wird im vorherigen Schritt berechnet</span>
+                  <span>
+                    <Price amount={String(SHIPPING_COST.toFixed(2))} currencyCode="EUR" />
+                  </span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold pt-2 border-t border-gray-300">
                   <span>Gesamt</span>
                   <span>
-                    <Price amount={String((cart?.totalPrice || 0).toFixed(2))} currencyCode="EUR" />
+                    <Price amount={String(total.toFixed(2))} currencyCode="EUR" />
                   </span>
                 </div>
               </div>

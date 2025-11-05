@@ -12,6 +12,9 @@ import { getProduct, getProductRecommendations } from "lib/products";
 import Link from "next/link";
 import { Suspense } from "react";
 
+// Cache product pages for 1 hour
+export const revalidate = 3600;
+
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
 }): Promise<Metadata> {

@@ -8,6 +8,7 @@ import { AuthProvider } from "lib/auth-context";
 import { SessionWarningModal } from "components/session-warning";
 import { CookieConsentBanner } from "components/cookie-consent-banner";
 import { FavoritesProvider } from "lib/favorites-context";
+import { GlobalToastProvider } from "lib/global-toast";
 
 // Type-safe Toaster for React 19 compatibility
 const SafeToaster = ({
@@ -87,15 +88,17 @@ export default async function RootLayout({
       >
         <AuthProvider>
           <FavoritesProvider>
-            <CartProvider cartPromise={cart}>
-              <Navbar />
-              <main className="relative z-10">
-                {children}
-                <SafeToaster closeButton />
-                <SessionWarningModal />
-                <CookieConsentBanner />
-              </main>
-            </CartProvider>
+            <GlobalToastProvider>
+              <CartProvider cartPromise={cart}>
+                <Navbar />
+                <main className="relative z-10">
+                  {children}
+                  <SafeToaster closeButton />
+                  <SessionWarningModal />
+                  <CookieConsentBanner />
+                </main>
+              </CartProvider>
+            </GlobalToastProvider>
           </FavoritesProvider>
         </AuthProvider>
       </body>

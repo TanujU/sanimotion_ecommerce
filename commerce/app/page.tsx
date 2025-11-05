@@ -12,6 +12,7 @@ import type { Metadata } from "next";
 import { BestsellersCarousel } from "../components/bestsellers-carousel";
 import { CategoriesCarousel } from "../components/categories-carousel";
 import { getCategories } from "../lib/categories";
+import { HeroSlider } from "../components/hero-slider";
 
 // Type-safe Link wrapper for React 19 compatibility
 const SafeLink = ({
@@ -29,7 +30,13 @@ const SafeLink = ({
 }) => {
   const LinkComponent = Link as any;
   return (
-    <LinkComponent href={href} className={className} style={style} {...props}>
+    <LinkComponent
+      href={href}
+      className={className}
+      style={style}
+      prefetch={false}
+      {...props}
+    >
       {children}
     </LinkComponent>
   );
@@ -50,11 +57,18 @@ export const metadata: Metadata = {
   },
 };
 
+// Cache this page for 1 hour, revalidate in background
+export const revalidate = 3600;
+
 export default async function HomePage() {
   const products = await getProducts();
 
-  // Fetch categories from database
-  const categories = await getCategories();
+  // Fetch categories from database and filter out unwanted ones
+  const allCategories = await getCategories();
+  const categories = allCategories.filter(
+    (cat) =>
+      cat.title !== "Ersatzteile" && cat.title.toLowerCase() !== "miscellaneous"
+  );
 
   // Get products with images and descriptions for bestsellers
   const bestsellersData = products
@@ -70,84 +84,12 @@ export default async function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
       <ScrollAnimations />
 
+      {/* Hero Banner Section - Image Slider */}
+      <HeroSlider products={products} />
+
       {/* Content wrapper */}
       <div>
-        {/* Hervorgehobene Produkte Bereich mit erweiterten Animationen */}
-        <div className="mx-auto max-w-7xl px-4 py-16 pt-8 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 scroll-reveal">
-            <h2 className="text-3xl font-weight-light tracking-tight text-gray-900 sm:text-4xl">
-              Was suchen Sie heute?
-            </h2>
-          </div>
-
-          {/* Service Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-16">
-            {/* Card 1 - Order Prescription */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/medical-prescription-delivery-box-with-medicine_690064-9803.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Medical prescription delivery"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-6">
-                <p className="text-gray-800 font-medium text-center">
-                  Bestellen Sie Ihr medizinisches Rezept mit kostenloser
-                  Lieferung
-                </p>
-              </div>
-            </div>
-
-            {/* Card 2 - Check Stock */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/medical-pills-blister-packs-medicine-stock_690064-9804.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Medical pills and medicine stock"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-6">
-                <p className="text-gray-800 font-medium text-center">
-                  Prüfen Sie, ob Ihre Medizin vorrätig ist
-                </p>
-              </div>
-            </div>
-
-            {/* Card 3 - Online Doctor */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/medical-professional-with-stethoscope-white-coat_690064-9805.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Medical professional consultation"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-6">
-                <p className="text-gray-800 font-medium text-center">
-                  Erkunden Sie die Online-Arzt-Unterstützung
-                </p>
-              </div>
-            </div>
-
-            {/* Card 4 - Health Essentials */}
-            <div className="bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer">
-              <div className="aspect-square overflow-hidden rounded-t-lg">
-                <img
-                  src="https://img.freepik.com/premium-photo/health-wellness-products-medical-supplies_690064-9806.jpg?semt=ais_hybrid&w=400&q=80"
-                  alt="Health and wellness products"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-6">
-                <p className="text-gray-800 font-medium text-center">
-                  Kaufen Sie Gesundheits- und Wellness-Produkte
-                </p>
-              </div>
-            </div>
-          </div>
-
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           {/* Bestsellers Section */}
           <div className="mb-16">
             <div className="text-left mb-12 scroll-reveal">
@@ -259,119 +201,6 @@ export default async function HomePage() {
               </div>
             </div>
           )}
-        </div>
-
-        {/* Find Your Formulation Section */}
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
-            {/* Left Column - Text Content (2/3 width) */}
-            <div className="lg:col-span-3 scroll-reveal">
-              <div className="relative">
-                <div className="absolute -top-20 left-0 w-full h-px bg-gray-400"></div>
-                <h2 className="text-4xl font-bold text-gray-800 mb-4 mt-4">
-                  Finden Sie Ihre Produkte
-                </h2>
-              </div>
-              <p className="text-lg text-gray-500 leading-relaxed">
-                Filtern Sie unsere medizinischen Produkte nach Ihren Anliegen,
-                die Sie am meisten ansprechen möchten.
-              </p>
-            </div>
-
-            {/* Right Column - Form (1/3 width) */}
-            <div className="lg:col-span-2 scroll-reveal">
-              <div className="bg-gray-100/50 p-20 rounded-lg border border-gray-200/50">
-                <form className="space-y-8">
-                  <div>
-                    <label className="block text-lg font-medium text-gray-800 mb-4">
-                      Ich suche nach
-                    </label>
-
-                    {/* Product Type Dropdown */}
-                    <div className="relative mb-2">
-                      <select
-                        className="w-full bg-transparent border-0 border-b border-gray-400 py-3 pr-8 text-gray-600 focus:outline-none focus:border-gray-600 focus:ring-0 appearance-none cursor-pointer text-base"
-                        defaultValue=""
-                      >
-                        <option value="" disabled>
-                          Produkttyp
-                        </option>
-                        <option value="dermal-filler">Dermal Filler</option>
-                        <option value="skin-booster">Hautauffrischung</option>
-                        <option value="fat-dissolving">Fettauflösung</option>
-                        <option value="wrinkle-treatment">
-                          Faltenbehandlung
-                        </option>
-                        <option value="lip-enhancement">
-                          Lippenvergrößerung
-                        </option>
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none">
-                        <svg
-                          className="w-4 h-4 text-gray-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-
-                    <div className="text-sm text-gray-500 mb-2">
-                      zur Behandlung
-                    </div>
-
-                    {/* Concern Dropdown */}
-                    <div className="relative">
-                      <select
-                        className="w-full bg-transparent border-0 border-b border-gray-400 py-3 pr-8 text-gray-600 focus:outline-none focus:border-gray-600 focus:ring-0 appearance-none cursor-pointer text-base"
-                        defaultValue=""
-                      >
-                        <option value="" disabled>
-                          Anliegen
-                        </option>
-                        <option value="fine-lines">Feine Linien</option>
-                        <option value="volume-loss">Volumenverlust</option>
-                        <option value="skin-texture">Hauttextur</option>
-                        <option value="hydration">Hydratation</option>
-                        <option value="fat-reduction">Fettreduktion</option>
-                        <option value="lip-volume">Lippenvolumen</option>
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none">
-                        <svg
-                          className="w-4 h-4 text-gray-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    className="w-full bg-transparent border-2 border-gray-300 text-gray-700 py-4 px-8 rounded-full hover:border-gray-400 hover:text-gray-800 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50 text-base font-medium"
-                  >
-                    Meine Produkte finden
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

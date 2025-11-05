@@ -3,6 +3,7 @@
 import { useFavorites } from "lib/favorites-context";
 import { useAuth } from "lib/auth-context";
 import { useRouter } from "next/navigation";
+import { useGlobalToast } from "lib/global-toast";
 
 interface FavoriteButtonProps {
   product: {
@@ -12,6 +13,7 @@ interface FavoriteButtonProps {
     sizes: string[];
     image: string;
     alt: string;
+    handle?: string;
   };
   className?: string;
   size?: "sm" | "md" | "lg";
@@ -25,6 +27,7 @@ export function FavoriteButton({
   const { toggleFavorite, isFavorite } = useFavorites();
   const { user, loading } = useAuth();
   const router = useRouter();
+  const { showSuccess, showInfo } = useGlobalToast();
 
   const sizeClasses = {
     sm: "w-6 h-6",
@@ -45,16 +48,27 @@ export function FavoriteButton({
         e.stopPropagation();
         // Verify auth only when attempting to add/remove favorite
         if (!loading && !user) {
-          try {
-            const redirect =
-              typeof window !== "undefined" ? window.location.pathname : "/";
-            router.push(`/login?redirectTo=${encodeURIComponent(redirect)}`);
-          } catch {
-            router.push("/login");
+          // Show toast asking to login
+          showInfo("Anmeldung erforderlich", "Bitte melden Sie sich an, um Produkte zu Ihren Favoriten hinzuzufügen", 4000);
+          
+          // Save product to localStorage so we can add it after login
+          if (typeof window !== "undefined") {
+            localStorage.setItem("pendingFavorite", JSON.stringify(product));
           }
+          
+          // Redirect to login with favorites page as destination
+          router.push(`/login?redirectTo=${encodeURIComponent("/favorites")}`);
           return;
         }
+        const isCurrentlyFavorite = isFavorite(product.id);
         toggleFavorite(product);
+        
+        // Show toast message
+        if (isCurrentlyFavorite) {
+          showInfo("Aus Favoriten entfernt", product.title, 3000);
+        } else {
+          showSuccess("Zu Favoriten hinzugefügt", product.title, 3000);
+        }
       }}
       className={`${sizeClasses[size]} bg-white/80 hover:bg-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 ${
         isFavorite(product.id) ? "text-red-500" : "text-gray-600"

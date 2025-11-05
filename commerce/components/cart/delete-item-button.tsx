@@ -10,6 +10,7 @@ import { removeItem } from "components/cart/actions";
 import type { CartItem } from "lib/types";
 import { useActionState } from "react";
 import { useCart } from "./cart-context";
+import { useGlobalToast } from "lib/global-toast";
 
 export function DeleteItemButton({
   item,
@@ -20,6 +21,7 @@ export function DeleteItemButton({
 }) {
   const [message, formAction] = useActionState(removeItem, null);
   const { updateCartItem } = useCart();
+  const { showInfo } = useGlobalToast();
   const merchandiseId = item.productId;
   const removeItemAction = formAction.bind(null, merchandiseId);
 
@@ -28,6 +30,8 @@ export function DeleteItemButton({
       action={async () => {
         // Optimistic local update
         updateCartItem(merchandiseId, "delete");
+        // Show toast
+        showInfo("Aus Warenkorb entfernt", item.productName, 3000);
         // Server sync (best-effort)
         removeItemAction();
       }}

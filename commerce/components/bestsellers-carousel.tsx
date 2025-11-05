@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+
+// Type-safe Link for React 19
+const SafeLink = Link as any;
 import ImageNotAvailable from "./icons/image-not-available";
 import { FavoriteButton } from "./favorite-button";
 import Price from "./price";
@@ -98,17 +101,18 @@ export function BestsellersCarousel({ products }: BestsellersCarouselProps) {
             product.variants?.[0]?.price?.currencyCode ||
             "EUR") as string;
           return (
-            <Link
+            <SafeLink
               key={product.id}
               href={`/product/${product.handle}`}
               className="block group relative"
+              prefetch={false}
             >
               <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden h-full flex flex-col">
                 {/* Bestseller Badge */}
                 <div className="absolute top-3 left-3 z-10 bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
                   Meistverkauft
                 </div>
-                
+
                 {/* Favorite Button */}
                 <div className="absolute top-3 right-3 z-10">
                   <FavoriteButton
@@ -119,11 +123,12 @@ export function BestsellersCarousel({ products }: BestsellersCarouselProps) {
                       sizes: product.dosage ? [product.dosage] : [],
                       image: product.featuredImage?.url || "",
                       alt: product.title,
+                      handle: product.handle,
                     }}
                     size="md"
                   />
                 </div>
-                
+
                 {/* Product Image */}
                 <div className="relative aspect-square w-full overflow-hidden bg-gray-50">
                   {product.featuredImage?.url ? (
@@ -138,19 +143,19 @@ export function BestsellersCarousel({ products }: BestsellersCarouselProps) {
                     </div>
                   )}
                 </div>
-                
+
                 {/* Product Info */}
                 <div className="flex flex-col p-4 bg-white border-t border-gray-100">
                   <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 min-h-[2.5rem]">
                     {product.title}
                   </h3>
-                  
+
                   {product.dosage && (
                     <p className="text-xs text-gray-500 mb-3">
                       {product.dosage}
                     </p>
                   )}
-                  
+
                   <div className="flex items-center justify-between mt-auto">
                     <Price
                       amount={amount}
@@ -159,13 +164,13 @@ export function BestsellersCarousel({ products }: BestsellersCarouselProps) {
                     />
                   </div>
                 </div>
-                
+
                 {/* Add to Cart Button - bottom right corner */}
                 <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <AddToCart product={product} compact />
                 </div>
               </div>
-            </Link>
+            </SafeLink>
           );
         })}
       </div>

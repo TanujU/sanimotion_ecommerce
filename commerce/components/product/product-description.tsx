@@ -7,10 +7,12 @@ import { ProductWithVariants as Product } from "lib/types";
 import { VariantSelector } from "./variant-selector";
 import { useState } from "react";
 import { useCart } from "components/cart/cart-context";
+import { useGlobalToast } from "lib/global-toast";
 
 export function ProductDescription({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const { addCartItem } = useCart();
+  const { showSuccess } = useGlobalToast();
 
   const handleIncrement = () => {
     setQuantity((prev) => prev + 1);
@@ -28,6 +30,12 @@ export function ProductDescription({ product }: { product: Product }) {
         for (let i = 0; i < quantity; i++) {
           addCartItem(variant, product);
         }
+        // Show success toast
+        showSuccess(
+          "Zum Warenkorb hinzugefügt",
+          `${product.title} ${quantity > 1 ? `(${quantity}x)` : ""}`,
+          3000
+        );
       }
     }
   };
@@ -88,17 +96,6 @@ export function ProductDescription({ product }: { product: Product }) {
           >
             In den Warenkorb
           </button>
-        </div>
-      </div>
-
-      {/* Product Information */}
-      <div className="border-t border-gray-200 pt-6">
-        <div className="space-y-2 text-sm text-gray-600">
-          <div>Produktnummer: ART-{product.id}</div>
-          <div>
-            Hersteller:{" "}
-            {product.title.includes("Croma") ? "CROMA Pharma GmbH" : "FREYARU"}
-          </div>
         </div>
       </div>
     </>

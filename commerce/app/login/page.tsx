@@ -125,7 +125,7 @@ export default function LoginPage() {
         // Redirect to intended page after successful login
         setTimeout(() => {
           const urlParams = new URLSearchParams(window.location.search);
-          const redirectTo = urlParams.get("redirectTo") || "/checkout";
+          const redirectTo = urlParams.get("redirectTo") || "/";
           try { sessionStorage.removeItem("checkout_redirect_ts"); } catch {}
           router.replace(redirectTo);
         }, 800);

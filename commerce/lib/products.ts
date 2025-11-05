@@ -78,13 +78,22 @@ export async function getProducts(searchQuery?: string, categoryName?: string): 
     }
 
     const mapped = products.map(convertToProductWithVariants);
+    
+    // Filter to only include products with valid prices and images
+    const filtered = mapped.filter(p => {
+      const hasValidPrice = p.priceRange?.maxVariantPrice?.amount && 
+                           parseFloat(p.priceRange.maxVariantPrice.amount) > 0;
+      const hasImage = p.featuredImage?.url || p.images?.length > 0;
+      return hasValidPrice && hasImage;
+    });
+    
     if (searchQuery && searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
-      return mapped.filter(p =>
+      return filtered.filter(p =>
         p.title.toLowerCase().includes(q) || p.name.toLowerCase().includes(q)
       );
     }
-    return mapped;
+    return filtered;
   } catch (error) {
     console.error('Exception in getProducts:', error);
     return [];
@@ -118,7 +127,7 @@ export async function getProduct(handle: string): Promise<ProductWithVariants | 
     })));
 
     // Find product by matching handle
-    const product = products.find(p => createHandle(p.name ?? p.Artikelbezeichnung) === handle);
+    const product = products?.find(p => createHandle(p.name ?? p.Artikelbezeichnung) === handle);
     
     if (!product) {
       console.log('Product not found for handle:', handle);
@@ -168,7 +177,15 @@ export async function getProductRecommendations(productId: string): Promise<Prod
       return [];
     }
 
-    return products.map(convertToProductWithVariants);
+    const mapped = products?.map(convertToProductWithVariants) || [];
+    
+    // Filter to only include products with valid prices and images
+    return mapped.filter(p => {
+      const hasValidPrice = p.priceRange?.maxVariantPrice?.amount && 
+                           parseFloat(p.priceRange.maxVariantPrice.amount) > 0;
+      const hasImage = p.featuredImage?.url || p.images?.length > 0;
+      return hasValidPrice && hasImage;
+    });
   } catch (error) {
     console.error('Error in getProductRecommendations:', error);
     return [];

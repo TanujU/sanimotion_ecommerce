@@ -215,69 +215,60 @@ export function CartProvider({
   const [cart, setCartState] = useState<Cart | undefined>(undefined);
 
   useEffect(() => {
-    try {
-      // Try to load cart from localStorage first
-      const savedCart = localStorage.getItem("cart");
-      if (savedCart) {
-        try {
-          const parsedCart = JSON.parse(savedCart);
-          setCartState(normalizeCart(parsedCart));
-          return;
-        } catch (error) {
-          console.error("Error parsing saved cart:", error);
-          // Clear invalid cart data
+    let mounted = true;
+    
+    const initCart = async () => {
+      try {
+        // Try to load cart from localStorage first
+        const savedCart = localStorage.getItem("cart");
+        if (savedCart) {
           try {
+            const parsedCart = JSON.parse(savedCart);
+            if (mounted) {
+              setCartState(normalizeCart(parsedCart));
+            }
+            return;
+          } catch (error) {
+            console.error("Error parsing saved cart:", error);
             localStorage.removeItem("cart");
-          } catch (e) {
-            console.warn("Error clearing invalid cart:", e);
           }
         }
-      }
 
-      // If no saved cart, load from provided value/promise if any
-      if (cartPromise) {
-        const maybeThen = (cartPromise as any).then;
-        if (typeof maybeThen === "function") {
-          (cartPromise as Promise<Cart | undefined>)
-            .then((initialCart) => {
-              try {
-                const cartToSet = initialCart || createEmptyCart();
-                setCartState(normalizeCart(cartToSet));
-                try {
-                  localStorage.setItem(
-                    "cart",
-                    JSON.stringify(normalizeCart(cartToSet))
-                  );
-                } catch (error) {
-                  console.warn("Error saving cart to localStorage:", error);
-                }
-              } catch (error) {
-                console.error("Error setting initial cart:", error);
-                setCartState(createEmptyCart());
-              }
-            })
-            .catch((error) => {
-              console.error("Error loading cart from promise:", error);
-              setCartState(createEmptyCart());
-            });
-        } else {
+        // If no saved cart, load from provided promise if any
+        if (cartPromise) {
           try {
-            const initialCart = cartPromise as unknown as Cart | undefined;
-            const cartToSet = initialCart || createEmptyCart();
-            setCartState(normalizeCart(cartToSet));
+            const initialCart = await cartPromise;
+            if (mounted) {
+              const cartToSet = initialCart || createEmptyCart();
+              const normalized = normalizeCart(cartToSet);
+              setCartState(normalized);
+              localStorage.setItem("cart", JSON.stringify(normalized));
+            }
           } catch (error) {
-            console.error("Error using provided cart value:", error);
+            console.error("Error loading cart from promise:", error);
+            if (mounted) {
+              setCartState(createEmptyCart());
+            }
+          }
+        } else {
+          // If no cartPromise provided, create empty cart
+          if (mounted) {
             setCartState(createEmptyCart());
           }
         }
-      } else {
-        // If no cartPromise provided, create empty cart
-        setCartState(createEmptyCart());
+      } catch (error) {
+        console.error("Error in cart initialization:", error);
+        if (mounted) {
+          setCartState(createEmptyCart());
+        }
       }
-    } catch (error) {
-      console.error("Error in cart initialization:", error);
-      setCartState(createEmptyCart());
-    }
+    };
+
+    initCart();
+
+    return () => {
+      mounted = false;
+    };
   }, [cartPromise]);
 
   const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {

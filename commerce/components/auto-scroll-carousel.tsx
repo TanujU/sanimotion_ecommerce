@@ -86,6 +86,7 @@ export default function AutoScrollCarousel({
             key={product.handle}
             href={`/product/${product.handle}`}
             className="block"
+            prefetch={false}
           >
             <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
               <GridTileImage
@@ -107,6 +108,7 @@ export default function AutoScrollCarousel({
             key={`duplicate-${product.handle}-${index}`}
             href={`/product/${product.handle}`}
             className="block"
+            prefetch={false}
           >
             <div className="relative aspect-square w-48 flex-shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:border-blue-600 transition-colors cursor-pointer">
               <GridTileImage

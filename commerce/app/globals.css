@@ -1034,3 +1034,111 @@ body {
 .animate-shake {
   animation: shake 0.5s ease-in-out;
 }
+
+/* Hero Banner Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUpDelayed {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes floatDelayed {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-30px) rotate(3deg);
+  }
+  66% {
+    transform: translateY(-15px) rotate(-2deg);
+  }
+}
+
+@keyframes pulseSlow {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes bounceSlow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-fade-in-up-delayed {
+  animation: fadeInUpDelayed 1s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delayed-2 {
+  animation: fadeInUpDelayed 1s ease-out 0.4s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delayed-3 {
+  animation: fadeInUpDelayed 1s ease-out 0.6s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delayed-4 {
+  animation: fadeInUpDelayed 1s ease-out 0.8s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 1s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+.animate-float-delayed {
+  animation: floatDelayed 8s ease-in-out 1s infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 4s ease-in-out infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounceSlow 3s ease-in-out infinite;
+}

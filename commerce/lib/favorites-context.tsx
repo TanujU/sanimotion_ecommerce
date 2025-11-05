@@ -9,6 +9,7 @@ interface FavoriteProduct {
   sizes: string[];
   image: string;
   alt: string;
+  handle?: string;
 }
 
 interface FavoritesContextType {

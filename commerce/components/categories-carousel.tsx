@@ -5,22 +5,38 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useState, useRef, useEffect } from "react";
 import type { CategoryWithPath } from "../lib/categories";
 
-// Category image mapping
+// Type-safe wrappers for React 19 compatibility
+const SafeLink = Link as any;
+const SafeChevronLeftIcon = ChevronLeftIcon as any;
+const SafeChevronRightIcon = ChevronRightIcon as any;
+
+// Category image mapping - Orthopedic body part specific images
 const categoryImages: { [key: string]: string } = {
-  // Use the same images as homepage fallback categories
-  "Hüfte": "https://img.freepik.com/premium-photo/healthy-lifestyle-weight-loss-concept_690064-9807.jpg?semt=ais_hybrid&w=400&q=80",
-  "Knie": "https://img.freepik.com/premium-photo/allergy-medication-antihistamine-concept_690064-9808.jpg?semt=ais_hybrid&w=400&q=80",
-  "Daumen": "https://img.freepik.com/premium-photo/medical-devices-equipment-healthcare_690064-9809.jpg?semt=ais_hybrid&w=400&q=80",
-  "Ellbogen": "https://img.freepik.com/premium-photo/vitamins-supplements-health-wellness_690064-9810.jpg?semt=ais_hybrid&w=400&q=80",
-  "Brustkorb": "https://img.freepik.com/premium-photo/womens-health-wellness-medical-care_690064-9811.jpg?semt=ais_hybrid&w=400&q=80",
-  "Handgelenk": "https://img.freepik.com/premium-photo/mens-health-wellness-medical-care_690064-9812.jpg?semt=ais_hybrid&w=400&q=80",
-  "Fuss": "https://img.freepik.com/premium-photo/healthy-lifestyle-weight-loss-concept_690064-9807.jpg?semt=ais_hybrid&w=400&q=80",
-  "Schulter": "https://img.freepik.com/premium-photo/allergy-medication-antihistamine-concept_690064-9808.jpg?semt=ais_hybrid&w=400&q=80",
-  "Sprunggelenk": "https://img.freepik.com/premium-photo/medical-devices-equipment-healthcare_690064-9809.jpg?semt=ais_hybrid&w=400&q=80",
-  "Ersatzteile": "https://img.freepik.com/premium-photo/vitamins-supplements-health-wellness_690064-9810.jpg?semt=ais_hybrid&w=400&q=80",
-  
-  // Default
-  "default": "https://img.freepik.com/premium-photo/healthy-lifestyle-weight-loss-concept_690064-9807.jpg?semt=ais_hybrid&w=400&q=80"
+  // Body parts with appropriate orthopedic/medical support images
+  Hüfte:
+    "https://tse4.mm.bing.net/th/id/OIP.sYRThy5scHKXffuvFXLq7AHaHa?pid=Api&P=0&h=180", // Hip anatomy
+  Knie: "https://tse1.mm.bing.net/th/id/OIP.JP356DBDANBk806hxROa6QHaFj?pid=Api&P=0&h=180", // Knee anatomy
+  Daumen:
+    "https://tse1.mm.bing.net/th/id/OIP.f3nKBiDb8zI6Fkm-6y8PiQHaHa?pid=Api&P=0&h=180", // Thumb anatomy
+  Ellbogen:
+    "https://tse1.mm.bing.net/th/id/OIP.KXo1_Gs2W975sDnkrZsBGgHaEK?pid=Api&P=0&h=180", // Elbow anatomy
+  Brustkorb:
+    "https://tse3.mm.bing.net/th/id/OIP.XQu-gdKN2AXRWBotu_2KOQHaFj?pid=Api&P=0&h=180", // Chest anatomy
+  Rücken:
+    "https://tse1.mm.bing.net/th/id/OIP.Jarg1nyCjTLCdyi8dyGvlgHaEK?pid=Api&P=0&h=180", // Back anatomy
+  Cervical:
+    "https://tse3.mm.bing.net/th/id/OIP.G4D2GXfBGkY7j4QKxrPqnAHaDa?pid=Api&P=0&h=180", // Cervical/neck anatomy
+  Handgelenk:
+    "https://tse2.mm.bing.net/th/id/OIP.oQVkIS6Iyq5de5UL8UVEBgHaHA?pid=Api&P=0&h=180", // Wrist anatomy
+  Fuss: "https://tse3.mm.bing.net/th/id/OIP.Khqkm8hW4US7SeSHplShSAHaHa?pid=Api&P=0&h=180", // Foot anatomy
+  Schulter:
+    "https://tse2.mm.bing.net/th/id/OIP.vP5BsoWtZhZ79lzZihNxOwHaHa?pid=Api&P=0&h=180", // Shoulder anatomy
+  Sprunggelenk:
+    "https://tse1.mm.bing.net/th/id/OIP.L4XR4UC_MCWSFp-rtYhPvwAAAA?pid=Api&P=0&h=180", // Ankle anatomy
+
+  // Default orthopedic equipment image
+  default:
+    "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&q=80",
 };
 
 interface CategoriesCarouselProps {
@@ -64,7 +80,11 @@ export function CategoriesCarousel({ categories }: CategoriesCarouselProps) {
   };
 
   const getImageForCategory = (categoryName: string): string => {
-    return categoryImages[categoryName] || categoryImages["default"];
+    return (
+      categoryImages[categoryName] ||
+      categoryImages.default ||
+      "https://cdn.pixabay.com/photo/2016/11/08/05/29/surgery-1807543_960_720.jpg"
+    );
   };
 
   if (categories.length === 0) {
@@ -86,7 +106,7 @@ export function CategoriesCarousel({ categories }: CategoriesCarouselProps) {
           }`}
           aria-label="Previous categories"
         >
-          <ChevronLeftIcon className="w-6 h-6 text-gray-800" />
+          <SafeChevronLeftIcon className="w-6 h-6 text-gray-800" />
         </button>
       )}
 
@@ -99,12 +119,12 @@ export function CategoriesCarousel({ categories }: CategoriesCarouselProps) {
           }}
         >
           {categories.map((category, index) => (
-            <Link
+            <SafeLink
               key={category.id}
               href={category.path}
               className="flex-shrink-0 bg-white rounded-lg transition-all duration-300 hover:-translate-y-2 group cursor-pointer"
               style={{
-                width: `calc(${100 / itemsPerView}% - ${(itemsPerView - 1) * 24 / itemsPerView}px)`,
+                width: `calc(${100 / itemsPerView}% - ${((itemsPerView - 1) * 24) / itemsPerView}px)`,
               }}
             >
               <div className="aspect-square overflow-hidden rounded-t-lg bg-gray-100">
@@ -117,7 +137,7 @@ export function CategoriesCarousel({ categories }: CategoriesCarouselProps) {
               <div className="p-4 text-center">
                 <p className="text-gray-800 font-medium">{category.title}</p>
               </div>
-            </Link>
+            </SafeLink>
           ))}
         </div>
       </div>
@@ -131,7 +151,7 @@ export function CategoriesCarousel({ categories }: CategoriesCarouselProps) {
           }`}
           aria-label="Next categories"
         >
-          <ChevronRightIcon className="w-6 h-6 text-gray-800" />
+          <SafeChevronRightIcon className="w-6 h-6 text-gray-800" />
         </button>
       )}
 
@@ -153,4 +173,3 @@ export function CategoriesCarousel({ categories }: CategoriesCarouselProps) {
     </div>
   );
 }
-

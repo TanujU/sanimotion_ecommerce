@@ -19,7 +19,12 @@ const SafeLink = ({
 }) => {
   const LinkComponent = Link as any;
   return (
-    <LinkComponent href={href} className={className} {...props}>
+    <LinkComponent
+      href={href}
+      className={className}
+      prefetch={false}
+      {...props}
+    >
       {children}
     </LinkComponent>
   );
@@ -79,6 +84,7 @@ export default function ProductGridItems({
                 sizes: product.dosage ? [product.dosage] : [],
                 image: product.featuredImage?.url || "",
                 alt: product.title,
+                handle: product.handle,
               }}
               size="md"
             />

@@ -3,10 +3,46 @@
 import Link from "next/link";
 import { HeartIcon } from "@heroicons/react/24/outline";
 import { useFavorites } from "lib/favorites-context";
+import { useAuth } from "lib/auth-context";
 import ImageNotAvailable from "components/icons/image-not-available";
+import { useEffect } from "react";
+import { useGlobalToast } from "lib/global-toast";
+
+// Helper to create URL-friendly handle from product title
+function createHandle(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim();
+}
 
 export default function FavoritesPage() {
-  const { favorites } = useFavorites();
+  const { favorites, toggleFavorite } = useFavorites();
+  const { user, loading } = useAuth();
+  const { showSuccess, showInfo } = useGlobalToast();
+
+  // Check for pending favorite after login
+  useEffect(() => {
+    if (!loading && user) {
+      const pendingFavorite = localStorage.getItem("pendingFavorite");
+      if (pendingFavorite) {
+        try {
+          const product = JSON.parse(pendingFavorite);
+          // Add the product to favorites
+          toggleFavorite(product);
+          showSuccess("Zu Favoriten hinzugefügt", product.title, 3000);
+          // Clear the pending favorite
+          localStorage.removeItem("pendingFavorite");
+        } catch (error) {
+          console.error("Error adding pending favorite:", error);
+          localStorage.removeItem("pendingFavorite");
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, loading]);
 
   if (favorites.length === 0) {
     return (
@@ -51,65 +87,67 @@ export default function FavoritesPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {favorites.map((product) => (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        {favorites.map((product) => {
+          const productHandle = product.handle || createHandle(product.title);
+          return (
           <div
             key={product.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+            className="group bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col"
           >
-            <div className="relative">
-              <div className="h-48 bg-gray-100 flex items-center justify-center">
+            <Link href={`/product/${productHandle}`} className="relative">
+              <div className="aspect-square bg-gray-50 flex items-center justify-center overflow-hidden">
                 {product.image ? (
                   <img
                     src={product.image}
                     alt={product.alt}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
-                  <ImageNotAvailable size={120} />
+                  <ImageNotAvailable size={80} />
                 )}
               </div>
-              <div className="absolute top-3 right-3">
-                <HeartIcon className="h-6 w-6 text-red-500 fill-current" />
-              </div>
-            </div>
+              
+              {/* Favorite Button - Toggle */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleFavorite(product);
+                  showInfo("Aus Favoriten entfernt", product.title, 3000);
+                }}
+                className="absolute top-2 right-2 w-7 h-7 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-md z-10"
+                aria-label="Remove from favorites"
+              >
+                <HeartIcon className="h-4 w-4 text-red-500 fill-current" />
+              </button>
+            </Link>
 
-            <div className="p-4">
-              <h3 className="font-semibold text-gray-900 text-lg mb-2 line-clamp-2">
+            <div className="p-3 flex flex-col flex-1">
+              <h3 className="font-medium text-gray-900 text-sm mb-1 line-clamp-2 min-h-[2.5rem]">
                 {product.title}
               </h3>
 
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xl font-bold text-gray-900">
-                  {product.price}
-                </span>
-                {product.sizes.length > 0 && (
-                  <div className="flex items-center space-x-1">
-                    {product.sizes.map((size, index) => (
-                      <span
-                        key={index}
-                        className={`text-xs px-2 py-1 rounded ${
-                          index === 0
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        {size}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {product.sizes.length > 0 && (
+                <p className="text-xs text-gray-500 mb-2">{product.sizes[0]}</p>
+              )}
 
-              <Link
-                href={`/product/${product.id}`}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 text-center block"
-              >
-                Produkt ansehen
-              </Link>
+              <div className="mt-auto">
+                <p className="text-base font-bold text-blue-600 mb-2">
+                  {product.price}
+                </p>
+
+                <Link
+                  href={`/product/${productHandle}`}
+                  className="w-full bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-center block text-xs font-medium"
+                >
+                  Details
+                </Link>
+              </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

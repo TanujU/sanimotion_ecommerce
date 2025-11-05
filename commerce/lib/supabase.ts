@@ -7,20 +7,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables. Please check your .env.local file.')
 }
 
-// Enhanced Supabase client with comprehensive security configuration
+// Client-side Supabase client (for browser use only)
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    // Enable automatic token refresh
-    autoRefreshToken: true,
-    // Persist session in localStorage (secure for web apps)
-    persistSession: true,
-    // Detect session from URL (for magic links, OAuth callbacks)
-    detectSessionInUrl: true,
-    // Use PKCE flow for enhanced security
+    autoRefreshToken: typeof window !== 'undefined',
+    persistSession: typeof window !== 'undefined',
+    detectSessionInUrl: typeof window !== 'undefined',
     flowType: 'pkce',
-    // Set secure storage key
     storageKey: 'sanimotion-auth-token',
-    // Enable debug mode in development
     debug: process.env.NODE_ENV === 'development',
   },
   global: {
@@ -29,15 +23,28 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       'X-Client-Version': '1.0.0',
     }
   },
-  // Enable real-time subscriptions with security
   realtime: {
     params: {
-      eventsPerSecond: 10, // Rate limit real-time events
+      eventsPerSecond: 10,
     }
   },
-  // Database configuration
   db: {
     schema: 'public'
+  }
+})
+
+// Server-side Supabase client (for server components and API routes)
+export const supabaseServer = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+    detectSessionInUrl: false,
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'sanimotion-ecommerce-server',
+      'X-Client-Version': '1.0.0',
+    }
   }
 })
 

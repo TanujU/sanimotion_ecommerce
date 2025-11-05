@@ -61,7 +61,12 @@ const SafeLink = ({
 }) => {
   const LinkComponent = Link as any;
   return (
-    <LinkComponent href={href} className={className} {...props}>
+    <LinkComponent
+      href={href}
+      className={className}
+      prefetch={false}
+      {...props}
+    >
       {children}
     </LinkComponent>
   );
