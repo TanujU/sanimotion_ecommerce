@@ -10,17 +10,24 @@ import { useCart } from "components/cart/cart-context";
 import Price from "components/price";
 import { useAuth } from "lib/auth-context";
 import { useRouter } from "next/navigation";
+import { Elements } from "@stripe/react-stripe-js";
+import { getStripe } from "lib/stripe";
+import CheckoutForm from "components/checkout-form";
 
 export default function PaymentPage() {
   const { cart } = useCart();
   const { user, loading } = useAuth();
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("card");
-  const [info, setInfo] = useState<{ email?: string; address?: string } | null>(null);
-  
-  const SHIPPING_COST = 6.90;
+  const [info, setInfo] = useState<{ email?: string; address?: string } | null>(
+    null
+  );
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+
+  const SHIPPING_COST = 6.9;
   const subtotal = cart?.totalPrice || 0;
   const total = subtotal + SHIPPING_COST;
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem("checkout_info");
@@ -35,6 +42,20 @@ export default function PaymentPage() {
       setInfo({ email: user?.email || "" });
     }
   }, [user?.email]);
+
+  // Create PaymentIntent as soon as page loads
+  useEffect(() => {
+    if (total > 0) {
+      fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: total, currency: "eur" }),
+      })
+        .then((res) => res.json())
+        .then((data) => setClientSecret(data.clientSecret))
+        .catch((err) => console.error("Error creating payment intent:", err));
+    }
+  }, [total]);
 
   // No auth guard here; auth is checked only when clicking Pay Now
   const [cardData, setCardData] = useState({
@@ -124,7 +145,9 @@ export default function PaymentPage() {
                 <div className="flex justify-between items-center py-2 border-b border-gray-100">
                   <div>
                     <p className="text-sm text-gray-600">Versenden an</p>
-                    <p className="font-medium">{info?.address || "Adresse eingeben"}</p>
+                    <p className="font-medium">
+                      {info?.address || "Adresse eingeben"}
+                    </p>
                   </div>
                   <button className="text-blue-600 text-sm hover:underline">
                     Ändern
@@ -145,23 +168,45 @@ export default function PaymentPage() {
             {/* Payment Section */}
             <div className="bg-white rounded-lg p-6 border border-gray-200">
               <h2 className="text-xl font-semibold mb-2">Zahlung</h2>
-              <p className="text-sm text-gray-600 mb-6">
+              <p className="text-sm text-gray-600 mb-6 flex items-center">
+                <LockClosedIcon className="h-4 w-4 mr-2" />
                 Alle Transaktionen sind sicher und verschlüsselt.
               </p>
 
-              <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-gray-300">
-                    <CreditCardIcon className="h-8 w-8 text-gray-400" />
+              {clientSecret ? (
+                <Elements
+                  stripe={getStripe()}
+                  options={{
+                    clientSecret,
+                    appearance: {
+                      theme: "stripe",
+                      variables: {
+                        colorPrimary: "#2563eb",
+                      },
+                    },
+                  }}
+                >
+                  <CheckoutForm
+                    total={total}
+                    cart={cart}
+                    userEmail={info?.email || ""}
+                  />
+                </Elements>
+              ) : (
+                <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-gray-300">
+                      <CreditCardIcon className="h-8 w-8 text-gray-400 animate-pulse" />
+                    </div>
+                    <p className="text-gray-600 font-medium">
+                      Zahlungsformular wird geladen...
+                    </p>
                   </div>
-                  <p className="text-gray-600 font-medium">
-                    Dieser Shop kann derzeit keine Zahlungen akzeptieren.
-                  </p>
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* Navigation Buttons */}
+            {/* Navigation Button */}
             <div className="flex justify-between">
               <button
                 onClick={() => window.history.back()}
@@ -169,12 +214,6 @@ export default function PaymentPage() {
               >
                 <ChevronLeftIcon className="h-4 w-4 mr-1" />
                 Zurück zum Versand
-              </button>
-              <button
-                onClick={handleSubmit as any}
-                className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
-              >
-                Jetzt bezahlen
               </button>
             </div>
           </div>
@@ -209,10 +248,15 @@ export default function PaymentPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium truncate">{item.productName}</h3>
-                    <p className="text-xs text-gray-600 truncate">{item.productHandle}</p>
+                    <p className="text-xs text-gray-600 truncate">
+                      {item.productHandle}
+                    </p>
                   </div>
                   <div className="text-right">
-                    <Price amount={String(item.totalPrice.toFixed(2))} currencyCode="EUR" />
+                    <Price
+                      amount={String(item.totalPrice.toFixed(2))}
+                      currencyCode="EUR"
+                    />
                   </div>
                 </div>
               ))}
@@ -221,19 +265,28 @@ export default function PaymentPage() {
                 <div className="flex justify-between">
                   <span>Zwischensumme</span>
                   <span>
-                    <Price amount={String((cart?.totalPrice || 0).toFixed(2))} currencyCode="EUR" />
+                    <Price
+                      amount={String((cart?.totalPrice || 0).toFixed(2))}
+                      currencyCode="EUR"
+                    />
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Versand</span>
                   <span>
-                    <Price amount={String(SHIPPING_COST.toFixed(2))} currencyCode="EUR" />
+                    <Price
+                      amount={String(SHIPPING_COST.toFixed(2))}
+                      currencyCode="EUR"
+                    />
                   </span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold pt-2 border-t border-gray-300">
                   <span>Gesamt</span>
                   <span>
-                    <Price amount={String(total.toFixed(2))} currencyCode="EUR" />
+                    <Price
+                      amount={String(total.toFixed(2))}
+                      currencyCode="EUR"
+                    />
                   </span>
                 </div>
               </div>

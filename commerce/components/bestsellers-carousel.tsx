@@ -166,7 +166,10 @@ export function BestsellersCarousel({ products }: BestsellersCarouselProps) {
                 </div>
 
                 {/* Add to Cart Button - bottom right corner */}
-                <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <div
+                  className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <AddToCart product={product} compact />
                 </div>
               </div>

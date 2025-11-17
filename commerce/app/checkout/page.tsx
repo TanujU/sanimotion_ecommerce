@@ -341,10 +341,15 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium truncate">{item.productName}</h3>
-                    <p className="text-xs text-gray-600 truncate">{item.productHandle}</p>
+                    <p className="text-xs text-gray-600 truncate">
+                      {item.productHandle}
+                    </p>
                   </div>
                   <div className="text-right">
-                    <Price amount={String(item.totalPrice.toFixed(2))} currencyCode="EUR" />
+                    <Price
+                      amount={String(item.totalPrice.toFixed(2))}
+                      currencyCode="EUR"
+                    />
                   </div>
                 </div>
               ))}
@@ -353,17 +358,25 @@ export default function CheckoutPage() {
                 <div className="flex justify-between">
                   <span>Zwischensumme</span>
                   <span>
-                    <Price amount={String((cart?.totalPrice || 0).toFixed(2))} currencyCode="EUR" />
+                    <Price
+                      amount={String((cart?.totalPrice || 0).toFixed(2))}
+                      currencyCode="EUR"
+                    />
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Versand</span>
-                  <span className="text-gray-500">Wird im nächsten Schritt berechnet</span>
+                  <span className="text-gray-500">
+                    Wird im nächsten Schritt berechnet
+                  </span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold pt-2 border-t border-gray-300">
                   <span>Gesamt</span>
                   <span>
-                    <Price amount={String((cart?.totalPrice || 0).toFixed(2))} currencyCode="EUR" />
+                    <Price
+                      amount={String((cart?.totalPrice || 0).toFixed(2))}
+                      currencyCode="EUR"
+                    />
                   </span>
                 </div>
               </div>

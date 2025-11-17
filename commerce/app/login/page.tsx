@@ -28,7 +28,9 @@ export default function LoginPage() {
     if (user) {
       const urlParams = new URLSearchParams(window.location.search);
       const redirectTo = urlParams.get("redirectTo") || "/";
-      try { sessionStorage.removeItem("checkout_redirect_ts"); } catch {}
+      try {
+        sessionStorage.removeItem("checkout_redirect_ts");
+      } catch {}
       router.replace(redirectTo);
     }
 
@@ -121,12 +123,17 @@ export default function LoginPage() {
         }
         setError(errorMessage);
       } else if (result.success) {
-        showSuccess("Willkommen zurück!", "Sie haben sich erfolgreich angemeldet.");
+        showSuccess(
+          "Willkommen zurück!",
+          "Sie haben sich erfolgreich angemeldet."
+        );
         // Redirect to intended page after successful login
         setTimeout(() => {
           const urlParams = new URLSearchParams(window.location.search);
           const redirectTo = urlParams.get("redirectTo") || "/";
-          try { sessionStorage.removeItem("checkout_redirect_ts"); } catch {}
+          try {
+            sessionStorage.removeItem("checkout_redirect_ts");
+          } catch {}
           router.replace(redirectTo);
         }, 800);
       } else {

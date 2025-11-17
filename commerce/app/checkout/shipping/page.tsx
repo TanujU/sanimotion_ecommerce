@@ -28,7 +28,9 @@ export default function ShippingPage() {
       description: "Standardversand",
     },
   ]);
-  const [info, setInfo] = useState<{ email?: string; address?: string } | null>(null);
+  const [info, setInfo] = useState<{ email?: string; address?: string } | null>(
+    null
+  );
   useEffect(() => {
     try {
       const saved = localStorage.getItem("checkout_info");
@@ -78,7 +80,9 @@ export default function ShippingPage() {
                 <div className="flex justify-between items-center py-2">
                   <div>
                     <p className="text-sm text-gray-600">Versenden an</p>
-                    <p className="font-medium">{info?.address || "Adresse eingeben"}</p>
+                    <p className="font-medium">
+                      {info?.address || "Adresse eingeben"}
+                    </p>
                   </div>
                   <button className="text-blue-600 text-sm hover:underline">
                     Ändern
@@ -176,10 +180,15 @@ export default function ShippingPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium truncate">{item.productName}</h3>
-                    <p className="text-xs text-gray-600 truncate">{item.productHandle}</p>
+                    <p className="text-xs text-gray-600 truncate">
+                      {item.productHandle}
+                    </p>
                   </div>
                   <div className="text-right">
-                    <Price amount={String(item.totalPrice.toFixed(2))} currencyCode="EUR" />
+                    <Price
+                      amount={String(item.totalPrice.toFixed(2))}
+                      currencyCode="EUR"
+                    />
                   </div>
                 </div>
               ))}
@@ -188,13 +197,19 @@ export default function ShippingPage() {
                 <div className="flex justify-between">
                   <span>Zwischensumme</span>
                   <span>
-                    <Price amount={String((cart?.totalPrice || 0).toFixed(2))} currencyCode="EUR" />
+                    <Price
+                      amount={String((cart?.totalPrice || 0).toFixed(2))}
+                      currencyCode="EUR"
+                    />
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Versand</span>
                   <span>
-                    {shippingMethods.find((m) => m.id === selectedMethod)?.price}
+                    {
+                      shippingMethods.find((m) => m.id === selectedMethod)
+                        ?.price
+                    }
                   </span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold pt-2 border-t border-gray-300">
@@ -202,9 +217,12 @@ export default function ShippingPage() {
                   <span>
                     {(() => {
                       const base = cart?.totalPrice || 0;
-                      const shipping = selectedMethod === "standard" ? 6.9 : 4.9;
+                      const shipping =
+                        selectedMethod === "standard" ? 6.9 : 4.9;
                       const total = (base + shipping).toFixed(2);
-                      return <Price amount={String(total)} currencyCode="EUR" />;
+                      return (
+                        <Price amount={String(total)} currencyCode="EUR" />
+                      );
                     })()}
                   </span>
                 </div>

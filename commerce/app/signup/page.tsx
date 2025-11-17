@@ -31,7 +31,9 @@ export default function SignupPage() {
     if (user) {
       const urlParams = new URLSearchParams(window.location.search);
       const redirectTo = urlParams.get("redirectTo") || "/";
-      try { sessionStorage.removeItem("checkout_redirect_ts"); } catch {}
+      try {
+        sessionStorage.removeItem("checkout_redirect_ts");
+      } catch {}
       router.replace(redirectTo);
     }
   }, [user, router]);
@@ -106,7 +108,9 @@ export default function SignupPage() {
         setTimeout(() => {
           const urlParams = new URLSearchParams(window.location.search);
           const redirectTo = urlParams.get("redirectTo") || "/checkout";
-          try { sessionStorage.removeItem("checkout_redirect_ts"); } catch {}
+          try {
+            sessionStorage.removeItem("checkout_redirect_ts");
+          } catch {}
           router.replace(redirectTo);
         }, 1200);
       }
@@ -116,7 +120,9 @@ export default function SignupPage() {
         "Registrierung fehlgeschlagen",
         "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
       );
-      setError("Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
+      setError(
+        "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+      );
     } finally {
       setIsLoading(false);
     }

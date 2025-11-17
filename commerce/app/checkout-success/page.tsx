@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { useCart } from "components/cart/cart-context";
+import { useRouter } from "next/navigation";
 
 export default function CheckoutSuccessPage() {
   const { setCart } = useCart();
+  const router = useRouter();
   const hasClearedCart = useRef(false);
 
   useEffect(() => {
@@ -18,18 +20,35 @@ export default function CheckoutSuccessPage() {
         totalPrice: 0,
       });
       hasClearedCart.current = true;
-      
+
       // Also clear localStorage cart
       try {
         localStorage.removeItem("cart");
+        localStorage.removeItem("checkout_info");
       } catch (e) {
-        console.warn("Could not clear localStorage cart:", e);
+        console.warn("Could not clear localStorage:", e);
       }
     }
-  }, [setCart]);
+
+    // Prevent back navigation by manipulating history
+    window.history.pushState(null, "", window.location.href);
+
+    const handlePopState = () => {
+      // Push state again to prevent going back
+      window.history.pushState(null, "", window.location.href);
+      // Then redirect to home
+      router.push("/");
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [setCart, router]);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 lg:pl-20">
+    <div className="min-h-screen bg-white text-gray-900 flex items-center justify-center lg:pl-20">
       <div className="mx-auto max-w-3xl px-4 py-16 text-center">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
           <svg
@@ -45,9 +64,13 @@ export default function CheckoutSuccessPage() {
             />
           </svg>
         </div>
-        <h1 className="text-3xl font-semibold">Bestellung erfolgreich aufgegeben</h1>
+        <h1 className="text-3xl font-semibold">
+          Bestellung erfolgreich aufgegeben
+        </h1>
         <p className="mt-3 text-gray-600">
-          Vielen Dank für Ihren Einkauf. Wir haben Ihnen eine Bestätigung per E-Mail gesendet. Sie können diese Seite sicher schließen oder weiter einkaufen.
+          Vielen Dank für Ihren Einkauf. Wir haben Ihnen eine Bestätigung per
+          E-Mail gesendet. Sie können diese Seite sicher schließen oder weiter
+          einkaufen.
         </p>
         <div className="mt-8 flex justify-center gap-3">
           <Link
